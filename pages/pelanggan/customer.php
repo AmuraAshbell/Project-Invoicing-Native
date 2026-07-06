@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Table-Pelanggan</title>
+    <link rel="stylesheet" href="../../style/index.css">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/styles/overlayscrollbars.min.css"/>
+    <link rel="stylesheet" href="../../dist/css/adminlte.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tabulator-tables@6.4.0/dist/css/tabulator_bootstrap5.min.css" crossorigin="anonymous"/>
+  </head>
+  <body class="app-wrapper">
+    
+  <?php include "../../layout/navbar.php"; ?>
+  <?php include "../../layout/sidebar.php"; ?>
+
+  <main class="app-main">
+        <div class="app-content-header">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-sm-6">
+                <h3 class="mb-0">Data Pelanggan</h3>
+              </div>
+              <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-end">
+                  <li class="breadcrumb-item"><a href="../../dashboard.php">Beranda</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">Tabel Pelanggan</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="app-content">
+          <div class="container-fluid">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Pelanggan</h3>
+                <div class="card-tools">
+                  <div class="input-group input-group-sm" style="width: 16rem">
+                    <span class="input-group-text">
+                      <i class="bi bi-search" aria-hidden="true"></i>
+                    </span>
+                    <input
+                      id="table-filter"
+                      type="search"
+                      class="form-control"
+                      placeholder="Filter rows…"
+                      aria-label="Filter rows"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="d-flex gap-2 mb-3">
+                  <a href="create-customer.php" class="btn btn-sm btn-primary">
+                    <i class="bi bi-plus-lg me-1" aria-hidden="true"></i>
+                    Tambah Pelanggan
+                  </a>
+                  <button id="export-csv" type="button" class="btn btn-sm btn-outline-secondary">
+                    <i class="bi bi-filetype-csv me-1" aria-hidden="true"></i>
+                    Export CSV
+                  </button>
+                  <button id="export-json" type="button" class="btn btn-sm btn-outline-secondary">
+                    <i class="bi bi-filetype-json me-1" aria-hidden="true"></i>
+                    Export JSON
+                  </button>
+                  <button id="print-table" type="button" class="btn btn-sm btn-outline-secondary">
+                    <i class="bi bi-printer me-1" aria-hidden="true"></i>
+                    Print
+                  </button>
+                </div>
+                <div id="users-table"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+              <?php include "../../layout/footer.php"; ?>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
+    <script src="../../dist/js/adminlte.js"></script>
+
+    <script>
+      const SELECTOR_SIDEBAR_WRAPPER = '.sidebar-wrapper';
+      const Default = {
+        scrollbarTheme: 'os-theme-light',
+        scrollbarAutoHide: 'leave',
+        scrollbarClickScroll: true,
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        const sidebarWrapper = document.querySelector(SELECTOR_SIDEBAR_WRAPPER);
+        const isMobile = window.innerWidth <= 992;
+        if (
+          sidebarWrapper &&
+          OverlayScrollbarsGlobal?.OverlayScrollbars !== undefined &&
+          !isMobile
+        ) {
+          OverlayScrollbarsGlobal.OverlayScrollbars(sidebarWrapper, {
+            scrollbars: {
+              theme: Default.scrollbarTheme,
+              autoHide: Default.scrollbarAutoHide,
+              clickScroll: Default.scrollbarClickScroll,
+            },
+          });
+        }
+      });
+    </script>
+
+    <script>
+      (() => {
+        'use strict';
+        const STORAGE_KEY = 'lte-theme';
+        const getStoredTheme = () => localStorage.getItem(STORAGE_KEY);
+        const setStoredTheme = (theme) => localStorage.setItem(STORAGE_KEY, theme);
+        const prefersDark = () => globalThis.matchMedia('(prefers-color-scheme: dark)').matches;
+        const getPreferredTheme = () => {
+          const stored = getStoredTheme();
+          if (stored) return stored;
+          return prefersDark() ? 'dark' : 'light';
+        };
+        const setTheme = (theme) => {
+          const resolved = theme === 'auto' ? (prefersDark() ? 'dark' : 'light') : theme;
+          document.documentElement.setAttribute('data-bs-theme', resolved);
+        };
+        setTheme(getPreferredTheme());
+        const showActiveTheme = (theme) => {
+          document.querySelectorAll('[data-bs-theme-value]').forEach((el) => {
+            el.classList.remove('active');
+            el.setAttribute('aria-pressed', 'false');
+            const check = el.querySelector('.bi-check-lg');
+            if (check) check.classList.add('d-none');
+          });
+          const active = document.querySelector(`[data-bs-theme-value="${theme}"]`);
+          if (active) {
+            active.classList.add('active');
+            active.setAttribute('aria-pressed', 'true');
+            const check = active.querySelector('.bi-check-lg');
+            if (check) check.classList.remove('d-none');
+          }
+          document.querySelectorAll('[data-lte-theme-icon]').forEach((icon) => {
+            icon.classList.toggle('d-none', icon.dataset.lteThemeIcon !== theme);
+          });
+        };
+        globalThis.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+          const stored = getStoredTheme();
+          if (!stored || stored === 'auto') setTheme(getPreferredTheme());
+        });
+        document.addEventListener('DOMContentLoaded', () => {
+          showActiveTheme(getPreferredTheme());
+          document.querySelectorAll('[data-bs-theme-value]').forEach((toggle) => {
+            toggle.addEventListener('click', () => {
+              const theme = toggle.getAttribute('data-bs-theme-value');
+              setStoredTheme(theme);
+              setTheme(theme);
+              showActiveTheme(theme);
+            });
+          });
+        });
+      })();
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/tabulator-tables@6.4.0/dist/js/tabulator.min.js" crossorigin="anonymous"></script>
+    <script>
+      const actionButtons = (cell) => {
+        const row = cell.getRow().getData();
+        const params = `id=${row.id}&ref_no=${encodeURIComponent(row.ref_no)}&name=${encodeURIComponent(row.name)}&address=${encodeURIComponent(row.address)}&phone=${encodeURIComponent(row.phone)}`;
+        return `<a href="edit-customer.php?${params}" class="btn btn-sm btn-warning">
+                  <i class="bi bi-pencil-square"></i> Ubah
+                </a>`;
+      };
+
+      document.addEventListener('DOMContentLoaded', () => {
+        const data = [
+          { id: 1, ref_no: "REF-001", name: "Amelia Price",    address: "Jl. Merdeka No. 12, Jakarta",         phone: "0812-3456-7890" },
+          { id: 2, ref_no: "REF-002", name: "Budi Santoso",    address: "Jl. Dago No. 45, Bandung",            phone: "0813-9876-5432" },
+          { id: 3, ref_no: "REF-003", name: "Citra Dewi",      address: "Jl. Malioboro No. 88, Yogyakarta",    phone: "0856-4321-8765" },
+          { id: 4, ref_no: "REF-004", name: "Daniel Wijaya",   address: "Jl. Basuki Rahmat No. 101, Surabaya", phone: "0811-2233-4455" },
+          { id: 5, ref_no: "REF-005", name: "Eka Putri",       address: "Jl. Gajah Mada No. 23, Semarang",    phone: "0878-5566-7788" },
+          { id: 6, ref_no: "REF-006", name: "Fahmi Malik",     address: "Jl. Sudirman No. 56, Medan",          phone: "0821-9988-7766" },
+          { id: 7, ref_no: "REF-007", name: "Gita Permata",    address: "Jl. Pettarani No. 14, Makassar",      phone: "0819-1122-3344" },
+          { id: 8, ref_no: "REF-008", name: "Hendra Wijaya",   address: "Jl. Teuku Umar No. 9, Denpasar",      phone: "0852-7788-9900" },
+          { id: 9, ref_no: "REF-009", name: "Indah Lestari",   address: "Jl. Ahmad Yani No. 72, Banjarmasin",  phone: "0813-4455-6677" },
+          { id: 10, ref_no: "REF-010", name: "Joko Anwar",     address: "Jl. Pemuda No. 5, Palembang",         phone: "0888-1234-5678" },
+        ];
+
+        const table = new Tabulator('#users-table', {
+          theme: "bootstrap5",
+          data: data,
+          layout: 'fitColumns',
+          pagination: true,
+          paginationSize: 10,
+          paginationSizeSelector: [10, 25, 50, 100],
+          movableColumns: true,
+          columns: [
+            { title: 'ID',      field: 'id',  hozAlign: 'center',    headerSort: true, width: 80 },
+            { title: 'Nomor Referensi',  field: 'ref_no', hozAlign: 'center', headerSort: true },
+            { title: 'Nama Pelanggan',    field: 'name',    headerSort: false },
+            { title: 'Alamat', field: 'address', headerSort: false },
+            { title: 'Nomor Telepon',   field: 'phone',   headerSort: false },
+            { title: 'Aksi',  field: 'id',      formatter: actionButtons, headerSort: false, hozAlign: 'center', width: 100 },
+          ],
+        });
+
+        document.getElementById('table-filter').addEventListener('input', (e) => {
+          const value = e.target.value;
+          if (value) {
+            table.setFilter([[{ field: 'name', type: 'like', value: value }]]);
+          } else {
+            table.clearFilter();
+          }
+        });
+
+        document.getElementById('export-csv').addEventListener('click', () => table.download('csv', 'users.csv'));
+        document.getElementById('export-json').addEventListener('click', () => table.download('json', 'users.json'));
+        document.getElementById('print-table').addEventListener('click', () => table.print(false, true));
+      });
+    </script>
+  </body>
+</html>

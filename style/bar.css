@@ -1,0 +1,62 @@
+/* ── Navbar ── */
+.app-header.navbar {
+  background-color: #1e2d42 !important;
+  border-bottom: 1px solid #38bdf8 !important;
+  position: sticky;
+}
+.app-header .nav-link,
+.app-header .navbar-nav .nav-link {
+  color: #d0eaf8 !important;
+}
+.app-header .nav-link:hover {
+  color: #38bdf8 !important;
+}
+.app-header .navbar-badge {
+  background-color: #38bdf8 !important;
+  color: #0c1a2e !important;
+}
+
+/* ── Sidebar ── */
+.app-sidebar {
+  background-color: #152030 !important;
+  border-right: 1px solid #1e3a52 !important;
+}
+.app-sidebar .brand-link {
+  background-color: #0f1a28 !important;
+  border-bottom: 1px solid #38bdf8 !important;
+}
+.app-sidebar .brand-text {
+  color: #e0f4ff !important;
+}
+.app-sidebar .nav-link {
+  color: #a0c8e0 !important;
+}
+.app-sidebar .nav-link:hover {
+  color: #38bdf8 !important;
+  background-color: rgba(56, 189, 248, 0.08) !important;
+}
+.app-sidebar .nav-link.active {
+  color: #38bdf8 !important;
+  background-color: rgba(56, 189, 248, 0.15) !important;
+}
+.app-sidebar .nav-icon {
+  color: inherit !important;
+}
+.app-sidebar .nav-header {
+  color: #4a7a9a !important;
+  font-size: 0.7rem !important;
+  letter-spacing: 0.08em !important;
+}
+
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 1030;
+}
+
+.app-sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}

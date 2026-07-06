@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report Tunggakan</title>
+    <link rel="stylesheet" href="../../style/index.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/styles/overlayscrollbars.min.css"/>
+    <link rel="stylesheet" href="../../dist/css/adminlte.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tabulator-tables@6.4.0/dist/css/tabulator_bootstrap5.min.css" crossorigin="anonymous"/>
+</head>
+<body class="app-wrapper">
+<?php include "../../layout/navbar.php"; ?>
+<?php include "../../layout/sidebar.php"; ?>
+
+  <main class="app-main">
+    <div class="app-content-header">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-sm-6">
+            <h3 class="mb-0">Laporan Tunggakan</h3>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-end">
+              <li class="breadcrumb-item"><a href="dashboard.php">Beranda</a></li>
+              <li class="breadcrumb-item active">Tunggakan</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="app-content">
+      <div class="container-fluid">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Tunggakan Pelanggan</h3>
+          </div>
+          <div class="card-body">
+            <div id="users-table"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <?php include "../../layout/footer.php"; ?>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
+  <script src="dist/js/adminlte.js"></script>
+
+  <script>
+    (() => {
+      'use strict';
+      const STORAGE_KEY = 'lte-theme';
+      const getStoredTheme = () => localStorage.getItem(STORAGE_KEY);
+      const setStoredTheme = (theme) => localStorage.setItem(STORAGE_KEY, theme);
+      const prefersDark = () => globalThis.matchMedia('(prefers-color-scheme: dark)').matches;
+      const getPreferredTheme = () => { const stored = getStoredTheme(); if (stored) return stored; return prefersDark() ? 'dark' : 'light'; };
+      const setTheme = (theme) => { const resolved = theme === 'auto' ? (prefersDark() ? 'dark' : 'light') : theme; document.documentElement.setAttribute('data-bs-theme', resolved); };
+      setTheme(getPreferredTheme());
+      const showActiveTheme = (theme) => {
+        document.querySelectorAll('[data-bs-theme-value]').forEach((el) => { el.classList.remove('active'); el.setAttribute('aria-pressed', 'false'); const check = el.querySelector('.bi-check-lg'); if (check) check.classList.add('d-none'); });
+        const active = document.querySelector(`[data-bs-theme-value="${theme}"]`);
+        if (active) { active.classList.add('active'); active.setAttribute('aria-pressed', 'true'); const check = active.querySelector('.bi-check-lg'); if (check) check.classList.remove('d-none'); }
+        document.querySelectorAll('[data-lte-theme-icon]').forEach((icon) => { icon.classList.toggle('d-none', icon.dataset.lteThemeIcon !== theme); });
+      };
+      globalThis.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { const stored = getStoredTheme(); if (!stored || stored === 'auto') setTheme(getPreferredTheme()); });
+      document.addEventListener('DOMContentLoaded', () => {
+        showActiveTheme(getPreferredTheme());
+        document.querySelectorAll('[data-bs-theme-value]').forEach((toggle) => { toggle.addEventListener('click', () => { const theme = toggle.getAttribute('data-bs-theme-value'); setStoredTheme(theme); setTheme(theme); showActiveTheme(theme); }); });
+      });
+    })();
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/tabulator-tables@6.4.0/dist/js/tabulator.min.js" crossorigin="anonymous"></script>
+  <script>
+    const fmt = (n) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(n);
+
+    // ── Data Dummy ──
+    const dataTunggakan = [
+      { nama: 'Amelia Price',    total_inv: 650000,  terbayar: 650000  },
+      { nama: 'Budi Santoso',    total_inv: 1560000, terbayar: 800000  },
+      { nama: 'Citra Dewi',      total_inv: 1200000, terbayar: 1200000 },
+      { nama: 'Daniel Wijaya',   total_inv: 620000,  terbayar: 0       },
+      { nama: 'Eka Putri',       total_inv: 3950000, terbayar: 3950000 },
+      { nama: 'Fahmi Malik',     total_inv: 1080000, terbayar: 500000  },
+      { nama: 'Gita Permata',    total_inv: 1450000, terbayar: 1450000 },
+      { nama: 'Hendra Wijaya',   total_inv: 1160000, terbayar: 300000  },
+      { nama: 'Indah Lestari',   total_inv: 1100000, terbayar: 1100000 },
+      { nama: 'Joko Anwar',      total_inv: 680000,  terbayar: 0       },
+    ];
+
+    // ── Custom formatter: hitung sisa tagihan secara dinamis ──
+    const sisaTagihanFormatter = (cell) => {
+      const data = cell.getRow().getData();
+      const sisa = data.total_inv - data.terbayar;
+
+      if (sisa > 0) {
+        return `<span class="fw-bold text-danger">${fmt(sisa)}</span>`;
+      }
+      return `<span class="text-success">${fmt(sisa)}</span>`;
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      new Tabulator('#users-table', {
+        theme: 'bootstrap5',
+        data: dataTunggakan,
+        layout: 'fitColumns',
+        pagination: true,
+        paginationSize: 10,
+        columns: [
+          { title: 'Nama Pelanggan',   field: 'nama',       headerFilter: 'input' },
+          {
+            title: 'Total Tagihan', field: 'total_inv', hozAlign: 'right', headerHozAlign:'right', 
+            formatter: (cell) => fmt(cell.getValue()),
+          },
+          {
+            title: 'Total Terbayar', field: 'terbayar', hozAlign: 'right', headerHozAlign:'right',
+            formatter: (cell) => fmt(cell.getValue()),
+          },
+          {
+            title: 'Sisa Tagihan', field: 'total_inv', hozAlign: 'right', headerHozAlign:'right',
+            formatter: sisaTagihanFormatter,
+          },
+        ],
+      });
+    });
+  </script>
+</body>
+</html>
