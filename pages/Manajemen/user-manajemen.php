@@ -18,11 +18,11 @@
         <div class="app-content-header">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-sm-6"><h3 class="mb-0">Manajemen User</h3></div>
+                    <div class="col-sm-6"><h3 class="mb-0">Tabel Pengguna</h3></div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-end">
                             <li class="breadcrumb-item"><a href="../../dashboard.php">Beranda</a></li>
-                            <li class="breadcrumb-item active">User</li>
+                            <li class="breadcrumb-item active">Tabel Pengguna</li>
                         </ol>
                     </div>
                 </div>
@@ -133,6 +133,14 @@
 
     <?php include "../../layout/footer.php"; ?>
 
+
+    <!-- Dropdown custom user -->
+    <div id="custom-dropdown-user" class="dropdown-menu shadow" style="display:none; position:fixed; z-index:9999; min-width:160px;">
+      <a class="dropdown-item" id="ddu-ubah" href="#"><i class="bi bi-pencil-square me-2"></i>Ubah</a>
+      <hr class="dropdown-divider">
+      <a class="dropdown-item text-danger" id="ddu-hapus" href="#"><i class="bi bi-trash me-2"></i>Hapus</a>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
@@ -194,11 +202,43 @@
       };
 
       const btnAksi = (cell) => {
-        const row = cell.getRow().getData();
-        return `<button class="btn btn-sm btn-warning" onclick="bukaModalUbah(${row.id})">
-                  <i class="bi bi-pencil-square"></i> Ubah
-                </button>`;
+        const id = cell.getValue();
+        return `<button class="btn btn-sm btn-warning" onclick="toggleDropdownUser(event, ${id})">
+          Aksi <i class="bi bi-chevron-down ms-1"></i>
+        </button>`;
       };
+
+      let activeUserRowId = null;
+
+      function toggleDropdownUser(e, id) {
+        e.stopPropagation();
+        const dd = document.getElementById('custom-dropdown-user');
+        const rect = e.currentTarget.getBoundingClientRect();
+        if (activeUserRowId === id && dd.style.display === 'block') {
+          dd.style.display = 'none'; activeUserRowId = null; return;
+        }
+        document.getElementById('ddu-ubah').onclick = (ev) => { ev.preventDefault(); bukaModalUbah(id); dd.style.display = 'none'; activeUserRowId = null; };
+        document.getElementById('ddu-hapus').onclick = (ev) => {
+          ev.preventDefault();
+          if (confirm('Hapus user ini?')) {
+            const row = table.getRow(id);
+            if (row) row.delete();
+            dataUsers = dataUsers.filter(u => u.id !== id);
+            saveUsers(dataUsers);
+            dd.style.display = 'none'; activeUserRowId = null;
+          }
+        };
+        dd.style.display = 'block';
+        dd.style.top  = (rect.bottom + window.scrollY + 2) + 'px';
+        dd.style.left = (rect.left + window.scrollX) + 'px';
+        activeUserRowId = id;
+      }
+
+      document.addEventListener('click', () => {
+        const dd = document.getElementById('custom-dropdown-user');
+        if (dd) dd.style.display = 'none';
+        activeUserRowId = null;
+      });
 
       let table;
 
@@ -212,11 +252,11 @@
           paginationSizeSelector: [10, 25, 50],
           movableColumns: true,
           columns: [
-            { title: 'ID',           field: 'id',       hozAlign: 'center', headerSort: true, width: 80 },
-            { title: 'Username',     field: 'username', hozAlign: 'center', headerSort: true },
-            { title: 'Nama Lengkap', field: 'nama',     headerSort: false },
-            { title: 'Status',       field: 'status',   formatter: statusBadge, headerSort: false, hozAlign: 'center', width: 130 },
-            { title: 'Aksi',         field: 'id',       formatter: btnAksi, headerSort: false, hozAlign: 'center', width: 120 },
+            { title: 'ID',           field: 'id',       headerHozAlign: 'center', hozAlign: 'center', headerSort: true, width: 80 },
+            { title: 'Username',     field: 'username', headerHozAlign: 'center', hozAlign: 'center', headerSort: true },
+            { title: 'Nama Lengkap', field: 'nama',     headerHozAlign: 'center', hozAlign: 'center', headerSort: false },
+            { title: 'Status',       field: 'status',   formatter: statusBadge, headerSort: false, headerHozAlign: 'center', hozAlign: 'center', width: 130 },
+            { title: 'Aksi',         field: 'id',       formatter: btnAksi, headerSort: false, headerHozAlign: 'center', hozAlign: 'center', width: 120 },
           ],
         });
 

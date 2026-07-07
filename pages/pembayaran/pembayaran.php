@@ -19,12 +19,12 @@
       <div class="container-fluid">
         <div class="row">
           <div class="col-sm-6">
-            <h3 class="mb-0">Data Pembayaran</h3>
+            <h3 class="mb-0">Tabel Pembayaran</h3>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-end">
               <li class="breadcrumb-item"><a href="dashboard.php">Beranda</a></li>
-              <li class="breadcrumb-item active">Pembayaran</li>
+              <li class="breadcrumb-item active">Tabel Pembayaran</li>
             </ol>
           </div>
         </div>
@@ -71,11 +71,17 @@
 
 <?php include "../../layout/footer.php"; ?>
 
+    <!-- Dropdown custom pembayaran -->
+    <div id="custom-dropdown-bayar" class="dropdown-menu shadow" style="display:none; position:fixed; z-index:9999; min-width:160px;">
+      <a class="dropdown-item" id="ddb-detail" href="#"><i class="bi bi-eye me-2"></i>Detail</a>
+      <hr class="dropdown-divider">
+      <a class="dropdown-item text-danger" id="ddb-hapus" href="#"><i class="bi bi-trash me-2"></i>Hapus</a>
+    </div>
 
   <script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
-  <script src="dist/js/adminlte.js"></script>
+  <script src="../../dist/js/adminlte.js"></script>
 
   <script>
       const SELECTOR_SIDEBAR_WRAPPER = '.sidebar-wrapper';
@@ -142,11 +148,57 @@
     ];
 
     const btnAksi = (cell) => {
-      const row = cell.getRow().getData();
-      return `<a href="../invoice/invoice.php?inv_no=${encodeURIComponent(row.inv_no)}" class="btn btn-sm btn-info me-1">
-                <i class="bi bi-eye"></i> Detail
-              </a>`;
+      const no = cell.getValue();
+      return `<button class="btn btn-sm btn-warning" onclick="toggleDropdownBayar(event, ${no})">
+        Aksi <i class="bi bi-chevron-down ms-1"></i>
+      </button>`;
     };
+
+    let activePayRowId = null;
+
+function toggleDropdownBayar(e, no) {
+      e.stopPropagation();
+      const dd = document.getElementById('custom-dropdown-bayar');
+      const rect = e.currentTarget.getBoundingClientRect();
+
+      // Tutup jika klik tombol yang sama
+      if (activePayRowId === no && dd.style.display === 'block') {
+        dd.style.display = 'none'; 
+        activePayRowId = null; 
+        return;
+      }
+
+      // PERBAIKAN 1: Cari baris secara spesifik menggunakan data 'no', karena tabel tidak memakai 'id'
+      const baris = tabelPembayaran.getRows().find(r => r.getData().no === no);
+      const row = baris.getData();
+
+      // Update parameter link Detail
+      document.getElementById('ddb-detail').href = `../invoice/invoice.php?inv_no=${encodeURIComponent(row.inv_no)}`;
+      
+      // Fungsi Hapus dengan konfirmasi nama faktur
+      document.getElementById('ddb-hapus').onclick = (ev) => {
+        ev.preventDefault();
+        if (confirm(`Apakah Anda yakin ingin menghapus data pembayaran untuk ${row.inv_no}?`)) { 
+          baris.delete(); 
+          dd.style.display = 'none'; 
+          activePayRowId = null; 
+        }
+      };
+
+      // Tampilkan Dropdown
+      dd.style.display = 'block';
+      dd.style.top  = (rect.bottom + window.scrollY + 2) + 'px';
+      
+      // PERBAIKAN 2: Geser posisi kiri (offset) agar tidak terpotong di tepi layar
+      dd.style.left = (rect.left + window.scrollX - 80) + 'px';
+      
+      activePayRowId = no;
+    }
+    document.addEventListener('click', () => {
+      const dd = document.getElementById('custom-dropdown-bayar');
+      if (dd) dd.style.display = 'none';
+      activePayRowId = null;
+    });
 
     let tabelPembayaran;
 
@@ -181,14 +233,14 @@
         paginationSize: 10,
         paginationSizeSelector: [10, 25, 50],
         columns: [
-          { title: 'No',        field: 'no',      hozAlign: 'center', width: 90 },
-          { title: 'Tanggal',   field: 'tanggal',  hozAlign: 'center', sorter: 'date', width: 120 },
+          { title: 'No',        field: 'no',   headerHozAlign: 'right',    hozAlign: 'center', width: 90 },
+          { title: 'Tanggal',   field: 'tanggal',  headerHozAlign: 'center', hozAlign: 'center', sorter: 'date', width: 120 },
           { title: 'No. Faktur',   field: 'inv_no',  headerHozAlign: 'center',   hozAlign: 'center' },
           {
             title: 'Nominal', field: 'nominal', headerHozAlign: 'right', hozAlign: 'right',
             formatter: (cell) => fmt(cell.getValue())
           },
-          { title: 'Aksi', field: 'inv_no', formatter: btnAksi, headerSort: false, hozAlign: 'center', width: 140 },
+          { title: 'Aksi', field: 'no', formatter: btnAksi, headerSort: false, headerHozAlign: 'center', hozAlign: 'center', width: 120 },
         ],
       });
 

@@ -115,3 +115,14 @@ body::before {
   color: #d0eaf8 !important;
 }
 
+#users-table .tabulator-cell {
+  overflow: visible !important;
+}
+
+#users-table .tabulator-row {
+  overflow: visible !important;
+}
+
+#users-table .tabulator-tableholder {
+  overflow: visible !important;
+}

@@ -19,7 +19,7 @@
           <div class="container-fluid">
             <div class="row">
               <div class="col-sm-6">
-                <h3 class="mb-0">Data Barang</h3>
+                <h3 class="mb-0">Tabel Barang</h3>
               </div>
               <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-end">
@@ -29,7 +29,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </div>  
         <div class="app-content">
           <div class="container-fluid">
             <div class="card">
@@ -76,6 +76,13 @@
         </div>
       </main>
         <?php include "../../layout/footer.php"; ?>
+
+            <!-- Dropdown custom -->
+    <div id="custom-dropdown" class="dropdown-menu shadow" style="display:none; position:fixed; z-index:9999; min-width:160px;">
+      <a class="dropdown-item" id="dd-ubah" href="#"><i class="bi bi-pencil-square me-2"></i>Ubah</a>
+      <hr class="dropdown-divider">
+      <a class="dropdown-item text-danger" id="dd-hapus" href="#"><i class="bi bi-trash me-2"></i>Hapus</a>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" crossorigin="anonymous"></script>
@@ -139,13 +146,60 @@
         return `<span class="badge text-bg-${color}">${value}</span>`;
       };
 
-      const actionButtons = (cell) => {
-        const row = cell.getRow().getData();
-        const params = `id=${row.id}&ref_no=${encodeURIComponent(row.ref_no)}&name=${encodeURIComponent(row.name)}&price=${row.price}`;
-        return `<a href="edit.php?${params}" class="btn btn-sm btn-warning">
-                  <i class="bi bi-pencil-square"></i> Ubah
-                </a>`;
+      // Tombol Aksi — hanya render button, data diambil saat klik
+      const btnAksi = (cell) => {
+        const id = cell.getValue();
+        return `<button class="btn btn-sm btn-warning" onclick="toggleDropdown(event, ${id})">
+          Aksi <i class="bi bi-chevron-down ms-1"></i>
+        </button>`;
       };
+
+      let table;
+      let activeRowId = null;
+
+      function toggleDropdown(e, id) {
+        e.stopPropagation();
+        const dd = document.getElementById('custom-dropdown');
+        const rect = e.currentTarget.getBoundingClientRect();
+
+        // Tutup jika klik tombol yang sama
+        if (activeRowId === id && dd.style.display === 'block') {
+          dd.style.display = 'none';
+          activeRowId = null;
+          return;
+        }
+
+        // Ambil data baris yang diklik
+        const row = table.getRow(id).getData();
+
+        // Sesuaikan parameter URL untuk form Edit Barang (karena ini tabel barang, bukan invoice)
+        document.getElementById('dd-ubah').href = `edit.php?id=${row.id}&ref_no=${encodeURIComponent(row.ref_no)}`;
+
+        // Fungsi ketika tombol hapus di dalam dropdown diklik
+        document.getElementById('dd-hapus').onclick = (ev) => {
+          ev.preventDefault();
+          if (confirm(`Apakah Anda yakin ingin menghapus barang "${row.name}"?`)) {
+            table.getRow(id).delete();
+            dd.style.display = 'none';
+            activeRowId = null;
+          }
+        };
+
+        // Posisi dropdown di bawah tombol
+        dd.style.display = 'block';
+        dd.style.top  = (rect.bottom + window.scrollY + 2) + 'px';
+        
+        // Agar dropdown tidak keluar layar/terpotong di ujung kanan
+        dd.style.left = (rect.left + window.scrollX - 80) + 'px';
+        activeRowId = id;
+      }
+
+      // Klik di luar → tutup dropdown
+      document.addEventListener('click', () => {
+        const dd = document.getElementById('custom-dropdown');
+        if (dd) dd.style.display = 'none';
+        activeRowId = null;
+      });
 
       document.addEventListener('DOMContentLoaded', () => {
         const data = [
@@ -331,7 +385,7 @@
   }
 ];
 
-        const table = new Tabulator('#users-table', {
+          table = new Tabulator('#users-table', {
           theme: "bootstrap5",
           data: data,
           layout: 'fitColumns',
@@ -340,14 +394,14 @@
           paginationSizeSelector: [10, 25, 50, 100],
           movableColumns: true,
           columns: [
-            { title: 'ID',     field: 'id', hozAlign: 'center',    headerSort: true, width: 80 },
-            { title: 'Nomor Referensi', field: 'ref_no', hozAlign: 'center', headerSort: true },
+            { title: 'ID',     field: 'id', headerHozAlign: 'center', hozAlign: 'center',    headerSort: true, width: 80 },
+            { title: 'Nomor Referensi', field: 'ref_no', headerHozAlign: 'center', hozAlign: 'center', headerSort: true },
             { title: 'Nama Barang',   field: 'name',   headerSort: false },
             {
-              title: 'Harga', field: 'price', headerSort: true, hozAlign: 'right',
+              title: 'Harga', field: 'price', headerSort: true, headerHozAlign: 'right', hozAlign: 'right',
               formatter: (cell) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(cell.getValue()),
             },
-            { title: 'Aksi', field: 'id', formatter: actionButtons, headerSort: false, hozAlign: 'center', width: 100 },
+            { title: 'Aksi', field: 'id', formatter: btnAksi, headerHozAlign: 'center', headerSort: false, hozAlign: 'center', width: 100 },
           ],
         });
 

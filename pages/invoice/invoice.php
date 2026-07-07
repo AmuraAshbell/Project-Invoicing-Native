@@ -361,6 +361,20 @@
 
         bootstrap.Modal.getInstance(document.getElementById('modalUbahBarang')).hide();
       });
+      // ... (kode renderItems dan pengambilan data URL lainnya tetap ada di atasnya) ...
+
+      // =================================================================
+      // LOGIKA AUTO-PRINT DARI TABEL INVOICE
+      // Cek apakah ada perintah cetak dari URL (?cetak=1)
+      if (params.get('cetak') === '1') {
+        // Gunakan setTimeout untuk memberi jeda 0.5 detik.
+        // Ini penting agar JavaScript selesai me-render data barang (tabel) 
+        // ke layar sebelum jendela print bawaan browser terbuka.
+        setTimeout(() => {
+          window.print();
+        }, 500); 
+      }
+      // =================================================================
     });
 
     document.addEventListener('DOMContentLoaded', function() {

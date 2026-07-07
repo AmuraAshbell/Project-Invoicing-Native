@@ -19,12 +19,12 @@
           <div class="container-fluid">
             <div class="row">
               <div class="col-sm-6">
-                <h3 class="mb-0">Data Laporan</h3>
+                <h3 class="mb-0">Tabel Laporan</h3>
               </div>
               <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-end">
                   <li class="breadcrumb-item"><a href="../../dashboard.php">Beranda</a></li>
-                  <li class="breadcrumb-item active" aria-current="page">Laporan Omset</li>
+                  <li class="breadcrumb-item active" aria-current="page">Tabel Laporan</li>
                 </ol>
               </div>
             </div>
@@ -157,18 +157,18 @@
         const columnConfigs = {
             harian: [
                 { title: 'Tanggal & Hari', field: 'label' },
-                { title: 'Jumlah Transaksi', field: 'transaksi', hozAlign: 'center' },
-                { title: 'Total Omset', field: 'omset', formatter: "money", formatterParams: { currency: "IDR", precision: 0 } }
+                { title: 'Jumlah Transaksi', field: 'transaksi', headerHozAlign: 'center', hozAlign: 'center' },
+                { title: 'Total Omset', field: 'omset', formatter: "money", headerHozAlign: 'right', hozAlign: 'right', formatterParams: { currency: "IDR", precision: 0 } }
             ],
             mingguan: [
                 { title: 'Minggu Ke', field: 'label' },
-                { title: 'Jumlah Transaksi', field: 'transaksi', hozAlign: 'center' },
-                { title: 'Total Omset', field: 'omset', formatter: "money", formatterParams: { currency: "IDR", precision: 0 } }
+                { title: 'Jumlah Transaksi', field: 'transaksi', headerHozAlign: 'center', hozAlign: 'center' },
+                { title: 'Total Omset', field: 'omset', formatter: "money", headerHozAlign: 'right', hozAlign: 'right', formatterParams: { currency: "IDR", precision: 0 } }
             ],
             bulanan: [
                 { title: 'Bulan', field: 'label' },
-                { title: 'Jumlah Transaksi', field: 'transaksi', hozAlign: 'center' },
-                { title: 'Total Omset', field: 'omset', formatter: "money", formatterParams: { currency: "IDR", precision: 0 } }
+                { title: 'Jumlah Transaksi', field: 'transaksi', headerHozAlign: 'center',  hozAlign: 'center' },
+                { title: 'Total Omset', field: 'omset', formatter: "money", headerHozAlign: 'right', hozAlign: 'right', formatterParams: { currency: "IDR", precision: 0 } }
             ]
         };
 

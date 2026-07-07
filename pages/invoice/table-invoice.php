@@ -19,7 +19,7 @@
         <div class="container-fluid">
           <div class="row">
             <div class="col-sm-6">
-              <h3 class="mb-0">Data Faktur</h3>
+              <h3 class="mb-0">Tabel Faktur</h3>
             </div>
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-end">
@@ -38,32 +38,29 @@
             </div>
             <div class="card-body">
 
-            <div class="d-flex gap-2 my-2">
-                  <a href="create-invoice.php" class="btn btn-sm btn-primary">
-                    <i class="bi bi-plus-lg me-1" aria-hidden="true"></i>
-                    Tambah Data
-                  </a>
-                  <button id="export-csv" type="button" class="btn btn-sm btn-outline-secondary">
-                    <i class="bi bi-filetype-csv me-1"></i>Export CSV
-                  </button>
-                  <button id="export-json" type="button" class="btn btn-sm btn-outline-secondary">
-                    <i class="bi bi-filetype-json me-1"></i>Export JSON
-                  </button>
-                  <button id="print-table" type="button" class="btn btn-sm btn-outline-secondary">
-                    <i class="bi bi-printer me-1"></i>Print
-                  </button>
+              <div class="d-flex gap-2 my-2">
+                <a href="create-invoice.php" class="btn btn-sm btn-primary">
+                  <i class="bi bi-plus-lg me-1"></i>Tambah Data
+                </a>
+                <button id="export-csv" type="button" class="btn btn-sm btn-outline-secondary">
+                  <i class="bi bi-filetype-csv me-1"></i>Export CSV
+                </button>
+                <button id="export-json" type="button" class="btn btn-sm btn-outline-secondary">
+                  <i class="bi bi-filetype-json me-1"></i>Export JSON
+                </button>
+                <button id="print-table" type="button" class="btn btn-sm btn-outline-secondary">
+                  <i class="bi bi-printer me-1"></i>Print
+                </button>
+                <div class="vr mx-1"></div>
+                <button id="btn-test-success" type="button" class="btn btn-sm btn-success">
+                  <i class="bi bi-check2-circle me-1"></i>Test Sukses
+                </button>
+                <button id="btn-test-error" type="button" class="btn btn-sm btn-danger">
+                  <i class="bi bi-x-circle me-1"></i>Test Gagal
+                </button>
+              </div>
 
-                  <div class="vr mx-1"></div>
-
-                  <button id="btn-test-success" type="button" class="btn btn-sm btn-success">
-                    <i class="bi bi-check2-circle me-1"></i>Test Sukses
-                  </button>
-                  <button id="btn-test-error" type="button" class="btn btn-sm btn-danger">
-                    <i class="bi bi-x-circle me-1"></i>Test Gagal
-                  </button>
-                </div>
-
-            <div class="row g-2 my-3">
+              <div class="row g-2 my-3">
                 <div class="col-md-3">
                   <label for="search-keyword" class="form-label form-label-sm mb-1">Kata Kunci</label>
                   <input type="text" id="search-keyword" class="form-control form-control-sm" placeholder="No faktur / pelanggan...">
@@ -72,7 +69,7 @@
                   <label for="search-customer" class="form-label form-label-sm mb-1">Pelanggan</label>
                   <select id="search-customer" class="form-select form-select-sm">
                     <option value="">Semua Pelanggan</option>
-                    <option value="Harga Amelia">Amelia Price</option>
+                    <option value="Amelia Price">Amelia Price</option>
                     <option value="Budi Santoso">Budi Santoso</option>
                     <option value="Citra Dewi">Citra Dewi</option>
                     <option value="Daniel Wijaya">Daniel Wijaya</option>
@@ -96,12 +93,12 @@
                   <button id="btn-search" type="button" class="btn btn-sm btn-primary w-100">
                     <i class="bi bi-search me-1"></i>Cari
                   </button>
-                  <button id="btn-reset" type="button" class="btn btn-sm btn-outline-secondary w-100" title="Reset Pencarian">
+                  <button id="btn-reset" type="button" class="btn btn-sm btn-outline-secondary w-100" title="Reset">
                     <i class="bi bi-arrow-counterclockwise"></i>
                   </button>
                 </div>
               </div>
-              
+
               <div id="users-table"></div>
             </div>
           </div>
@@ -109,8 +106,32 @@
       </div>
     </main>
 
-            <?php include "../../layout/footer.php"; ?>
+    <?php include "../../layout/footer.php"; ?>
 
+    <!-- Dropdown custom (position fixed, di luar Tabulator) -->
+    <div id="custom-dropdown" class="dropdown-menu shadow" style="display:none; position:fixed; z-index:9999; min-width:160px;">
+      <a class="dropdown-item" id="dd-detail" href="#"><i class="bi bi-eye me-2"></i>Detail</a>
+      <a class="dropdown-item" id="dd-ubah" href="#"><i class="bi bi-pencil-square me-2"></i>Ubah</a>
+      <hr class="dropdown-divider">
+      <a class="dropdown-item text-danger" id="dd-hapus" href="#"><i class="bi bi-trash me-2"></i>Hapus</a>
+      <a class="dropdown-item" onclick="window.print()" id="dd-cetak" href="#"><i class="bi bi-printer me-2"></i>Cetak</a>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast-container position-fixed top-0 end-0 p-4" style="z-index:1055;">
+      <div id="toast-success" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+          <div class="toast-body fw-medium"><i class="bi bi-check-circle-fill me-2"></i>Aksi berhasil! Data telah disimpan.</div>
+          <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+        </div>
+      </div>
+      <div id="toast-error" class="toast align-items-center text-bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+          <div class="toast-body fw-medium"><i class="bi bi-exclamation-triangle-fill me-2"></i>Terjadi kesalahan. Gagal menyimpan data!</div>
+          <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+        </div>
+      </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" crossorigin="anonymous"></script>
@@ -162,33 +183,95 @@
         return `<span class="badge text-bg-${color}">${label}</span>`;
       };
 
-const btnAksi = (cell) => {
-  const row = cell.getRow().getData();
-  const paramsDetail = `id=${row.id}&inv_no=${encodeURIComponent(row.inv_no)}&customer=${encodeURIComponent(row.customer||'')}&due_date=${encodeURIComponent(row.due_date||'')}`;
-  const paramsEdit   = `id=${row.id}&inv_no=${encodeURIComponent(row.inv_no)}`;
-  return `<a href="invoice.php?${paramsDetail}" class="btn btn-sm btn-info me-1">
-            <i class="bi bi-eye"></i> Detail
-          </a>
-          <a href="edit-invoice.php?${paramsEdit}" class="btn btn-sm btn-warning">
-            <i class="bi bi-pencil-square"></i> Ubah
-          </a>`;
-};
+      // Tombol Aksi — hanya render button, data diambil saat klik
+      const btnAksi = (cell) => {
+        const id = cell.getValue();
+        return `<button class="btn btn-sm btn-warning" onclick="toggleDropdown(event, ${id})">
+          Aksi <i class="bi bi-chevron-down ms-1"></i>
+        </button>`;
+      };
+
+      let table;
+      let activeRowId = null;
+
+      function toggleDropdown(e, id) {
+        e.stopPropagation();
+        const dd = document.getElementById('custom-dropdown');
+        const rect = e.currentTarget.getBoundingClientRect();
+
+        // Tutup jika klik tombol yang sama
+        if (activeRowId === id && dd.style.display === 'block') {
+          dd.style.display = 'none';
+          activeRowId = null;
+          return;
+        }
+
+        const row = table.getRow(id).getData();
+        const paramsDetail = `id=${row.id}&inv_no=${encodeURIComponent(row.inv_no)}&customer=${encodeURIComponent(row.customer||'')}&due_date=${encodeURIComponent(row.due_date||'')}`;
+        const paramsEdit   = `id=${row.id}&inv_no=${encodeURIComponent(row.inv_no)}`;
+
+        document.getElementById('dd-detail').href = `invoice.php?${paramsDetail}`;
+        document.getElementById('dd-ubah').href   = `edit-invoice.php?${paramsEdit}`;
+
+        document.getElementById('dd-hapus').onclick = (ev) => {
+          ev.preventDefault();
+          if (confirm('Hapus invoice ini?')) {
+            table.getRow(id).delete();
+            dd.style.display = 'none';
+            activeRowId = null;
+          }
+        };
+
+        // Tombol Cetak (Membuka halaman invoice dan otomatis print)
+        document.getElementById('dd-cetak').onclick = (ev) => {
+          ev.preventDefault();
+          // Kita tambahkan parameter &cetak=1 di ujung URL
+          const paramsDetail = `inv_no=${encodeURIComponent(row.inv_no)}&customer=${encodeURIComponent(row.customer||'')}&due_date=${encodeURIComponent(row.due_date||'')}`;
+          window.open(`invoice.php?${paramsDetail}&cetak=1`, '_blank');
+          
+          dd.style.display = 'none';
+          activeRowId = null;
+        };
+
+        // Opsional: Jika kamu punya tombol khusus "PDF" untuk DOMPDF di dropdown
+        /*
+        document.getElementById('dd-pdf').onclick = (ev) => {
+          ev.preventDefault();
+          window.open(`cetak-pdf.php?inv_no=${encodeURIComponent(row.inv_no)}`, '_blank');
+          dd.style.display = 'none';
+          activeRowId = null;
+        };
+        */
+
+        // Posisi dropdown di bawah tombol
+        dd.style.display = 'block';
+        dd.style.top  = (rect.bottom + window.scrollY + 2) + 'px';
+        dd.style.left = (rect.left + window.scrollX) + 'px';
+        activeRowId = id;
+      }
+
+      // Klik di luar → tutup dropdown
+      document.addEventListener('click', () => {
+        const dd = document.getElementById('custom-dropdown');
+        if (dd) dd.style.display = 'none';
+        activeRowId = null;
+      });
 
       document.addEventListener('DOMContentLoaded', () => {
         const data = [
-          { id:1,  inv_no:"INV-2026-001", customer:"Amelia Price",   due_date:"2026-07-01", price:650000,  status:"paid"      },
-          { id:2,  inv_no:"INV-2026-002", customer:"Budi Santoso",   due_date:"2026-07-05", price:1560000, status:"unpaid"    },
-          { id:3,  inv_no:"INV-2026-003", customer:"Citra Dewi",     due_date:"2026-07-10", price:1200000, status:"paid"      },
-          { id:4,  inv_no:"INV-2026-004", customer:"Daniel Wijaya",  due_date:"2026-07-12", price:620000,  status:"cancelled" },
-          { id:5,  inv_no:"INV-2026-005", customer:"Eka Putri",      due_date:"2026-07-15", price:3950000, status:"paid"      },
-          { id:6,  inv_no:"INV-2026-006", customer:"Fahmi Malik",    due_date:"2026-07-18", price:1080000, status:"unpaid"    },
-          { id:7,  inv_no:"INV-2026-007", customer:"Gita Permata",   due_date:"2026-07-20", price:1450000, status:"paid"      },
-          { id:8,  inv_no:"INV-2026-008", customer:"Hendra Wijaya",  due_date:"2026-07-22", price:1160000, status:"unpaid"    },
-          { id:9,  inv_no:"INV-2026-009", customer:"Indah Lestari",  due_date:"2026-07-25", price:1100000, status:"paid"      },
-          { id:10, inv_no:"INV-2026-010", customer:"Joko Anwar",     due_date:"2026-07-28", price:680000,  status:"cancelled" },
+          { id:1,  inv_no:"INV-2026-001", customer:"Amelia Price",   start_date:"2026-05-02", due_date:"2026-07-01", price:650000,  status:"paid"      },
+          { id:2,  inv_no:"INV-2026-002", customer:"Budi Santoso",   start_date:"2026-05-02", due_date:"2026-07-05", price:1560000, status:"unpaid"    },
+          { id:3,  inv_no:"INV-2026-003", customer:"Citra Dewi",     start_date:"2026-05-02", due_date:"2026-07-10", price:1200000, status:"paid"      },
+          { id:4,  inv_no:"INV-2026-004", customer:"Daniel Wijaya",  start_date:"2026-05-02", due_date:"2026-07-12", price:620000,  status:"cancelled" },
+          { id:5,  inv_no:"INV-2026-005", customer:"Eka Putri",      start_date:"2026-05-02", due_date:"2026-07-15", price:3950000, status:"paid"      },
+          { id:6,  inv_no:"INV-2026-006", customer:"Fahmi Malik",    start_date:"2026-05-02", due_date:"2026-07-18", price:1080000, status:"unpaid"    },
+          { id:7,  inv_no:"INV-2026-007", customer:"Gita Permata",   start_date:"2026-05-02", due_date:"2026-07-20", price:1450000, status:"paid"      },
+          { id:8,  inv_no:"INV-2026-008", customer:"Hendra Wijaya",  start_date:"2026-05-02", due_date:"2026-07-22", price:1160000, status:"unpaid"    },
+          { id:9,  inv_no:"INV-2026-009", customer:"Indah Lestari",  start_date:"2026-05-02", due_date:"2026-07-25", price:1100000, status:"paid"      },
+          { id:10, inv_no:"INV-2026-010", customer:"Joko Anwar",     start_date:"2026-05-02", due_date:"2026-07-28", price:680000,  status:"cancelled" },
         ];
 
-        const table = new Tabulator('#users-table', {
+        table = new Tabulator('#users-table', {
           theme: "bootstrap5",
           data: data,
           layout: 'fitColumns',
@@ -197,118 +280,53 @@ const btnAksi = (cell) => {
           paginationSizeSelector: [10, 25, 50, 100],
           movableColumns: true,
           columns: [
-            { title: 'ID',             field: 'id',       hozAlign: 'center', headerSort: true, width: 70 },
-            { title: 'Nomor Faktur',   field: 'inv_no',   hozAlign: 'center', headerSort: true },
-            { title: 'Nama Pelanggan', field: 'customer', headerSort: false },
-            { title: 'Jatuh Tempo',    field: 'due_date', headerSort: true },
+            { title: 'ID',             field: 'id',          headerHozAlign: 'center',hozAlign: 'center', headerSort: true, width: 70 },
+            { title: 'Nomor Faktur',   field: 'inv_no',     headerHozAlign: 'center', hozAlign: 'center', headerSort: true },
+            { title: 'Nama Pelanggan', field: 'customer',   headerSort: false },
+            { title: 'Tanggal Faktur', field: 'start_date', headerHozAlign: 'center', hozAlign: 'center', headerSort: true },
+            { title: 'Jatuh Tempo',    field: 'due_date',   headerHozAlign: 'center', hozAlign: 'center', headerSort: true },
             {
-              title: 'Total Harga', field: 'price', headerSort: true, hozAlign: 'right',
+              title: 'Total Harga', field: 'price', headerSort: true, headerHozAlign: 'right', hozAlign: 'right',
               formatter: (cell) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(cell.getValue()),
             },
-            { title: 'Status', field: 'status', formatter: statusBadge, headerSort: false, hozAlign: 'center', width: 130 },
-            // { title: 'Detail', field: 'id',     formatter: btnDetail,   headerSort: false, hozAlign: 'center', width: 110 },
-            { title: 'Aksi',   field: 'id',     formatter: btnAksi,     headerSort: false, hozAlign: 'center', width: 200 },
+            { title: 'Status', field: 'status', formatter: statusBadge, headerSort: false, headerHozAlign: 'center', hozAlign: 'center', width: 130 },
+            { title: 'Aksi',   field: 'id',     formatter: btnAksi,     headerSort: false, headerHozAlign: 'center', hozAlign: 'center', width: 120 },
           ],
         });
 
-                // Fungsi Logika Pencarian Lanjutan
         function applySearch() {
           const keyword  = document.getElementById('search-keyword').value.trim();
           const customer = document.getElementById('search-customer').value;
           const dateFrom = document.getElementById('search-date-from').value;
           const dateTo   = document.getElementById('search-date-to').value;
-
-          const filters = [];
-
-          // Filter Kata Kunci (Nomor Faktur ATAU Nama Pelanggan)
-          if (keyword) {
-            filters.push([
-              { field: 'inv_no',   type: 'like', value: keyword },
-              { field: 'customer', type: 'like', value: keyword },
-            ]);
-          }
-          // Filter Spesifik Customer
-          if (customer) {
-            filters.push({ field: 'customer', type: '=', value: customer });
-          }
-          // Filter Rentang Tanggal Jatuh Tempo
-          if (dateFrom) {
-            filters.push({ field: 'due_date', type: '>=', value: dateFrom });
-          }
-          if (dateTo) {
-            filters.push({ field: 'due_date', type: '<=', value: dateTo });
-          }
-
-          // Terapkan ke tabel Tabulator
-          if (filters.length > 0) {
-            table.setFilter(filters);
-          } else {
-            table.clearFilter();
-          }
+          const filters  = [];
+          if (keyword)  filters.push([{ field: 'inv_no', type: 'like', value: keyword }, { field: 'customer', type: 'like', value: keyword }]);
+          if (customer) filters.push({ field: 'customer', type: '=', value: customer });
+          if (dateFrom) filters.push({ field: 'due_date', type: '>=', value: dateFrom });
+          if (dateTo)   filters.push({ field: 'due_date', type: '<=', value: dateTo });
+          filters.length > 0 ? table.setFilter(filters) : table.clearFilter();
         }
 
-        // Jalankan pencarian saat tombol "Cari" diklik
         document.getElementById('btn-search').addEventListener('click', applySearch);
-
-        // Fungsi untuk mereset semua filter ke kondisi awal
         document.getElementById('btn-reset').addEventListener('click', () => {
-          document.getElementById('search-keyword').value  = '';
-          document.getElementById('search-customer').value = '';
+          document.getElementById('search-keyword').value   = '';
+          document.getElementById('search-customer').value  = '';
           document.getElementById('search-date-from').value = '';
           document.getElementById('search-date-to').value   = '';
           table.clearFilter();
         });
 
+        document.getElementById('export-csv').addEventListener('click',  () => table.download('csv',  'faktur.csv'));
+        document.getElementById('export-json').addEventListener('click', () => table.download('json', 'faktur.json'));
+        document.getElementById('print-table').addEventListener('click', () => table.print(false, true));
 
-        // document.getElementById('table-filter').addEventListener('input', (e) => {
-        //   const v = e.target.value;
-        //   if (v) { table.setFilter([[{ field: 'inv_no', type: 'like', value: v }, { field: 'customer', type: 'like', value: v }]]); } else { table.clearFilter(); }
-        // });
-
-        document.getElementById('export-csv').addEventListener('click',   () => table.download('csv',  'faktur.csv'));
-        document.getElementById('export-json').addEventListener('click',  () => table.download('json', 'faktur.json'));
-        document.getElementById('print-table').addEventListener('click',  () => table.print(false, true));
+        document.getElementById('btn-test-success').addEventListener('click', () => {
+          new bootstrap.Toast(document.getElementById('toast-success'), { delay: 3000 }).show();
+        });
+        document.getElementById('btn-test-error').addEventListener('click', () => {
+          new bootstrap.Toast(document.getElementById('toast-error'), { delay: 4000 }).show();
+        });
       });
     </script>
-
-  <script>
-          // Menampilkan notifikasi sukses
-      document.getElementById('btn-test-success').addEventListener('click', () => {
-        const toastSukses = new bootstrap.Toast(document.getElementById('toast-success'), {
-          delay: 3000 // Menghilang otomatis setelah 3 detik
-        });
-        toastSukses.show();
-      });
-
-      // Menampilkan notifikasi gagal
-      document.getElementById('btn-test-error').addEventListener('click', () => {
-        const toastGagal = new bootstrap.Toast(document.getElementById('toast-error'), {
-          delay: 4000 // Menghilang otomatis setelah 4 detik
-        });
-        toastGagal.show();
-      });
-  </script>
-
-  <div class="toast-container position-fixed top-0 end-0 p-4" style="z-index: 1055;">
-  
-  <div id="toast-success" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
-    <div class="d-flex">
-      <div class="toast-body fw-medium">
-        <i class="bi bi-check-circle-fill me-2"></i> Aksi berhasil! Data telah disimpan.
-      </div>
-      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Tutup"></button>
-    </div>
-  </div>
-
-  <div id="toast-error" class="toast align-items-center text-bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
-    <div class="d-flex">
-      <div class="toast-body fw-medium">
-        <i class="bi bi-exclamation-triangle-fill me-2"></i> Terjadi kesalahan. Gagal menyimpan data!
-      </div>
-      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Tutup"></button>
-    </div>
-  </div>
-
-</div>
   </body>
 </html>

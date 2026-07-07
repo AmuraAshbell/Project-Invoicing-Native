@@ -21,7 +21,7 @@
           <div class="container-fluid">
             <div class="row">
               <div class="col-sm-6">
-                <h3 class="mb-0">Data Pelanggan</h3>
+                <h3 class="mb-0">Tabel Pelanggan</h3>
               </div>
               <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-end">
@@ -80,6 +80,14 @@
 
               <?php include "../../layout/footer.php"; ?>
 
+
+
+    <!-- Dropdown custom -->
+    <div id="custom-dropdown" class="dropdown-menu shadow" style="display:none; position:fixed; z-index:9999; min-width:160px;">
+      <a class="dropdown-item" id="dd-ubah" href="#"><i class="bi bi-pencil-square me-2"></i>Ubah</a>
+      <hr class="dropdown-divider">
+      <a class="dropdown-item text-danger" id="dd-hapus" href="#"><i class="bi bi-trash me-2"></i>Hapus</a>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" crossorigin="anonymous"></script>
@@ -168,12 +176,40 @@
     <script src="https://cdn.jsdelivr.net/npm/tabulator-tables@6.4.0/dist/js/tabulator.min.js" crossorigin="anonymous"></script>
     <script>
       const actionButtons = (cell) => {
-        const row = cell.getRow().getData();
-        const params = `id=${row.id}&ref_no=${encodeURIComponent(row.ref_no)}&name=${encodeURIComponent(row.name)}&address=${encodeURIComponent(row.address)}&phone=${encodeURIComponent(row.phone)}`;
-        return `<a href="edit-customer.php?${params}" class="btn btn-sm btn-warning">
-                  <i class="bi bi-pencil-square"></i> Ubah
-                </a>`;
+        const id = cell.getValue();
+        return `<button class="btn btn-sm btn-warning" onclick="toggleDropdown(event, ${id})">
+          Aksi <i class="bi bi-chevron-down ms-1"></i>
+        </button>`;
       };
+
+      let table;
+      let activeRowId = null;
+
+      function toggleDropdown(e, id) {
+        e.stopPropagation();
+        const dd = document.getElementById('custom-dropdown');
+        const rect = e.currentTarget.getBoundingClientRect();
+        if (activeRowId === id && dd.style.display === 'block') {
+          dd.style.display = 'none'; activeRowId = null; return;
+        }
+        const row = table.getRow(id).getData();
+        const params = `id=${row.id}&ref_no=${encodeURIComponent(row.ref_no)}&name=${encodeURIComponent(row.name)}&address=${encodeURIComponent(row.address)}&phone=${encodeURIComponent(row.phone)}`;
+        document.getElementById('dd-ubah').href = `edit-customer.php?${params}`;
+        document.getElementById('dd-hapus').onclick = (ev) => {
+          ev.preventDefault();
+          if (confirm('Hapus pelanggan ini?')) { table.getRow(id).delete(); dd.style.display = 'none'; activeRowId = null; }
+        };
+        dd.style.display = 'block';
+        dd.style.top  = (rect.bottom + window.scrollY + 2) + 'px';
+        dd.style.left = (rect.left + window.scrollX) + 'px';
+        activeRowId = id;
+      }
+
+      document.addEventListener('click', () => {
+        const dd = document.getElementById('custom-dropdown');
+        if (dd) dd.style.display = 'none';
+        activeRowId = null;
+      });
 
       document.addEventListener('DOMContentLoaded', () => {
         const data = [
@@ -189,7 +225,7 @@
           { id: 10, ref_no: "REF-010", name: "Joko Anwar",     address: "Jl. Pemuda No. 5, Palembang",         phone: "0888-1234-5678" },
         ];
 
-        const table = new Tabulator('#users-table', {
+        table = new Tabulator('#users-table', {
           theme: "bootstrap5",
           data: data,
           layout: 'fitColumns',
@@ -198,12 +234,12 @@
           paginationSizeSelector: [10, 25, 50, 100],
           movableColumns: true,
           columns: [
-            { title: 'ID',      field: 'id',  hozAlign: 'center',    headerSort: true, width: 80 },
-            { title: 'Nomor Referensi',  field: 'ref_no', hozAlign: 'center', headerSort: true },
+            { title: 'ID',      field: 'id', headerHozAlign: 'center',  hozAlign: 'center',    headerSort: true, width: 80 },
+            { title: 'Nomor Referensi',  field: 'ref_no', headerHozAlign: 'center', hozAlign: 'center', headerSort: true },
             { title: 'Nama Pelanggan',    field: 'name',    headerSort: false },
             { title: 'Alamat', field: 'address', headerSort: false },
-            { title: 'Nomor Telepon',   field: 'phone',   headerSort: false },
-            { title: 'Aksi',  field: 'id',      formatter: actionButtons, headerSort: false, hozAlign: 'center', width: 100 },
+            { title: 'Nomor Telepon',   field: 'phone', headerSort: false },
+            { title: 'Aksi',  field: 'id',      formatter: actionButtons, headerSort: false, headerHozAlign: 'center', hozAlign: 'center', width: 120 },
           ],
         });
 

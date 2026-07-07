@@ -14,6 +14,7 @@
     <?php include "../../layout/sidebar.php"; ?>
 
     <main class="app-main">
+        <!-- ── Header Konten ── -->
         <div class="app-content-header">
             <div class="container-fluid">
                 <div class="row">
@@ -30,18 +31,18 @@
             </div>
         </div>
 
-        <div class="app-content row">
+        <!-- ── Isi Konten ── -->
+        <div class="app-content">
             <div class="container-fluid">
                 <div class="row g-4">
 
                     <!-- ── Kolom Kiri ── -->
-                    <div class="col-lg-8">
+                    <div class="col-lg-7">
 
-                        <!-- Informasi Perusahaan -->
+                        <!-- Card Tampilan Informasi Perusahaan -->
                         <div class="card mb-4 mx-auto" style="margin: 0 auto;">
                             <div class="card-header d-flex justify-content-between align-items-center">
                                 <h6 class="card-title mb-0">Informasi Perusahaan</h6>
-                                
                             </div>
                             <div class="card-body">
                                 <div class="row g-3">
@@ -85,49 +86,11 @@
                                         <p class="text-secondary small mb-1">Alamat Perusahaan</p>
                                         <p class="mb-0 fw-semibold" id="view-alamat">Jl. Simo Pomahan, Surabaya</p>
                                     </div>
-                                    
                                 </div>
-                                <div class="mb-4 me-3 justify-content-end d-flex">
-                                        <button class="btn btn-md btn-warning" onclick="bukaModal('modalEditPerusahaan')">
-                                            <i class="bi bi-pencil-square me-1"></i>Ubah
-                                        </button> 
-                                    </div>
-                            </div>
-                        </div>
-
-                        <!-- Logo & Tanda Tangan -->
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <h6 class="card-title mb-0">Logo & Tanda Tangan Dokumen</h6>
-                            </div>
-                            <div class="card-body">
-                                <div class="row g-3">
-                                    <div class="col-sm-6">
-                                        <p class="text-secondary small mb-2">Logo Perusahaan</p>
-                                        <div class="border rounded d-flex align-items-center justify-content-center bg-body-secondary"
-                                             style="width:120px;height:120px;" id="preview-logo">
-                                            <i class="bi bi-building fs-1 text-secondary"></i>
-                                        </div>
-                                        <div class="mt-2">
-                                            <label for="inputLogo" class="btn btn-sm btn-outline-secondary">
-                                                <i class="bi bi-upload me-1"></i>Unggah Logo
-                                            </label>
-                                            <input type="file" id="inputLogo" accept="image/*" class="d-none">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <p class="text-secondary small mb-2">Tanda Tangan</p>
-                                        <div class="border rounded d-flex align-items-center justify-content-center bg-body-secondary"
-                                             style="width:120px;height:120px;" id="preview-ttd">
-                                            <i class="bi bi-pen fs-1 text-secondary"></i>
-                                        </div>
-                                        <div class="mt-2">
-                                            <label for="inputTTD" class="btn btn-sm btn-outline-secondary">
-                                                <i class="bi bi-upload me-1"></i>Unggah TTD
-                                            </label>
-                                            <input type="file" id="inputTTD" accept="image/*" class="d-none">
-                                        </div>
-                                    </div>
+                                <div class="mt-4 mb-2 d-flex justify-content-end">
+                                    <button class="btn btn-md btn-warning" onclick="bukaModal('modalEditPerusahaan')">
+                                        <i class="bi bi-pencil-square me-1"></i>Ubah
+                                    </button> 
                                 </div>
                             </div>
                         </div>
@@ -135,58 +98,67 @@
                     </div>
 
                     <!-- ── Kolom Kanan ── -->
-                    <div class="col-lg-4">
+                    <div class="col-lg-5">
 
-                        <!-- Informasi Kontak -->
+                        <!-- Card Informasi Kontak -->
                         <div class="card mb-4">
                             <div class="card-header">
                                 <h6 class="card-title mb-0">Informasi Kontak Perusahaan</h6>
                             </div>
                             <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-start mb-3 pb-3 border-bottom">
-                                    <div>
-                                        <p class="text-secondary small mb-1">Email Perusahaan</p>
-                                        <p class="mb-0 fw-semibold" id="view-email">zidanrasyidsusanto19@gmail.com</p>
-                                    </div>
-                                    <button class="btn btn-sm btn-warning ms-2" onclick="bukaModal('modalEditKontak')">
-                                        <i class="bi bi-pencil-square"></i>
-                                    </button>
+                                <div class="mb-3">
+                                    <p class="text-secondary small mb-1">Email Perusahaan</p>
+                                    <p class="mb-0 fw-semibold" id="view-email">zidanrasyidsusanto19@gmail.com</p>
                                 </div>
-                                <div class="d-flex justify-content-between align-items-start">
-                                    <div>
-                                        <p class="text-secondary small mb-1">No. Telepon Perusahaan</p>
-                                        <p class="mb-0 fw-semibold" id="view-telepon">+62 852 1952 6186</p>
-                                    </div>
-                                    <button class="btn btn-sm btn-warning ms-2" onclick="bukaModal('modalEditKontak')">
-                                        <i class="bi bi-pencil-square"></i>
+                                <div class="mb-3">
+                                    <p class="text-secondary small mb-1">No. Telepon / WhatsApp</p>
+                                    <p class="mb-0 fw-semibold" id="view-telepon">+62 852 1952 6186</p>
+                                </div>
+                                
+                                <div class="d-flex justify-content-end pt-2">
+                                    <button class="btn btn-sm btn-warning" onclick="bukaModal('modalEditKontak')">
+                                        <i class="bi bi-pencil-square me-1"></i> Ubah Kontak
                                     </button>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Informasi Tambahan
+                        <!-- Card Branding Dokumen (Sesuai Gambar) -->
                         <div class="card mb-4">
-                            <div class="card-header d-flex justify-content-between align-items-center">
-                                <h6 class="card-title mb-0">Informasi Lainnya</h6>
-                                <button class="btn btn-sm btn-warning" onclick="bukaModal('modalEditLainnya')">
-                                    <i class="bi bi-pencil-square"></i>
-                                </button>
+                            <div class="card-header">
+                                <h6 class="card-title mb-0">Branding Dokumen</h6>
                             </div>
                             <div class="card-body">
-                                <div class="mb-3">
-                                    <p class="text-secondary small mb-1">NPWP</p>
-                                    <p class="mb-0 fw-semibold" id="view-npwp">-</p>
+                                <div class="row g-3">
+                                    <!-- Kotak Upload Logo -->
+                                    <div class="col-6">
+                                        <p class="text-secondary small mb-2 text-center">Logo Perusahaan</p>
+                                        <label for="inputLogo" class="border border-2 rounded text-center p-3 d-flex flex-column align-items-center justify-content-center w-100" style="cursor: pointer; border-style: dashed !important; border-color: #6c757d !important; background: rgba(0,0,0,0.02); min-height: 130px;">
+                                            <div id="preview-logo-content" class="w-100 text-center">
+                                                <i class="bi bi-cloud-arrow-up fs-2 text-secondary mb-2 d-block"></i>
+                                                <span class="small text-muted d-block text-truncate">Pilih Logo (1:1)</span>
+                                            </div>
+                                            <input type="file" id="inputLogo" accept="image/*" class="d-none">
+                                        </label>
+                                    </div>
+                                    
+                                    <!-- Kotak Upload TTD -->
+                                    <div class="col-6">
+                                        <p class="text-secondary small mb-2 text-center">Tanda Tangan</p>
+                                        <label for="inputTTD" class="border border-2 rounded text-center p-3 d-flex flex-column align-items-center justify-content-center w-100" style="cursor: pointer; border-style: dashed !important; border-color: #6c757d !important; background: rgba(0,0,0,0.02); min-height: 130px;">
+                                            <div id="preview-ttd-content" class="w-100 text-center">
+                                                <i class="bi bi-pen fs-2 text-secondary mb-2 d-block"></i>
+                                                <span class="small text-muted d-block text-truncate">Pilih TTD (PNG)</span>
+                                            </div>
+                                            <input type="file" id="inputTTD" accept="image/png" class="d-none">
+                                        </label>
+                                    </div>
                                 </div>
-                                <div class="mb-3">
-                                    <p class="text-secondary small mb-1">No. Rekening Bank</p>
-                                    <p class="mb-0 fw-semibold" id="view-rekening">-</p>
-                                </div>
-                                <div>
-                                    <p class="text-secondary small mb-1">Nama Bank</p>
-                                    <p class="mb-0 fw-semibold" id="view-bank">-</p>
+                                <div class="mt-3 text-center">
+                                    <small class="text-muted" style="font-size: 0.75rem;">Format disarankan: PNG transparan. Maks 2MB.</small>
                                 </div>
                             </div>
-                        </div> -->
+                        </div>
 
                     </div>
                 </div>
@@ -272,7 +244,7 @@
                         <input type="email" class="form-control" id="edit-email" value="zidanrasyidsusanto19@gmail.com">
                     </div>
                     <div class="mb-0">
-                        <label class="form-label">No. Telepon Perusahaan*   </label>
+                        <label class="form-label">No. Telepon / WhatsApp* </label>
                         <input type="tel" class="form-control" id="edit-telepon" value="+62 852 1952 6186">
                     </div>
                 </div>
@@ -286,7 +258,7 @@
         </div>
     </div>
 
-    ── Modal Edit Lainnya ──
+    <!-- ── Modal Edit Lainnya (NPWP & Bank) ── -->
     <div class="modal fade" id="modalEditLainnya" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -329,10 +301,13 @@
 
     <?php include "../../layout/footer.php"; ?>
 
+    <!-- ── Scripts ── -->
     <script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
     <script src="../../dist/js/adminlte.js"></script>
+    
+    <!-- Script Tema -->
     <script>
       (() => {
         'use strict';
@@ -343,21 +318,12 @@
         const getPreferredTheme = () => { const stored = getStoredTheme(); if (stored) return stored; return prefersDark() ? 'dark' : 'light'; };
         const setTheme = (theme) => { const resolved = theme === 'auto' ? (prefersDark() ? 'dark' : 'light') : theme; document.documentElement.setAttribute('data-bs-theme', resolved); };
         setTheme(getPreferredTheme());
-        const showActiveTheme = (theme) => {
-          document.querySelectorAll('[data-bs-theme-value]').forEach((el) => { el.classList.remove('active'); el.setAttribute('aria-pressed', 'false'); const check = el.querySelector('.bi-check-lg'); if (check) check.classList.add('d-none'); });
-          const active = document.querySelector(`[data-bs-theme-value="${theme}"]`);
-          if (active) { active.classList.add('active'); active.setAttribute('aria-pressed', 'true'); const check = active.querySelector('.bi-check-lg'); if (check) check.classList.remove('d-none'); }
-          document.querySelectorAll('[data-lte-theme-icon]').forEach((icon) => { icon.classList.toggle('d-none', icon.dataset.lteThemeIcon !== theme); });
-        };
-        globalThis.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { const stored = getStoredTheme(); if (!stored || stored === 'auto') setTheme(getPreferredTheme()); });
-        document.addEventListener('DOMContentLoaded', () => {
-          showActiveTheme(getPreferredTheme());
-          document.querySelectorAll('[data-bs-theme-value]').forEach((toggle) => { toggle.addEventListener('click', () => { const theme = toggle.getAttribute('data-bs-theme-value'); setStoredTheme(theme); setTheme(theme); showActiveTheme(theme); }); });
-        });
       })();
     </script>
 
+    <!-- Script Fungsionalitas Halaman -->
     <script>
+      // Buka Modal
       function bukaModal(id) {
         new bootstrap.Modal(document.getElementById(id)).show();
       }
@@ -391,26 +357,32 @@
         bootstrap.Modal.getInstance(document.getElementById('modalEditLainnya')).hide();
       });
 
-      // ── Preview logo ──
+      // ── Preview logo dalam kotak putus-putus ──
       document.getElementById('inputLogo').addEventListener('change', (e) => {
         const file = e.target.files[0];
         if (!file) return;
         const reader = new FileReader();
         reader.onload = (ev) => {
-          const preview = document.getElementById('preview-logo');
-          preview.innerHTML = `<img src="${ev.target.result}" class="img-fluid rounded" style="width:120px;height:120px;object-fit:contain;">`;
+          const previewContent = document.getElementById('preview-logo-content');
+          previewContent.innerHTML = `
+            <img src="${ev.target.result}" class="img-fluid rounded mb-2" style="max-height: 65px; object-fit: contain;">
+            <span class="small text-primary d-block fw-bold text-truncate w-100 px-2">${file.name}</span>
+          `;
         };
         reader.readAsDataURL(file);
       });
 
-      // ── Preview TTD ──
+      // ── Preview TTD dalam kotak putus-putus ──
       document.getElementById('inputTTD').addEventListener('change', (e) => {
         const file = e.target.files[0];
         if (!file) return;
         const reader = new FileReader();
         reader.onload = (ev) => {
-          const preview = document.getElementById('preview-ttd');
-          preview.innerHTML = `<img src="${ev.target.result}" class="img-fluid rounded" style="width:120px;height:120px;object-fit:contain;">`;
+          const previewContent = document.getElementById('preview-ttd-content');
+          previewContent.innerHTML = `
+            <img src="${ev.target.result}" class="img-fluid rounded mb-2" style="max-height: 65px; object-fit: contain;">
+            <span class="small text-primary d-block fw-bold text-truncate w-100 px-2">${file.name}</span>
+          `;
         };
         reader.readAsDataURL(file);
       });
