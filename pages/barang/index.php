@@ -35,20 +35,7 @@
             <div class="card">
               <div class="card-header">
                 <h3 class="card-title">Barang</h3>
-                <div class="card-tools">
-                  <div class="input-group input-group-sm" style="width: 16rem">
-                    <span class="input-group-text">
-                      <i class="bi bi-search" aria-hidden="true"></i>
-                    </span>
-                    <input
-                      id="table-filter"
-                      type="search"
-                      class="form-control"
-                      placeholder="Filter rows…"
-                      aria-label="Filter rows"
-                    />
-                  </div>
-                </div>
+
               </div>
               <div class="card-body">
                 <div class="d-flex gap-2 mb-3">
@@ -69,6 +56,35 @@
                     Print
                   </button>
                 </div>
+
+                <!-- Search -->
+                <div class="row g-2 mb-3">
+                  <div class="col-12 col-md-4">
+                    <label for="search-nama" class="form-label form-label-sm mb-1">Nama Barang</label>
+                    <input type="text" id="search-nama" class="form-control form-control-sm" placeholder="Cari nama barang...">
+                  </div>
+                  <div class="col-12 col-md-3">
+                    <label for="search-refno" class="form-label form-label-sm mb-1">Nomor Referensi</label>
+                    <input type="text" id="search-refno" class="form-control form-control-sm" placeholder="Cari ref no...">
+                  </div>
+                  <div class="col-6 col-md-2">
+                    <label for="search-harga-min" class="form-label form-label-sm mb-1">Harga Min</label>
+                    <input type="number" id="search-harga-min" class="form-control form-control-sm" placeholder="0">
+                  </div>
+                  <div class="col-6 col-md-2">
+                    <label for="search-harga-max" class="form-label form-label-sm mb-1">Harga Max</label>
+                    <input type="number" id="search-harga-max" class="form-control form-control-sm" placeholder="9999999">
+                  </div>
+                  <div class="col-12 col-md-1 d-flex align-items-end gap-1">
+                    <button id="btn-search" type="button" class="btn btn-sm btn-primary w-100">
+                      <i class="bi bi-search"></i>
+                    </button>
+                    <button id="btn-reset" type="button" class="btn btn-sm btn-outline-secondary w-100" title="Reset">
+                      <i class="bi bi-arrow-counterclockwise"></i>
+                    </button>
+                  </div>
+                </div>
+
                 <div id="users-table"></div>
               </div>
             </div>
@@ -405,9 +421,27 @@
           ],
         });
 
-        document.getElementById('table-filter').addEventListener('input', (e) => {
-          const value = e.target.value;
-          if (value) { table.setFilter([[{ field: 'name', type: 'like', value: value }]]); } else { table.clearFilter(); }
+        function applySearch() {
+          const nama    = document.getElementById('search-nama').value.trim();
+          const refno   = document.getElementById('search-refno').value.trim();
+          const hargaMin = parseInt(document.getElementById('search-harga-min').value) || 0;
+          const hargaMax = parseInt(document.getElementById('search-harga-max').value) || 99999999;
+          const filters = [];
+          if (nama)  filters.push({ field: 'name',   type: 'like', value: nama });
+          if (refno) filters.push({ field: 'ref_no', type: 'like', value: refno });
+          filters.push({ field: 'price', type: '>=', value: hargaMin });
+          filters.push({ field: 'price', type: '<=', value: hargaMax });
+          table.setFilter(filters);
+        }
+        document.getElementById('btn-search').addEventListener('click', applySearch);
+        document.getElementById('search-nama').addEventListener('input', applySearch);
+        document.getElementById('search-refno').addEventListener('input', applySearch);
+        document.getElementById('btn-reset').addEventListener('click', () => {
+          document.getElementById('search-nama').value      = '';
+          document.getElementById('search-refno').value     = '';
+          document.getElementById('search-harga-min').value = '';
+          document.getElementById('search-harga-max').value = '';
+          table.clearFilter();
         });
 
         document.getElementById('export-csv').addEventListener('click', () => table.download('csv', 'users.csv'));

@@ -38,6 +38,31 @@
             <h3 class="card-title">Tunggakan Pelanggan</h3>
           </div>
           <div class="card-body">
+
+            <!-- Search -->
+            <div class="row g-2 mb-3">
+              <div class="col-12 col-md-5">
+                <label for="search-nama" class="form-label form-label-sm mb-1">Nama Pelanggan</label>
+                <input type="text" id="search-nama" class="form-control form-control-sm" placeholder="Cari nama pelanggan...">
+              </div>
+              <div class="col-12 col-md-4">
+                <label for="search-sisa" class="form-label form-label-sm mb-1">Tampilkan</label>
+                <select id="search-sisa" class="form-select form-select-sm">
+                  <option value="">Semua</option>
+                  <option value="ada">Ada Tunggakan</option>
+                  <option value="lunas">Lunas</option>
+                </select>
+              </div>
+              <div class="col-12 col-md-3 d-flex align-items-end gap-1">
+                <button id="btn-search" type="button" class="btn btn-sm btn-primary w-100">
+                  <i class="bi bi-search me-1"></i>Cari
+                </button>
+                <button id="btn-reset" type="button" class="btn btn-sm btn-outline-secondary" title="Reset">
+                  <i class="bi bi-arrow-counterclockwise"></i>
+                </button>
+              </div>
+            </div>
+
             <div id="users-table"></div>
           </div>
         </div>
@@ -79,6 +104,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/tabulator-tables@6.4.0/dist/js/tabulator.min.js" crossorigin="anonymous"></script>
   <script>
+    let tabelTunggakan;
     const fmt = (n) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(n);
 
     // ── Data Dummy ──
@@ -107,7 +133,7 @@
     };
 
     document.addEventListener('DOMContentLoaded', () => {
-      new Tabulator('#users-table', {
+      tabelTunggakan = new Tabulator('#users-table', {
         theme: 'bootstrap5',
         data: dataTunggakan,
         layout: 'fitColumns',

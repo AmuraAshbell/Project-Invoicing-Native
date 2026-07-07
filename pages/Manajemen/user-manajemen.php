@@ -34,12 +34,7 @@
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">Data User</h3>
-                        <div class="card-tools">
-                            <div class="input-group input-group-sm" style="width:16rem">
-                                <span class="input-group-text"><i class="bi bi-search"></i></span>
-                                <input id="table-filter" type="search" class="form-control" placeholder="Filter rows…"/>
-                            </div>
-                        </div>
+
                     </div>
                     <div class="card-body">
                         <div class="d-flex gap-2 mb-3">
@@ -53,6 +48,34 @@
                                 <i class="bi bi-filetype-json me-1"></i>Export JSON
                             </button>
                         </div>
+                        <!-- Search -->
+                        <div class="row g-2 mb-3">
+                          <div class="col-12 col-md-4">
+                            <label for="search-username" class="form-label form-label-sm mb-1">Username</label>
+                            <input type="text" id="search-username" class="form-control form-control-sm" placeholder="Cari username...">
+                          </div>
+                          <div class="col-12 col-md-4">
+                            <label for="search-nama" class="form-label form-label-sm mb-1">Nama Lengkap</label>
+                            <input type="text" id="search-nama" class="form-control form-control-sm" placeholder="Cari nama...">
+                          </div>
+                          <div class="col-12 col-md-2">
+                            <label for="search-status" class="form-label form-label-sm mb-1">Status</label>
+                            <select id="search-status" class="form-select form-select-sm">
+                              <option value="">Semua</option>
+                              <option value="aktif">Aktif</option>
+                              <option value="nonaktif">Tidak Aktif</option>
+                            </select>
+                          </div>
+                          <div class="col-12 col-md-2 d-flex align-items-end gap-1">
+                            <button id="btn-search" type="button" class="btn btn-sm btn-primary w-100">
+                              <i class="bi bi-search me-1"></i>Cari
+                            </button>
+                            <button id="btn-reset" type="button" class="btn btn-sm btn-outline-secondary" title="Reset">
+                              <i class="bi bi-arrow-counterclockwise"></i>
+                            </button>
+                          </div>
+                        </div>
+
                         <div id="users-table"></div>
                     </div>
                 </div>
@@ -260,10 +283,25 @@
           ],
         });
 
-        document.getElementById('table-filter').addEventListener('input', (e) => {
-          const v = e.target.value;
-          if (v) { table.setFilter([[{ field: 'username', type: 'like', value: v }, { field: 'nama', type: 'like', value: v }]]); }
-          else { table.clearFilter(); }
+        function applySearch() {
+          const username = document.getElementById('search-username').value.trim();
+          const nama     = document.getElementById('search-nama').value.trim();
+          const status   = document.getElementById('search-status').value;
+          const filters  = [];
+          if (username) filters.push({ field: 'username', type: 'like', value: username });
+          if (nama)     filters.push({ field: 'nama',     type: 'like', value: nama });
+          if (status)   filters.push({ field: 'status',   type: '=',    value: status });
+          filters.length > 0 ? table.setFilter(filters) : table.clearFilter();
+        }
+        document.getElementById('btn-search').addEventListener('click', applySearch);
+        document.getElementById('search-username').addEventListener('input', applySearch);
+        document.getElementById('search-nama').addEventListener('input', applySearch);
+        document.getElementById('search-status').addEventListener('change', applySearch);
+        document.getElementById('btn-reset').addEventListener('click', () => {
+          document.getElementById('search-username').value = '';
+          document.getElementById('search-nama').value     = '';
+          document.getElementById('search-status').value   = '';
+          table.clearFilter();
         });
 
         document.getElementById('export-csv').addEventListener('click', () => table.download('csv', 'users.csv'));

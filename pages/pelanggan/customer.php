@@ -37,20 +37,7 @@
             <div class="card">
               <div class="card-header">
                 <h3 class="card-title">Pelanggan</h3>
-                <div class="card-tools">
-                  <div class="input-group input-group-sm" style="width: 16rem">
-                    <span class="input-group-text">
-                      <i class="bi bi-search" aria-hidden="true"></i>
-                    </span>
-                    <input
-                      id="table-filter"
-                      type="search"
-                      class="form-control"
-                      placeholder="Filter rows…"
-                      aria-label="Filter rows"
-                    />
-                  </div>
-                </div>
+
               </div>
               <div class="card-body">
                 <div class="d-flex gap-2 mb-3">
@@ -71,6 +58,31 @@
                     Print
                   </button>
                 </div>
+
+                <!-- Search -->
+                <div class="row g-2 mb-3">
+                  <div class="col-12 col-md-4">
+                    <label for="search-nama" class="form-label form-label-sm mb-1">Nama Pelanggan</label>
+                    <input type="text" id="search-nama" class="form-control form-control-sm" placeholder="Cari nama pelanggan...">
+                  </div>
+                  <div class="col-12 col-md-3">
+                    <label for="search-telepon" class="form-label form-label-sm mb-1">Nomor Telepon</label>
+                    <input type="text" id="search-telepon" class="form-control form-control-sm" placeholder="Cari nomor telepon...">
+                  </div>
+                  <div class="col-12 col-md-3">
+                    <label for="search-alamat" class="form-label form-label-sm mb-1">Alamat</label>
+                    <input type="text" id="search-alamat" class="form-control form-control-sm" placeholder="Cari alamat...">
+                  </div>
+                  <div class="col-12 col-md-2 d-flex align-items-end gap-1">
+                    <button id="btn-search" type="button" class="btn btn-sm btn-primary w-100">
+                      <i class="bi bi-search me-1"></i>Cari
+                    </button>
+                    <button id="btn-reset" type="button" class="btn btn-sm btn-outline-secondary" title="Reset">
+                      <i class="bi bi-arrow-counterclockwise"></i>
+                    </button>
+                  </div>
+                </div>
+
                 <div id="users-table"></div>
               </div>
             </div>
@@ -243,13 +255,25 @@
           ],
         });
 
-        document.getElementById('table-filter').addEventListener('input', (e) => {
-          const value = e.target.value;
-          if (value) {
-            table.setFilter([[{ field: 'name', type: 'like', value: value }]]);
-          } else {
-            table.clearFilter();
-          }
+        function applySearch() {
+          const nama    = document.getElementById('search-nama').value.trim();
+          const telepon = document.getElementById('search-telepon').value.trim();
+          const alamat  = document.getElementById('search-alamat').value.trim();
+          const filters = [];
+          if (nama)    filters.push({ field: 'name',    type: 'like', value: nama });
+          if (telepon) filters.push({ field: 'phone',   type: 'like', value: telepon });
+          if (alamat)  filters.push({ field: 'address', type: 'like', value: alamat });
+          filters.length > 0 ? table.setFilter(filters) : table.clearFilter();
+        }
+        document.getElementById('btn-search').addEventListener('click', applySearch);
+        document.getElementById('search-nama').addEventListener('input', applySearch);
+        document.getElementById('search-telepon').addEventListener('input', applySearch);
+        document.getElementById('search-alamat').addEventListener('input', applySearch);
+        document.getElementById('btn-reset').addEventListener('click', () => {
+          document.getElementById('search-nama').value    = '';
+          document.getElementById('search-telepon').value = '';
+          document.getElementById('search-alamat').value  = '';
+          table.clearFilter();
         });
 
         document.getElementById('export-csv').addEventListener('click', () => table.download('csv', 'users.csv'));

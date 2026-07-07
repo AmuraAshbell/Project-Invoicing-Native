@@ -66,20 +66,22 @@
                   <input type="text" id="search-keyword" class="form-control form-control-sm" placeholder="No faktur / pelanggan...">
                 </div>
                 <div class="col-md-3">
-                  <label for="search-customer" class="form-label form-label-sm mb-1">Pelanggan</label>
-                  <select id="search-customer" class="form-select form-select-sm">
-                    <option value="">Semua Pelanggan</option>
-                    <option value="Amelia Price">Amelia Price</option>
-                    <option value="Budi Santoso">Budi Santoso</option>
-                    <option value="Citra Dewi">Citra Dewi</option>
-                    <option value="Daniel Wijaya">Daniel Wijaya</option>
-                    <option value="Eka Putri">Eka Putri</option>
-                    <option value="Fahmi Malik">Fahmi Malik</option>
-                    <option value="Gita Permata">Gita Permata</option>
-                    <option value="Hendra Wijaya">Hendra Wijaya</option>
-                    <option value="Indah Lestari">Indah Lestari</option>
-                    <option value="Joko Anwar">Joko Anwar</option>
-                  </select>
+                  <label for="search-customer-input" class="form-label form-label-sm mb-1">Pelanggan</label>
+                  <input type="text" id="search-customer-input" class="form-control form-control-sm"
+                    list="customer-list" placeholder="Ketik nama pelanggan..." autocomplete="off">
+                  <datalist id="customer-list">
+                    <option value="Amelia Price">
+                    <option value="Amelia Putri">
+                    <option value="Budi Santoso">
+                    <option value="Citra Dewi">
+                    <option value="Daniel Wijaya">
+                    <option value="Eka Putri">
+                    <option value="Fahmi Malik">
+                    <option value="Gita Permata">
+                    <option value="Hendra Wijaya">
+                    <option value="Indah Lestari">
+                    <option value="Joko Anwar">
+                  </datalist>
                 </div>
                 <div class="col-md-2">
                   <label for="search-date-from" class="form-label form-label-sm mb-1">Tgl Dari</label>
@@ -296,12 +298,12 @@
 
         function applySearch() {
           const keyword  = document.getElementById('search-keyword').value.trim();
-          const customer = document.getElementById('search-customer').value;
+          const customer = document.getElementById('search-customer-input').value.trim();
           const dateFrom = document.getElementById('search-date-from').value;
           const dateTo   = document.getElementById('search-date-to').value;
           const filters  = [];
           if (keyword)  filters.push([{ field: 'inv_no', type: 'like', value: keyword }, { field: 'customer', type: 'like', value: keyword }]);
-          if (customer) filters.push({ field: 'customer', type: '=', value: customer });
+          if (customer) filters.push({ field: 'customer', type: 'like', value: customer });
           if (dateFrom) filters.push({ field: 'due_date', type: '>=', value: dateFrom });
           if (dateTo)   filters.push({ field: 'due_date', type: '<=', value: dateTo });
           filters.length > 0 ? table.setFilter(filters) : table.clearFilter();
@@ -310,7 +312,7 @@
         document.getElementById('btn-search').addEventListener('click', applySearch);
         document.getElementById('btn-reset').addEventListener('click', () => {
           document.getElementById('search-keyword').value   = '';
-          document.getElementById('search-customer').value  = '';
+          document.getElementById('search-customer-input').value = '';
           document.getElementById('search-date-from').value = '';
           document.getElementById('search-date-to').value   = '';
           table.clearFilter();
