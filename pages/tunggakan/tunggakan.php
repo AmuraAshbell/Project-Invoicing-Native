@@ -57,7 +57,7 @@
                 <button id="btn-search" type="button" class="btn btn-sm btn-primary w-100">
                   <i class="bi bi-search me-1"></i>Cari
                 </button>
-                <button id="btn-reset" type="button" class="btn btn-sm btn-outline-secondary" title="Reset">
+                <button id="btn-reset" type="button" class="btn btn-sm btn-outline-secondary w-100" title="Reset">
                   <i class="bi bi-arrow-counterclockwise"></i>
                 </button>
               </div>
@@ -76,7 +76,7 @@
   <script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
-  <script src="dist/js/adminlte.js"></script>
+  <script src="../../dist/js/adminlte.js"></script>
 
   <script>
     (() => {
@@ -140,7 +140,7 @@
         pagination: true,
         paginationSize: 10,
         columns: [
-          { title: 'Nama Pelanggan',   field: 'nama',       headerFilter: 'input' },
+          { title: 'Nama Pelanggan',   field: 'nama' },
           {
             title: 'Total Tagihan', field: 'total_inv', hozAlign: 'right', headerHozAlign:'right', 
             formatter: (cell) => fmt(cell.getValue()),
@@ -156,6 +156,26 @@
         ],
       });
     });
+
+      function applySearch() {
+        const nama = document.getElementById('search-nama').value.trim();
+        const sisa = document.getElementById('search-sisa').value;
+        tabelTunggakan.setFilter((row) => {
+          let ok = true;
+          if (nama) ok = ok && row.nama.toLowerCase().includes(nama.toLowerCase());
+          if (sisa === 'ada')   ok = ok && (row.total_inv - row.terbayar) > 0;
+          if (sisa === 'lunas') ok = ok && (row.total_inv - row.terbayar) <= 0;
+          return ok;
+        });
+      }
+      document.getElementById('btn-search').addEventListener('click', applySearch);
+      document.getElementById('search-nama').addEventListener('input', applySearch);
+      document.getElementById('search-sisa').addEventListener('change', applySearch);
+      document.getElementById('btn-reset').addEventListener('click', () => {
+        document.getElementById('search-nama').value = '';
+        document.getElementById('search-sisa').value = '';
+        tabelTunggakan.clearFilter();
+      });
   </script>
 </body>
 </html>

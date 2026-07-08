@@ -41,7 +41,7 @@
 
             <!-- ── Form Pencarian ── -->
             <div class="row g-2 mb-3">
-              <div class="col-12 col-md-4">
+              <div class="col-12 col-md-3">
                 <label for="search-keyword" class="form-label form-label-sm mb-1">Kata Kunci</label>
                 <input type="text" id="search-keyword" class="form-control form-control-sm" placeholder="Cari No. Faktur...">
               </div>
@@ -53,9 +53,12 @@
                 <label for="search-date-to" class="form-label form-label-sm mb-1">Tgl Ke</label>
                 <input type="date" id="search-date-to" class="form-control form-control-sm">
               </div>
-              <div class="col-12 col-md-2 d-flex align-items-end">
-                <button id="btn-reset" type="button" class="btn btn-sm btn-outline-secondary w-100">
-                  <i class="bi bi-arrow-counterclockwise me-1"></i>Reset
+              <div class="col-md-3 d-flex align-items-end gap-2">
+                  <button id="btn-search" type="button" class="btn btn-sm btn-primary w-100">
+                    <i class="bi bi-search me-1"></i>Cari
+                  </button>
+                  <button id="btn-reset" type="button" class="btn btn-sm btn-outline-secondary w-100" title="Reset">
+                    <i class="bi bi-arrow-counterclockwise"></i>
                 </button>
               </div>
             </div>
@@ -244,7 +247,8 @@ function toggleDropdownBayar(e, no) {
         ],
       });
 
-      // Client-side filtering otomatis saat input berubah
+      // Client-side filtering
+      document.getElementById('btn-search').addEventListener('click', terapkanFilter);
       document.getElementById('search-keyword').addEventListener('input', terapkanFilter);
       document.getElementById('search-date-from').addEventListener('change', terapkanFilter);
       document.getElementById('search-date-to').addEventListener('change', terapkanFilter);
