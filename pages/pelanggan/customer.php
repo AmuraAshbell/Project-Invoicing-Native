@@ -61,7 +61,7 @@
 
                 <!-- Search -->
                 <div class="row g-2 mb-3">
-                  <div class="col-12 col-md-4">
+                  <div class="col-12 col-md-3">
                     <label for="search-nama" class="form-label form-label-sm mb-1">Nama Pelanggan</label>
                     <input type="text" id="search-nama" class="form-control form-control-sm" placeholder="Cari nama pelanggan...">
                   </div>
@@ -73,11 +73,11 @@
                     <label for="search-alamat" class="form-label form-label-sm mb-1">Alamat</label>
                     <input type="text" id="search-alamat" class="form-control form-control-sm" placeholder="Cari alamat...">
                   </div>
-                  <div class="col-12 col-md-2 d-flex align-items-end gap-1">
+                  <div class="col-10 col-md-3 d-flex align-items-end gap-2">
                     <button id="btn-search" type="button" class="btn btn-sm btn-primary w-100">
                       <i class="bi bi-search me-1"></i>Cari
                     </button>
-                    <button id="btn-reset" type="button" class="btn btn-sm btn-outline-secondary" title="Reset">
+                    <button id="btn-reset" type="button" class="btn btn-sm btn-outline-secondary w-100" title="Reset">
                       <i class="bi bi-arrow-counterclockwise"></i>
                     </button>
                   </div>

@@ -36,9 +36,9 @@
             <div class="card-header">
               <h3 class="card-title">Faktur</h3>
             </div>
-            <div class="card-body">
 
-              <div class="d-flex gap-2 my-2">
+            <div class="card-body">
+              <div class="d-flex gap-2 mb-3">
                 <a href="create-invoice.php" class="btn btn-sm btn-primary">
                   <i class="bi bi-plus-lg me-1"></i>Tambah Data
                 </a>
@@ -60,8 +60,8 @@
                 </button>
               </div>
 
-              <div class="row g-2 my-3">
-                <div class="col-md-3">
+              <div class="row g-2 mb-3">
+                <div class="col-md-2">
                   <label for="search-keyword" class="form-label form-label-sm mb-1">Kata Kunci</label>
                   <input type="text" id="search-keyword" class="form-control form-control-sm" placeholder="No faktur / pelanggan...">
                 </div>
@@ -91,7 +91,7 @@
                   <label for="search-date-to" class="form-label form-label-sm mb-1">Tgl Ke</label>
                   <input type="date" id="search-date-to" class="form-control form-control-sm">
                 </div>
-                <div class="col-md-2 d-flex align-items-end gap-2">
+                <div class="col-md-3 d-flex align-items-end gap-2">
                   <button id="btn-search" type="button" class="btn btn-sm btn-primary w-100">
                     <i class="bi bi-search me-1"></i>Cari
                   </button>
@@ -331,4 +331,4 @@
       });
     </script>
   </body>
-</html>
+</html> 
