@@ -67,6 +67,10 @@
                 </select>
               </div>
               <div class="mb-3">
+                <label for="inputDueDate" class="form-label">Tanggal Faktur</label>
+                <input type="date" class="form-control" id="inputDueDate" name="due_date">
+              </div>
+              <div class="mb-3">
                 <label for="inputDueDate" class="form-label">Tanggal Jatuh Tempo</label>
                 <input type="date" class="form-control" id="inputDueDate" name="due_date">
               </div>

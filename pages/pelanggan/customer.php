@@ -255,7 +255,7 @@
           },
 
           columns: [
-            { title: 'ID',      field: 'id', headerHozAlign: 'center',  hozAlign: 'center',    headerSort: true, width: 80 },
+            { title: 'No.',      field: 'id', headerHozAlign: 'center',  hozAlign: 'center',    headerSort: true, width: 80 },
             { title: 'Nomor Referensi',  field: 'ref_no', headerHozAlign: 'center', hozAlign: 'center', headerSort: true },
             { title: 'Nama Pelanggan',    field: 'name',    headerSort: false },
             { title: 'Alamat', field: 'address', headerSort: false },

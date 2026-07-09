@@ -245,7 +245,7 @@ function toggleDropdownBayar(e, no) {
         },
 
         columns: [
-          { title: 'No',        field: 'no',   headerHozAlign: 'right',    hozAlign: 'center', width: 90 },
+          { title: 'No.',        field: 'no',   headerHozAlign: 'right',    hozAlign: 'center', width: 90 },
           { title: 'Tanggal',   field: 'tanggal',  headerHozAlign: 'center', hozAlign: 'center', sorter: 'date', width: 120 },
           { title: 'No. Faktur',   field: 'inv_no',  headerHozAlign: 'center',   hozAlign: 'center' },
           {
