@@ -23,7 +23,7 @@
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-end">
-              <li class="breadcrumb-item"><a href="dashboard.php">Beranda</a></li>
+              <li class="breadcrumb-item"><a href="../beranda/dashboard.php">Beranda</a></li>
               <li class="breadcrumb-item active">Tabel Tunggakan</li>
             </ol>
           </div>
@@ -139,6 +139,15 @@
         layout: 'fitColumns',
         pagination: true,
         paginationSize: 10,
+
+        paginationCounter: function(pageSize, currentRow, currentPage, totalRows, totalPages) {
+            // Mengambil total seluruh data asli (sebelum terkena filter/pencarian)
+            const totalDataKeseluruhan = tabelTunggakan.getData().length;
+            
+            // Format output sesuai permintaanmu
+            return `Menampilkan ${pageSize} Data dari ${totalRows} Data, Total Data adalah ${totalDataKeseluruhan}`;
+        },
+
         columns: [
           { title: 'Nama Pelanggan',   field: 'nama' },
           {

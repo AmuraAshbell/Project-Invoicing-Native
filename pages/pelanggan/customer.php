@@ -25,7 +25,7 @@
               </div>
               <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-end">
-                  <li class="breadcrumb-item"><a href="../../dashboard.php">Beranda</a></li>
+                  <li class="breadcrumb-item"><a href="../beranda/dashboard.php">Beranda</a></li>
                   <li class="breadcrumb-item active" aria-current="page">Tabel Pelanggan</li>
                 </ol>
               </div>
@@ -245,6 +245,15 @@
           paginationSize: 10,
           paginationSizeSelector: [10, 25, 50, 100],
           movableColumns: true,
+
+          paginationCounter: function(pageSize, currentRow, currentPage, totalRows, totalPages) {
+            // Mengambil total seluruh data asli (sebelum terkena filter/pencarian)
+            const totalDataKeseluruhan = table.getData().length;
+            
+            // Format output sesuai permintaanmu
+            return `Menampilkan ${pageSize} Data dari ${totalRows} Data, Total Data adalah ${totalDataKeseluruhan}`;
+          },
+
           columns: [
             { title: 'ID',      field: 'id', headerHozAlign: 'center',  hozAlign: 'center',    headerSort: true, width: 80 },
             { title: 'Nomor Referensi',  field: 'ref_no', headerHozAlign: 'center', hozAlign: 'center', headerSort: true },

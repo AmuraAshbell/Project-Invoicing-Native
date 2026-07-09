@@ -23,7 +23,7 @@
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-end">
-              <li class="breadcrumb-item"><a href="dashboard.php">Beranda</a></li>
+              <li class="breadcrumb-item"><a href="../beranda/dashboard.php">Beranda</a></li>
               <li class="breadcrumb-item active">Tabel Pembayaran</li>
             </ol>
           </div>
@@ -235,6 +235,15 @@ function toggleDropdownBayar(e, no) {
         pagination: true,
         paginationSize: 10,
         paginationSizeSelector: [10, 25, 50],
+
+        paginationCounter: function(pageSize, currentRow, currentPage, totalRows, totalPages) {
+            // Mengambil total seluruh data asli (sebelum terkena filter/pencarian)
+            const totalDataKeseluruhan = tabelPembayaran.getData().length;
+            
+            // Format output sesuai permintaanmu
+            return `Menampilkan ${pageSize} Data dari ${totalRows} Data, Total Data adalah ${totalDataKeseluruhan}`;
+        },
+
         columns: [
           { title: 'No',        field: 'no',   headerHozAlign: 'right',    hozAlign: 'center', width: 90 },
           { title: 'Tanggal',   field: 'tanggal',  headerHozAlign: 'center', hozAlign: 'center', sorter: 'date', width: 120 },

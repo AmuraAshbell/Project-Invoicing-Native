@@ -23,7 +23,7 @@
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-end">
-                            <li class="breadcrumb-item"><a href="../../dashboard.php">Beranda</a></li>
+                            <li class="breadcrumb-item"><a href="../beranda/dashboard.php">Beranda</a></li>
                             <li class="breadcrumb-item active">Perusahaan</li>
                         </ol>
                     </div>

@@ -21,7 +21,7 @@
                     <div class="col-sm-6"><h3 class="mb-0">Tabel Pengguna</h3></div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-end">
-                            <li class="breadcrumb-item"><a href="../../dashboard.php">Beranda</a></li>
+                            <li class="breadcrumb-item"><a href="../beranda/dashboard.php">Beranda</a></li>
                             <li class="breadcrumb-item active">Tabel Pengguna</li>
                         </ol>
                     </div>
@@ -273,7 +273,16 @@
           pagination: true,
           paginationSize: 10,
           paginationSizeSelector: [10, 25, 50],
-          movableColumns: true,
+          movableColumns: false,
+
+          paginationCounter: function(pageSize, currentRow, currentPage, totalRows, totalPages) {
+            // Mengambil total seluruh data asli (sebelum terkena filter/pencarian)
+            const totalDataKeseluruhan = table.getData().length;
+            
+            // Format output sesuai permintaanmu
+            return `Menampilkan ${pageSize} Data dari ${totalRows} Data, Total Data adalah ${totalDataKeseluruhan}`;
+        },
+
           columns: [
             { title: 'ID',           field: 'id',       headerHozAlign: 'center', hozAlign: 'center', headerSort: true, width: 80 },
             { title: 'Username',     field: 'username', headerHozAlign: 'center', hozAlign: 'center', headerSort: true },
