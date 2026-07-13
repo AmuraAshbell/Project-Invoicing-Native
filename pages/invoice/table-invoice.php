@@ -116,7 +116,9 @@
       <a class="dropdown-item" id="dd-ubah" href="#"><i class="bi bi-pencil-square me-2"></i>Ubah</a>
       <hr class="dropdown-divider">
       <a class="dropdown-item text-danger" id="dd-hapus" href="#"><i class="bi bi-trash me-2"></i>Hapus</a>
-      <a class="dropdown-item" onclick="window.print()" id="dd-cetak" href="#"><i class="bi bi-printer me-2"></i>Cetak</a>
+      
+      <a class="dropdown-item" id="dd-cetak" href="#"><i class="bi bi-printer me-2"></i>Cetak</a>
+      <a class="dropdown-item" id="dd-pdf" href="#"><i class="bi bi-file-earmark-pdf me-2"></i>Download PDF</a>
     </div>
 
     <!-- Toast -->
@@ -224,31 +226,30 @@
           }
         };
 
-        // Tombol Cetak (Membuka halaman invoice dan otomatis print)
+      // ── Aksi Tombol Cetak (Menggunakan DomPDF - View di Browser) ──
         document.getElementById('dd-cetak').onclick = (ev) => {
           ev.preventDefault();
-          // Kita tambahkan parameter &cetak=1 di ujung URL
-          const paramsDetail = `inv_no=${encodeURIComponent(row.inv_no)}&customer=${encodeURIComponent(row.customer||'')}&due_date=${encodeURIComponent(row.due_date||'')}`;
-          window.open(`invoice.php?${paramsDetail}&cetak=1`, '_blank');
+          // Kita kirim parameter action=print ke PHP
+          window.location.href = `cetak-pdf.php?inv_no=${encodeURIComponent(row.inv_no)}&action=print`;
           
           dd.style.display = 'none';
           activeRowId = null;
         };
 
-        // Opsional: Jika kamu punya tombol khusus "PDF" untuk DOMPDF di dropdown
-        /*
+        // ── Aksi Tombol Download PDF (Menggunakan DomPDF - Force Download) ──
         document.getElementById('dd-pdf').onclick = (ev) => {
           ev.preventDefault();
-          window.open(`cetak-pdf.php?inv_no=${encodeURIComponent(row.inv_no)}`, '_blank');
+          // Kita kirim parameter action=download ke PHP
+          window.location.href = `cetak-pdf.php?inv_no=${encodeURIComponent(row.inv_no)}&action=download`;
+          
           dd.style.display = 'none';
           activeRowId = null;
         };
-        */
 
         // Posisi dropdown di bawah tombol
         dd.style.display = 'block';
         dd.style.top  = (rect.bottom + window.scrollY + 2) + 'px';
-        dd.style.left = (rect.left + window.scrollX) + 'px';
+        dd.style.left = (rect.left + window.scrollX - 80) + 'px'; // Digeser sedikit ke kiri agar tidak menabrak batas layar
         activeRowId = id;
       }
 

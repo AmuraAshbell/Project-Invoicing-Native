@@ -1,0 +1,79 @@
+body {
+  margin: 0;
+  font-family: "Inter", sans-serif;
+  padding: 0;
+  background-color: #ffffff;
+  height: 100vh;
+  overflow-x: hidden;
+}
+/* Sisi Kiri (Branding & Ilustrasi) */
+.split-left {
+  background-color: #f3f4f6; /* Warna abu-abu terang TailAdmin */
+  min-height: 100vh;
+  padding: 3rem;
+}
+/* Sisi Kanan (Form) */
+.split-right {
+  min-height: 100vh;
+}
+.form-wrapper {
+  width: 100%;
+  max-width: 480px; /* Lebar form maksimal */
+  padding: 2rem;
+}
+
+/* Modifikasi Input Group agar ikon ada di dalam (kanan) */
+.form-label {
+  font-weight: 500;
+  color: #1f2937;
+}
+.form-control {
+  padding: 0.75rem 1rem;
+  border-right: none;
+}
+.form-control:focus {
+  box-shadow: none;
+  border-color: #3c50e0;
+}
+.input-group-text {
+  background-color: transparent;
+  color: #9ca3af;
+  border-left: none;
+}
+.form-control:focus + .input-group-text {
+  border-color: #3c50e0;
+  color: #3c50e0;
+}
+
+/* Tombol Primary Khas TailAdmin */
+.btn-primary-custom {
+  background-color: #3c50e0;
+  border-color: #3c50e0;
+  padding: 0.75rem;
+  font-weight: 500;
+}
+.btn-primary-custom:hover {
+  background-color: #303fba;
+  border-color: #303fba;
+}
+
+/* Garis Pemisah (Or sign in with) */
+.divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: #6b7280;
+  margin: 1.5rem 0;
+}
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  border-bottom: 1px solid #e5e7eb;
+}
+.divider::before {
+  margin-right: 1em;
+}
+.divider::after {
+  margin-left: 1em;
+}

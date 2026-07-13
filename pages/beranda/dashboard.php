@@ -140,7 +140,7 @@
                       <tr class="text-secondary small">
                         <th>Pelanggan</th>
                         <th class="text-end">Nominal</th>
-                        <th class="text-center">Aksi</th>
+                        <th class="text-center">Tanggal</th>
                       </tr>
                     </thead>
                     <tbody id="tbody-jatuh-tempo">
@@ -203,35 +203,41 @@
         <!-- ══════════════════════════════════════════════ -->
         <!-- BARIS 4 — RIWAYAT TRANSAKSI TERAKHIR (Full Width) -->
         <!-- ══════════════════════════════════════════════ -->
-        <div class="row g-4 mb-4">
-          <div class="col-lg-12">
-            <div class="card">
-              <div class="card-header d-flex justify-content-between align-items-center">
-                <h6 class="card-title mb-0"><i class="bi bi-clock-history me-1"></i>Riwayat Transaksi Terakhir</h6>
-                <a href="../invoice/table-invoice.php" class="btn btn-sm btn-link text-decoration-none">Lihat semua <i class="bi bi-arrow-right"></i></a>
-              </div>
-              <div class="card-body">
-                <div class="table-responsive">
-                  <table class="table table-hover align-middle">
-                    <thead>
-                      <tr class="text-secondary small">
-                        <th>No. Faktur</th>
-                        <th>Tanggal</th>
-                        <th>Nama Pelanggan</th>
-                        <th>Keterangan</th>
-                        <th class="text-end">Nominal</th>
-                        <th class="text-center">Status</th>
-                      </tr>
-                    </thead>
-                    <tbody id="tbody-riwayat-transaksi">
-                      <!-- diisi via JavaScript -->
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
+<div class="row g-4 mb-4">
+  <div class="col-lg-12">
+    <div class="card mb-4">
+      
+      <div class="card-header d-flex align-items-center">
+        <h6 class="card-title mb-0">
+          <i class="bi bi-clock-history me-1"></i>Riwayat Transaksi Terakhir
+        </h6>
+        
+        <a href="../invoice/table-invoice.php" class="btn btn-sm btn-link text-decoration-none ms-auto p-0">
+          Lihat semua <i class="bi bi-arrow-right"></i>
+        </a>
+      </div>
+
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-hover align-middle">
+            <thead>
+              <tr class="text-secondary small">
+                <th>No. Faktur</th>
+                <th>Tanggal</th>
+                <th>Nama Pelanggan</th>
+                <th>Keterangan</th>
+                <th class="text-end">Nominal</th>
+                <th class="text-center">Status</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-riwayat-transaksi">
+              </tbody>
+          </table>
         </div>
+      </div>
+    </div>
+  </div>
+</div>
 
       </div>
     </div>
@@ -297,12 +303,12 @@
 
     // ── Data Dummy: Faktur Jatuh Tempo ──
     const fakturJatuhTempo = [
-      { pelanggan: 'Toko Andalan Jaya',      nominal: 4500000 },
-      { pelanggan: 'CV Mitra Sejahtera',      nominal: 7800000 },
-      { pelanggan: 'Budi Santoso',            nominal: 1250000 },
-      { pelanggan: 'PT Karya Abadi',          nominal: 9600000 },
-      { pelanggan: 'Toko Sumber Rezeki',      nominal: 1350000 },
-    ];
+        { inv_no: 'INV-2026-012', pelanggan: 'Andi Wijaya', nominal: 1500000, tanggal: '13 Jul 2026' },
+        { inv_no: 'INV-2026-008', pelanggan: 'Toko Sejahtera', nominal: 4250000, tanggal: '12 Jul 2026' },
+        { inv_no: 'INV-2026-004', pelanggan: 'Bambang Susilo', nominal: 627000, tanggal: '13 Jul 2026' },
+        { inv_no: 'INV-2026-002', pelanggan: 'Indra Kurniawan', nominal: 5450000, tanggal: '12 Jul 2026' },
+        { inv_no: 'INV-2026-0016', pelanggan: 'Cello Didik', nominal: 4290000, tanggal: '13 Jul 2026' },
+      ];
 
     // ── Data Dummy: Stok Menipis ──
     const stokMenipis = [
@@ -391,12 +397,13 @@
       fakturJatuhTempo.forEach((f) => {
         tbodyJT.innerHTML += `
           <tr>
-            <td class="small">${f.pelanggan}</td>
-            <td class="text-end small fw-semibold">${fmtRupiah(f.nominal)}</td>
-            <td class="text-center">
-              <button class="btn btn-sm btn-danger">
-                <i class="bi bi-send-fill"></i> Tagih
-              </button>
+            <td class="small text-wrap" style="min-width: 120px;">
+                <span class="fw-semibold d-block">${f.pelanggan}</span>
+                <span class="text-muted" style="font-size: 0.75rem;">${f.inv_no}</span>
+            </td>
+            <td class="text-end small fw-semibold align-middle">${fmtRupiah(f.nominal)}</td>
+            <td class="text-end align-middle">
+              <span class="badge text-bg-danger fw-normal"><i class="bi bi-calendar-x"></i> ${f.tanggal}</span>
             </td>
           </tr>`;
       });

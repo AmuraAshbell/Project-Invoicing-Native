@@ -43,8 +43,8 @@
           <form action="table-invoice.php" method="GET">
             <div class="card-body">
               <div class="mb-3">
-                <label for="exampleInputId1" class="form-label">ID*</label>
-                <input type="number" class="form-control" id="exampleInputId1" name="id" placeholder="Masukkan ID">
+                <label for="exampleInputId1" class="form-label">No.*</label>
+                <input type="number" class="form-control" id="exampleInputId1" name="id" placeholder="Masukkan No.">
               </div>
               <div class="mb-3">
                 <label for="exampleInputRef_No1" class="form-label">Nomor Faktur*</label>

@@ -126,3 +126,34 @@ body::before {
 #users-table .tabulator-tableholder {
   overflow: visible !important;
 }
+
+/* ── PERBAIKAN WARNA TABULATOR FOOTER DI MODE GELAP ── */
+[data-bs-theme="dark"] .tabulator .tabulator-footer {
+    background-color: var(--bs-card-bg) !important;
+    border-top: 1px solid var(--bs-border-color) !important;
+    color: var(--bs-body-color) !important;
+}
+
+[data-bs-theme="dark"] .tabulator .tabulator-footer .tabulator-page {
+    background-color: var(--bs-card-bg) !important;
+    border-color: var(--bs-border-color) !important;
+    color: var(--bs-body-color) !important;
+}
+
+/* Warna tombol pagination saat kursor diarahkan (hover) */
+[data-bs-theme="dark"] .tabulator .tabulator-footer .tabulator-page:not(.disabled):hover {
+    background-color: var(--bs-secondary-bg) !important;
+    color: var(--bs-body-color) !important;
+}
+
+/* Warna tombol pagination yang sedang aktif */
+[data-bs-theme="dark"] .tabulator .tabulator-footer .tabulator-page.active {
+    background-color: var(--bs-primary) !important;
+    color: #fff !important;
+    border-color: var(--bs-primary) !important;
+}
+
+/* Warna info tulisan "Menampilkan X Data..." */
+[data-bs-theme="dark"] .tabulator .tabulator-footer .tabulator-page-counter {
+    color: var(--bs-secondary-color) !important;
+}
