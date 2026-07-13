@@ -18,11 +18,11 @@
         <div class="app-content-header">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-sm-6"><h3 class="mb-0">Tabel PIC (Person In Charge)</h3></div>
+                    <div class="col-sm-6"><h3 class="mb-0">Tabel Pengguna</h3></div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-end">
                             <li class="breadcrumb-item"><a href="../beranda/dashboard.php">Beranda</a></li>
-                            <li class="breadcrumb-item active">Tabel PIC</li>
+                            <li class="breadcrumb-item active">Tabel Pengguna</li>
                         </ol>
                     </div>
                 </div>
@@ -33,7 +33,7 @@
             <div class="container-fluid">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Data Kontak PIC</h3>
+                        <h3 class="card-title">Data Kontak Pengguna</h3>
                     </div>
                     <div class="card-body">
                         <div class="d-flex gap-2 mb-3">
@@ -86,7 +86,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Tambah Data PIC</h5>
+                    <h5 class="modal-title">Tambah Data Pengguna</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
