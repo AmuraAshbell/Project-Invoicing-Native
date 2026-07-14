@@ -43,10 +43,6 @@
           <form action="index.php" method="GET">
             <div class="card-body">
               <div class="mb-3">
-                <label for="exampleInputId1" class="form-label">No.*</label>
-                <input type="number" class="form-control" id="exampleInputId1" placeholder="Masukkan No.">
-              </div>
-              <div class="mb-3">
                 <label for="exampleInputRef_No1" class="form-label">Nomor Referensi*</label>
                 <input type="text" class="form-control" id="exampleInputRef_No1" placeholder="Masukkan Refferal Number">
               </div>

@@ -8,7 +8,8 @@ body {
 }
 /* Sisi Kiri (Branding & Ilustrasi) */
 .split-left {
-  background-color: #f3f4f6; /* Warna abu-abu terang TailAdmin */
+  background-image: url("../assets/akatsukigundam.png");
+  background-size: cover;
   min-height: 100vh;
   padding: 3rem;
 }
