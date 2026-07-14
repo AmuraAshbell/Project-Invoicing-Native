@@ -52,11 +52,11 @@
 
         <div class="col-lg-6 d-flex flex-column align-items-center justify-content-center split-right">
             <div class="form-wrapper">
-                <h3 class="fw-bold mb-1">Masuk</h3>
-                <p class="text-muted mb-4">Masuk ke akun Anda</p>
+                <h3 class="fw-bold mb-2 justify-content-center align-items-center d-flex">SELAMAT DATANG KEMBALI</h3>
+                <p class="text-muted mb-2 justify-content-center align-items-center d-flex">Masuk ke akun Anda untuk memulai sesi Anda</p>
 
                 <form action="../beranda/dashboard.php" method="POST">
-                    <div class="mb-3">
+                    <div class="mb-1">
                         <label class="form-label">Email</label>
                         <div class="input-group">
                             <input type="email" class="form-control" placeholder="Masukkan email Anda" required>
@@ -72,20 +72,31 @@
                         </div>
                     </div>
 
-                    <button href="../beranda/dashboard.php" type="submit" class="btn btn-primary-custom w-100 text-white rounded-3 mb-3">
+                    <div class="col-8 mb-3">
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
+                        <label class="form-check-label" for="flexCheckDefault"> Remember Me </label>
+                      </div>
+                    </div>
+
+                    <button href="../beranda/dashboard.php" type="submit" class="btn btn-primary w-100 text-white rounded-3 mb-3">
                         Sign In
                     </button>
+
+                    <p class="mb-1">
+                        <a href="forgot-password.html">I forgot my password</a>
+                    </p>
                     
-                    <div class="divider small">Atau, Masuk dengan</div>
+                    <!-- <div class="divider small">Atau, Masuk dengan</div>
 
                     <button type="button" class="btn btn-light border w-100 rounded-3 py-2 fw-semibold text-secondary d-flex justify-content-center align-items-center gap-2">
                         <i class="bi bi-google text-danger"></i>
                         Masuk dengan Google
-                    </button>
+                    </button> -->
 
-                    <div class="text-center mt-4">
+                    <!-- <div class="text-center mt-4">
                         <p class="text-muted">Tidak punya akun? <a href="register.php" data-auth-transition class="text-primary text-decoration-none">Daftar</a></p>
-                    </div>
+                    </div> -->
                 </form>
             </div>
         </div>
