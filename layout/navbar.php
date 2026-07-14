@@ -29,7 +29,7 @@
           </li>
           <li class="user-footer">
             <a href="#" class="btn btn-outline-secondary">Profil</a>
-            <a href="#" class="btn btn-outline-danger float-end">Keluar</a>
+            <a href="../auth/login.php" class="btn btn-outline-danger float-end">Keluar</a>
           </li>
         </ul>
       </li>

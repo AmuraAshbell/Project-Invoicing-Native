@@ -28,10 +28,10 @@
     <!--begin::Accessibility Features-->
     <!-- Skip links will be dynamically added by accessibility.js -->
     <meta name="supported-color-schemes" content="light dark" />
-      <link rel="stylesheet" href="../style/auth.css">
+      <link rel="stylesheet" href="../../style/auth.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/styles/overlayscrollbars.min.css"/>
-    <link rel="stylesheet" href="../dist/css/adminlte.min.css"/>
+    <link rel="stylesheet" href="../../dist/css/adminlte.min.css"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tabulator-tables@6.4.0/dist/css/tabulator_bootstrap5.min.css" crossorigin="anonymous"/>
   </head>
   <!--end::Head-->
@@ -39,27 +39,16 @@
   <body>
 
      <div class="row g-0">
-        <div class="col-lg-6 d-none d-lg-flex flex-column align-items-center justify-content-center split-left">
-            <div class="text-center mb-5">
-                <a href="#" class="text-decoration-none text-dark d-inline-flex align-items-center gap-2 fs-2 fw-bold mb-3">
-                    <i class="bi bi-box-seam-fill text-primary"></i>
-                    Amura Store
-                </a>
-                <p class="text-muted fs-5">Sistem Invoicing & Inventaris Modern</p>
-            </div>
-            <img src="https://cdni.iconscout.com/illustration/premium/thumb/web-development-3454628-2918517.png" alt="Illustration" class="img-fluid" style="max-width: 80%;">
-        </div>
-
         <div class="col-lg-6 d-flex flex-column align-items-center justify-content-center split-right">
             <div class="form-wrapper my-4">
-                <h3 class="fw-bold mb-1">Sign Up to Amura Store</h3>
-                <p class="text-muted mb-4">Create an account</p>
+                <h3 class="fw-bold mb-1">Daftar di Invoicing</h3>
+                <p class="text-muted mb-4">Buat akun baru</p>
 
                 <form action="login.php" method="POST">
                     <div class="mb-3">
                         <label class="form-label">Name</label>
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Enter your full name" required>
+                            <input type="text" class="form-control" placeholder="Masukkan nama lengkap Anda" required>
                             <span class="input-group-text"><i class="bi bi-person"></i></span>
                         </div>
                     </div>
@@ -67,7 +56,7 @@
                     <div class="mb-3">
                         <label class="form-label">Email</label>
                         <div class="input-group">
-                            <input type="email" class="form-control" placeholder="Enter your email" required>
+                            <input type="email" class="form-control" placeholder="Masukkan email Anda" required>
                             <span class="input-group-text"><i class="bi bi-envelope"></i></span>
                         </div>
                     </div>
@@ -75,7 +64,7 @@
                     <div class="mb-3">
                         <label class="form-label">Password</label>
                         <div class="input-group">
-                            <input type="password" class="form-control" placeholder="Enter your password" required>
+                            <input type="password" class="form-control" placeholder="Masukkan password Anda" required>
                             <span class="input-group-text"><i class="bi bi-lock"></i></span>
                         </div>
                     </div>
@@ -83,24 +72,35 @@
                     <div class="mb-4">
                         <label class="form-label">Re-type Password</label>
                         <div class="input-group">
-                            <input type="password" class="form-control" placeholder="Re-enter your password" required>
+                            <input type="password" class="form-control" placeholder="Masukkan kembali password Anda" required>
                             <span class="input-group-text"><i class="bi bi-lock"></i></span>
                         </div>
                     </div>
 
                     <button type="submit" class="btn btn-primary-custom w-100 text-white rounded-3 mb-3">
-                        Create account
+                        Buat Akun
                     </button>
                     
                     <button type="button" class="btn btn-light border w-100 rounded-3 py-2 fw-semibold text-secondary d-flex justify-content-center align-items-center gap-2">
                         <i class="bi bi-google text-danger"></i>
-                        Sign up with Google
+                        Daftar dengan Google
                     </button>
 
                     <div class="text-center mt-4">
-                        <p class="text-muted">Already have an account? <a href="login.php" class="text-primary text-decoration-none">Sign In</a></p>
+                        <p class="text-muted">Sudah punya akun? <a href="login.php" data-auth-transition class="text-primary text-decoration-none">Masuk</a></p>
                     </div>
                 </form>
+            </div>
+        </div>
+
+        <div class="col-lg-6 d-none d-lg-flex flex-column align-items-center justify-content-center split-right-image">
+            <div class="auth-visual-overlay"></div>
+            <div class="text-center mb-5">
+                <a href="#" class="text-decoration-none text-dark d-inline-flex align-items-center gap-2 fs-2 fw-bold mb-3">
+                    <i class="bi bi-box-seam-fill text-primary"></i>
+                    Invoicing
+                </a>
+                <p class="text-muted fs-5">Sistem Invoicing & Inventaris Modern</p>
             </div>
         </div>
     </div>
@@ -108,7 +108,8 @@
     <script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
-    <script src="../dist/js/adminlte.js"></script>
+    <script src="../../dist/js/adminlte.js"></script>
+    <script src="../../style/auth-transition.js"></script>
 
     <script>
       const SELECTOR_SIDEBAR_WRAPPER = '.sidebar-wrapper';
