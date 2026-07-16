@@ -19,12 +19,12 @@
       <div class="container-fluid">
         <div class="row">
           <div class="col-sm-6">
-            <h3 class="mb-0">Tabel Pembayaran</h3>
+            <h3 class="mb-0">Pembayaran</h3>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-end">
               <li class="breadcrumb-item"><a href="../beranda/dashboard.php">Beranda</a></li>
-              <li class="breadcrumb-item active">Tabel Pembayaran</li>
+              <li class="breadcrumb-item active">Pembayaran</li>
             </ol>
           </div>
         </div>
@@ -35,7 +35,7 @@
       <div class="container-fluid">
         <div class="card">
           <div class="card-header">
-            <h3 class="card-title">Pembayaran</h3>
+            <h3 class="card-title">Data Pembayaran</h3>
           </div>
           <div class="card-body">
 

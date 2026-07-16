@@ -42,6 +42,12 @@
                 <p>Pelanggan</p>
               </a>
             </li>
+            <li class="nav-item" data-child="pic">
+              <a href="../PIC/pic.php" class="nav-link">
+                <i class="nav-icon bi bi-circle"></i>
+                <p>PIC</p>
+              </a>
+            </li>
           </ul>
         </li>
 
@@ -124,7 +130,7 @@
     
     const barangPages     = ['index', 'edit', 'create'];
     const customerPages   = ['customer', 'edit-customer', 'create-customer'];
-    
+    const picPages        = ['pic', 'edit-pic', 'create-pic'];
     const perusahaanPages = ['perusahaan'];
     const manajemenPages  = ['user-manajemen'];
 
@@ -160,6 +166,7 @@
     // Group: DATA MASTER
     setActive(barangPages,     'barang',      'master');
     setActive(customerPages,   'customer',    'master');
+    setActive(picPages,        'pic',         'master');
     
     // Group: PENGATURAN
     setActive(perusahaanPages, 'perusahaan',  'pengaturan');

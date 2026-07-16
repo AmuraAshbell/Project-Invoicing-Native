@@ -27,7 +27,7 @@
           <ol class="breadcrumb float-sm-end">
             <li class="breadcrumb-item"><a href="../beranda/dashboard.php">Beranda</a></li>
             <li class="breadcrumb-item"><a href="table-invoice.php">Faktur</a></li>
-            <li class="breadcrumb-item active">Ubah</li>
+            <li class="breadcrumb-item active">Ubah Faktur</li>
           </ol>
         </div>
       </div>

@@ -84,7 +84,7 @@
                     </button>
 
                     <p class="mb-1">
-                        <a href="forgot-password.html">I forgot my password</a>
+                        <a href="forget-password.php">I forgot my password</a>
                     </p>
                     
                     <!-- <div class="divider small">Atau, Masuk dengan</div>

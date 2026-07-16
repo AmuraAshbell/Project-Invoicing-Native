@@ -19,12 +19,12 @@
         <div class="container-fluid">
           <div class="row">
             <div class="col-sm-6">
-              <h3 class="mb-0">Tabel Faktur</h3>
+              <h3 class="mb-0">Faktur</h3>
             </div>
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-end">
                 <li class="breadcrumb-item"><a href="../beranda/dashboard.php">Beranda</a></li>
-                <li class="breadcrumb-item active">Tabel Faktur</li>
+                <li class="breadcrumb-item active">Faktur</li>
               </ol>
             </div>
           </div>
@@ -34,13 +34,13 @@
         <div class="container-fluid">
           <div class="card">
             <div class="card-header">
-              <h3 class="card-title">Faktur</h3>
+              <h3 class="card-title">Data Faktur</h3>
             </div>
 
             <div class="card-body">
               <div class="d-flex gap-2 mb-3">
                 <a href="create-invoice.php" class="btn btn-sm btn-primary">
-                  <i class="bi bi-plus-lg me-1"></i>Tambah Data
+                  <i class="bi bi-plus-lg me-1"></i>Tambah Faktur
                 </a>
                 <button id="export-csv" type="button" class="btn btn-sm btn-outline-secondary">
                   <i class="bi bi-filetype-csv me-1"></i>Export CSV

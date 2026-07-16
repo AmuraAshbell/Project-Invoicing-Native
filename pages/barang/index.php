@@ -19,12 +19,12 @@
           <div class="container-fluid">
             <div class="row">
               <div class="col-sm-6">
-                <h3 class="mb-0">Tabel Barang</h3>
+                <h3 class="mb-0">Barang</h3>
               </div>
               <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-end">
                   <li class="breadcrumb-item"><a href="../beranda/dashboard.php">Beranda</a></li>
-                  <li class="breadcrumb-item active" aria-current="page">Tabel Barang</li>
+                  <li class="breadcrumb-item active" aria-current="page">Barang</li>
                 </ol>
               </div>
             </div>
@@ -34,14 +34,14 @@
           <div class="container-fluid">
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Barang</h3>
+                <h3 class="card-title">Data Barang</h3>
 
               </div>
               <div class="card-body">
                 <div class="d-flex gap-2 mb-3">
                   <a href="create.php" class="btn btn-sm btn-primary">
                     <i class="bi bi-plus-lg me-1" aria-hidden="true"></i>
-                    Tambah Data
+                    Tambah Barang
                   </a>
                   <button id="export-csv" type="button" class="btn btn-sm btn-outline-secondary">
                     <i class="bi bi-filetype-csv me-1" aria-hidden="true"></i>

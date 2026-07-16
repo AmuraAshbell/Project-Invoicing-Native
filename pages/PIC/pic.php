@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manajemen Pengguna</title>
+    <title>Manajemen PIC</title>
     <link rel="stylesheet" href="../../style/index.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/styles/overlayscrollbars.min.css"/>
@@ -18,11 +18,11 @@
         <div class="app-content-header">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-sm-6"><h3 class="mb-0">Pengguna</h3></div>
+                    <div class="col-sm-6"><h3 class="mb-0">PIC</h3></div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-end">
                             <li class="breadcrumb-item"><a href="../beranda/dashboard.php">Beranda</a></li>
-                            <li class="breadcrumb-item active">Pengguna</li>
+                            <li class="breadcrumb-item active">PIC</li>
                         </ol>
                     </div>
                 </div>
@@ -33,13 +33,13 @@
             <div class="container-fluid">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Data Pengguna</h3>
+                        <h3 class="card-title">Data Kontak PIC</h3>
                     </div>
                     <div class="card-body">
                         <div class="d-flex gap-2 mb-3">
-                            <a href="create-user.php" class="btn btn-sm btn-primary">
+                            <a href="create-pic.php" class="btn btn-sm btn-primary">
                                 <i class="bi bi-plus-lg me-1" aria-hidden="true"></i>
-                                Tambah Pengguna
+                                Tambah PIC
                             </a>
                             <button id="export-csv" type="button" class="btn btn-sm btn-outline-secondary">
                                 <i class="bi bi-filetype-csv me-1"></i>Export CSV
@@ -51,8 +51,12 @@
                         
                         <div class="row g-2 mb-3">
                           <div class="col-12 col-md-3">
-                            <label for="search-nama" class="form-label form-label-sm mb-1">Username</label>
-                            <input type="text" id="search-nama" class="form-control form-control-sm" placeholder="Cari username...">
+                            <label for="search-nama" class="form-label form-label-sm mb-1">Nama Lengkap</label>
+                            <input type="text" id="search-nama" class="form-control form-control-sm" placeholder="Cari nama...">
+                          </div>
+                          <div class="col-12 col-md-3">
+                            <label for="search-jabatan" class="form-label form-label-sm mb-1">Jabatan</label>
+                            <input type="text" id="search-jabatan" class="form-control form-control-sm" placeholder="Cari jabatan...">
                           </div>
                           <div class="col-12 col-md-2">
                             <label for="search-status" class="form-label form-label-sm mb-1">Status</label>
@@ -81,7 +85,7 @@
 
     <?php include "../../layout/footer.php"; ?>
 
-    <div id="custom-dropdown-users" class="dropdown-menu shadow" style="display:none; position:fixed; z-index:9999; min-width:160px;">
+    <div id="custom-dropdown-pic" class="dropdown-menu shadow" style="display:none; position:fixed; z-index:9999; min-width:160px;">
       <a class="dropdown-item" id="dd-ubah" href="#"><i class="bi bi-pencil-square me-2"></i>Ubah</a>
       <hr class="dropdown-divider">
       <a class="dropdown-item text-danger" id="ddp-hapus" href="#"><i class="bi bi-trash me-2"></i>Hapus</a>
@@ -119,28 +123,25 @@
     </script>
 
     <script>
-      // ── LOGIKA TABULATOR DAN CRUD USERS ──
-      // PERBAIKAN 1: Menyeragamkan variabel agar tidak error
-      const USER_KEY = 'app_users';
+      // ── LOGIKA TABULATOR DAN CRUD PIC ──
+      const PIC_KEY = 'app_pics';
 
-      // PERBAIKAN 4: Menambahkan atribut 'status' pada dummy data
-      const defaultUsers = [
-        { id: 1, username: 'budi_santoso', email: 'budi@ptmaju.com', created_at: '2023-01-01 00:00:00', updated_at: '2023-01-01 00:00:00', status: 'aktif' },
-        { id: 2, username: 'siti_aminah', email: 'siti@vendor.co.id', created_at: '2023-01-01 00:00:00', updated_at: '2023-01-01 00:00:00', status: 'nonaktif' },
+      const defaultPICs = [
+        { id: 1, nama: 'Budi Santoso', no_telp: '081234567890', email: 'budi@ptmaju.com', jabatan: 'Purchasing Manager', status: 'aktif' },
+        { id: 2, nama: 'Siti Aminah', no_telp: '081987654321', email: 'siti@vendor.co.id', jabatan: 'Sales Representative', status: 'aktif' },
       ];
 
-      function loadUsers() {
-        const stored = localStorage.getItem(USER_KEY);
-        return stored ? JSON.parse(stored) : defaultUsers;
+      function loadPICs() {
+        const stored = localStorage.getItem(PIC_KEY);
+        return stored ? JSON.parse(stored) : defaultPICs;
       }
 
-      function saveUsers(data) {
-        localStorage.setItem(USER_KEY, JSON.stringify(data));
+      function savePICs(data) {
+        localStorage.setItem(PIC_KEY, JSON.stringify(data));
       }
 
-      let dataUsers = loadUsers();
-      let nextId = dataUsers.length ? Math.max(...dataUsers.map(p => p.id)) + 1 : 1;
-      let table; // PERBAIKAN 3: Variabel table harus dideklarasikan di luar
+      let dataPICs = loadPICs();
+      let nextId = dataPICs.length ? Math.max(...dataPICs.map(p => p.id)) + 1 : 1;
 
       const statusBadge = (cell) => {
         const val = cell.getValue();
@@ -151,60 +152,55 @@
 
       const btnAksi = (cell) => {
         const id = cell.getValue();
-        return `<button class="btn btn-sm btn-warning" onclick="toggleDropdownUsers(event, ${id})">
+        return `<button class="btn btn-sm btn-warning" onclick="toggleDropdownPIC(event, ${id})">
           Aksi <i class="bi bi-chevron-down ms-1"></i>
         </button>`;
       };
 
-      let activeUserRowId = null;
+      let activePICRowId = null;
 
-      function toggleDropdownUsers(e, id) {
+      function toggleDropdownPIC(e, id) {
         e.stopPropagation();
-        const dd = document.getElementById('custom-dropdown-users');
+        const dd = document.getElementById('custom-dropdown-pic');
         const rect = e.currentTarget.getBoundingClientRect();
         
-        if (activeUserRowId === id && dd.style.display === 'block') {
+        if (activePICRowId === id && dd.style.display === 'block') {
           dd.style.display = 'none'; 
-          activeUserRowId = null; 
+          activePICRowId = null; 
           return;
         }
 
+        // PERBAIKAN 1: Pindah halaman ke edit-user.php dan bawa parameter ID-nya
+        // Pastikan pemanggilan ID elemennya benar ('dd-ubah')
         document.getElementById('dd-ubah').onclick = (ev) => { 
             ev.preventDefault(); 
-            window.location.href = `edit-user.php?id=${id}`; 
+            window.location.href = `edit-pic.php?id=${id}`; 
         };
 
         document.getElementById('ddp-hapus').onclick = (ev) => {
           ev.preventDefault();
-          if (confirm('Hapus pengguna ini?')) {
+          if (confirm('Hapus kontak PIC ini?')) {
             const row = table.getRow(id);
             if (row) row.delete();
-            dataUsers = dataUsers.filter(p => p.id !== id);
-            saveUsers(dataUsers);
+            dataPICs = dataPICs.filter(p => p.id !== id);
+            savePICs(dataPICs);
             dd.style.display = 'none'; 
-            activeUserRowId = null;
+            activePICRowId = null;
           }
         };
 
         dd.style.display = 'block';
         dd.style.top  = (rect.bottom + window.scrollY + 2) + 'px';
         dd.style.left = (rect.left + window.scrollX - 40) + 'px';
-        activeUserRowId = id;
+        activePICRowId = id;
       }
 
-      // PERBAIKAN 5: Menutup dropdown saat klik di luar tabel
-      document.addEventListener('click', () => {
-        const dd = document.getElementById('custom-dropdown-users');
-        if (dd && dd.style.display === 'block') {
-          dd.style.display = 'none';
-          activeUserRowId = null;
-        }
-      });
+      // ... (kode inisialisasi tabel dibiarkan sama seperti milik Anda) ...
 
       document.addEventListener('DOMContentLoaded', () => {
         table = new Tabulator('#users-table', {
           theme: 'bootstrap5',
-          data: dataUsers,
+          data: dataPICs,
           layout: 'fitColumns',
           pagination: true,
           paginationSize: 10,
@@ -218,21 +214,24 @@
 
           columns: [
             { title: 'No.',         field: 'id',         headerHozAlign: 'center', hozAlign: 'center', width: 80 },
-            { title: 'Username',    field: 'username',      headerHozAlign: 'left',   hozAlign: 'left' },
-            { title: 'Email',       field: 'email',      headerHozAlign: 'left',   hozAlign: 'left' },
-            { title: 'Created At',  field: 'created_at',    headerHozAlign: 'left',   hozAlign: 'left' },
-            { title: 'Updated At',  field: 'updated_at',    headerHozAlign: 'left',   hozAlign: 'left' },
-            { title: 'Status',      field: 'status',     formatter: statusBadge, headerHozAlign: 'center', hozAlign: 'center', width: 100 },
-            { title: 'Aksi',        field: 'id',         formatter: btnAksi, headerSort: false, headerHozAlign: 'center', hozAlign: 'center', width: 120 },
+            { title: 'Nama Lengkap',field: 'nama',      headerHozAlign: 'left',   hozAlign: 'left' },
+            { title: 'No. Telepon', field: 'no_telp',   headerHozAlign: 'left',   hozAlign: 'left' },
+            { title: 'Email',      field: 'email',      headerHozAlign: 'left',   hozAlign: 'left' },
+            { title: 'Jabatan',    field: 'jabatan',    headerHozAlign: 'left',   hozAlign: 'left' },
+            { title: 'Status',     field: 'status',     formatter: statusBadge, headerHozAlign: 'center', hozAlign: 'center', width: 100 },
+            { title: 'Aksi',       field: 'id',         formatter: btnAksi, headerSort: false, headerHozAlign: 'center', hozAlign: 'center', width: 120 },
           ],
         });
 
+        // PERBAIKAN 2: Search Filter (Menghapus 'search-departemen' yang bikin error)
         function applySearch() {
           const nama       = document.getElementById('search-nama').value.trim();
+          const jabatan    = document.getElementById('search-jabatan').value.trim();
           const status     = document.getElementById('search-status').value;
           const filters    = [];
           
-          if (nama)   filters.push({ field: 'username',   type: 'like', value: nama });
+          if (nama)   filters.push({ field: 'nama',   type: 'like', value: nama });
+          if (jabatan) filters.push({ field: 'jabatan', type: 'like', value: jabatan });
           if (status) filters.push({ field: 'status', type: '=',    value: status });
           
           filters.length > 0 ? table.setFilter(filters) : table.clearFilter();
@@ -240,17 +239,19 @@
         
         document.getElementById('btn-search').addEventListener('click', applySearch);
         document.getElementById('search-nama').addEventListener('input', applySearch);
+        document.getElementById('search-jabatan').addEventListener('input', applySearch);
         document.getElementById('search-status').addEventListener('change', applySearch);
         
         document.getElementById('btn-reset').addEventListener('click', () => {
           document.getElementById('search-nama').value   = '';
+          document.getElementById('search-jabatan').value = '';
           document.getElementById('search-status').value = '';
           table.clearFilter();
         });
 
         // Export Buttons
-        document.getElementById('export-csv').addEventListener('click', () => table.download('csv', 'data_users.csv'));
-        document.getElementById('export-json').addEventListener('click', () => table.download('json', 'data_users.json'));
+        document.getElementById('export-csv').addEventListener('click', () => table.download('csv', 'data_pic.csv'));
+        document.getElementById('export-json').addEventListener('click', () => table.download('json', 'data_pic.json'));
       });
     </script>
 </body>

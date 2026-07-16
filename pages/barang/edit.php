@@ -27,7 +27,7 @@
           <ol class="breadcrumb float-sm-end">
             <li class="breadcrumb-item"><a href="../beranda/dashboard.php">Beranda</a></li>
             <li class="breadcrumb-item"><a href="index.php">Barang</a></li>
-            <li class="breadcrumb-item active">Edit</li>
+            <li class="breadcrumb-item active">Edit Barang</li>
           </ol>
         </div>
       </div>

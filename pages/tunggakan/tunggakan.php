@@ -19,12 +19,12 @@
       <div class="container-fluid">
         <div class="row">
           <div class="col-sm-6">
-            <h3 class="mb-0">Tabel Tunggakan</h3>
+            <h3 class="mb-0">Tunggakan</h3>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-end">
               <li class="breadcrumb-item"><a href="../beranda/dashboard.php">Beranda</a></li>
-              <li class="breadcrumb-item active">Tabel Tunggakan</li>
+              <li class="breadcrumb-item active">Tunggakan</li>
             </ol>
           </div>
         </div>
@@ -35,7 +35,7 @@
       <div class="container-fluid">
         <div class="card">
           <div class="card-header">
-            <h3 class="card-title">Tunggakan Pelanggan</h3>
+            <h3 class="card-title">Data Tunggakan Pelanggan</h3>
           </div>
           <div class="card-body">
 

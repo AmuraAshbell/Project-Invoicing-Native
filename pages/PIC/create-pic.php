@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Pelanggan</title>
+    <title>Tambah-Data</title>
     <link rel="stylesheet" href="../../style/style.css">
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/styles/overlayscrollbars.min.css"/>
     <link rel="stylesheet" href="../../dist/css/adminlte.min.css"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tabulator-tables@6.4.0/dist/css/tabulator_bootstrap5.min.css" crossorigin="anonymous"/>
+
 </head>
   <body class="app-wrapper">
   <?php include "../../layout/navbar.php"; ?>
@@ -20,13 +21,13 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-sm-6">
-          <h3 class="mb-0">Edit Pelanggan</h3>
+          <h3 class="mb-0">Tambah PIC</h3>
         </div>
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-end">
             <li class="breadcrumb-item"><a href="../beranda/dashboard.php">Beranda</a></li>
-            <li class="breadcrumb-item"><a href="customer.php">Pelanggan</a></li>
-            <li class="breadcrumb-item active">Edit Pelanggan</li>
+            <li class="breadcrumb-item"><a href="index.php">PIC</a></li>
+            <li class="breadcrumb-item active">Tambah PIC</li>
           </ol>
         </div>
       </div>
@@ -34,33 +35,40 @@
   </div>
   <div class="app-content">
     <div class="container-fluid">
-      <div class="col-md-13 mx-auto">
-        <div class="card card-warning card-outline mb-4">
+      <div class="col-md-13    mx-auto">
+        <div class="card card-primary card-outline mb-4">
           <div class="card-header">
-            <div class="card-title">Edit Pelanggan</div>
+            <div class="card-title">Tambah PIC</div>
           </div>
-          <form action="customer.php" method="GET">
+          <form action="pic.php" method="POST">
             <div class="card-body">
               <div class="mb-3">
-                <label for="inputRefNo" class="form-label">Nomor Referensi*</label>
-                <input type="text" class="form-control" id="inputRefNo" name="ref_no" placeholder="Masukkan Ref No">
+                <label for="exampleInputName1" class="form-label">Nama PIC*</label>
+                <input type="text" class="form-control" id="exampleInputName1" placeholder="Masukkan Nama">
               </div>
               <div class="mb-3">
-                <label for="inputName" class="form-label">Nama Pelanggan*</label>
-                <input type="text" class="form-control" id="inputName" name="name" placeholder="Masukkan Nama">
+                <label for="exampleInputPrice1" class="form-label">No Telepon*</label>
+                <input type="number" class="form-control" id="exampleInputPrice1" placeholder="Masukkan No Telepon">
               </div>
-              <div class="mb-3">
-                <label for="inputAddress" class="form-label">Alamat*</label>
-                <input type="text" class="form-control" id="inputAddress" name="address" placeholder="Masukkan Alamat">
+              <div class="col-md-12 mb-3">
+                <label class="form-label">Email</label>
+                <input type="email" class="form-control" id="add-email" placeholder="email@contoh.com">
               </div>
-              <div class="mb-3">
-                <label for="inputPhone" class="form-label">Nomor Telepon*</label>
-                <input type="text" class="form-control" id="inputPhone" name="phone" placeholder="Masukkan No. Telepon">
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Jabatan</label>
+                <input type="text" class="form-control" id="add-jabatan" placeholder="Contoh: Manager, Staff">
+              </div>
+              <div class="col-md-12 mb-0">
+                <label class="form-label">Status</label>
+                <select class="form-select" id="add-status">
+                    <option value="aktif">Aktif</option>
+                    <option value="nonaktif">Tidak Aktif</option>
+                </select>
               </div>
             </div>
             <div class="card-footer d-flex gap-2">
-              <button type="submit" class="btn btn-warning">Ubah</button>
-              <a href="customer.php" class="btn btn-secondary">Batal</a>
+              <button type="submit" class="btn btn-primary">Tambah</button>
+              <a href="pic.php" class="btn btn-secondary">Batal</a>
             </div>
           </form>
         </div>
@@ -68,7 +76,7 @@
     </div>
   </div>
 </main>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>

@@ -26,8 +26,8 @@
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-end">
             <li class="breadcrumb-item"><a href="../beranda/dashboard.php">Beranda</a></li>
-            <li class="breadcrumb-item"><a href="index.php">Barang</a></li>
-            <li class="breadcrumb-item active">Tambah</li>
+            <li class="breadcrumb-item"><a href="user-manajemen.php">Pengguna</a></li>
+            <li class="breadcrumb-item active">Tambah Pengguna</li>
           </ol>
         </div>
       </div>
@@ -43,27 +43,30 @@
           <form action="user-manajemen.php" method="GET">
             <div class="card-body">
               <div class="mb-3">
-                <label for="exampleInputName1" class="form-label">Nama Pengguna*</label>
-                <input type="text" class="form-control" id="exampleInputName1" placeholder="Masukkan Nama">
-              </div>
-              <div class="mb-3">
-                <label for="exampleInputPrice1" class="form-label">No Telepon*</label>
-                <input type="number" class="form-control" id="exampleInputPrice1" placeholder="Masukkan No Telepon">
+                <label for="exampleInputName1" class="form-label">Username*</label>
+                <input type="text" class="form-control" id="exampleInputName1" placeholder="Masukkan Username">
               </div>
               <div class="col-md-12 mb-3">
                 <label class="form-label">Email</label>
                 <input type="email" class="form-control" id="add-email" placeholder="email@contoh.com">
               </div>
-              <div class="col-md-6 mb-3">
-                <label class="form-label">Jabatan</label>
-                <input type="text" class="form-control" id="add-jabatan" placeholder="Contoh: Manager, Staff">
+              <div class="mb-3">
+                  <label for="inputPassword" class="form-label">Password*</label>
+                  <div class="input-group">
+                      <input type="password" class="form-control" id="inputPassword" placeholder="Masukkan Password" required>
+                      <button class="btn btn-outline-secondary" type="button" id="btnTogglePassword">
+                          <i class="bi bi-eye" id="iconPassword"></i>
+                      </button>
+                  </div>
               </div>
-              <div class="col-md-12 mb-0">
-                <label class="form-label">Status</label>
-                <select class="form-select" id="add-status">
-                    <option value="aktif">Aktif</option>
-                    <option value="nonaktif">Tidak Aktif</option>
-                </select>
+              <div class="mb-3">
+                  <label for="inputPassword" class="form-label">Konfirmasi Password*</label>
+                  <div class="input-group">
+                      <input type="password" class="form-control" id="inputPassword" placeholder="Masukkan Konfirmasi Password" required>
+                      <button class="btn btn-outline-secondary" type="button" id="btnTogglePassword">
+                          <i class="bi bi-eye" id="iconPassword"></i>
+                      </button>
+                  </div>
               </div>
             </div>
             <div class="card-footer d-flex gap-2">
@@ -133,5 +136,28 @@
         });
       })();
     </script>
+    <script>
+    // Fitur Show/Hide Password
+    const btnTogglePassword = document.getElementById('btnTogglePassword');
+    const inputPassword = document.getElementById('inputPassword');
+    const iconPassword = document.getElementById('iconPassword');
+
+    btnTogglePassword.addEventListener('click', function () {
+        // Cek apakah tipe input saat ini adalah 'password'
+        if (inputPassword.type === 'password') {
+            // Ubah tipe jadi 'text' agar password terlihat
+            inputPassword.type = 'text';
+            // Ganti ikon menjadi mata dicoret (eye-slash)
+            iconPassword.classList.remove('bi-eye');
+            iconPassword.classList.add('bi-eye-slash');
+        } else {
+            // Kembalikan tipe menjadi 'password' agar tersembunyi lagi
+            inputPassword.type = 'password';
+            // Ganti ikon menjadi mata biasa (eye)
+            iconPassword.classList.remove('bi-eye-slash');
+            iconPassword.classList.add('bi-eye');
+        }
+    });
+</script>
 </body>
 </html>
