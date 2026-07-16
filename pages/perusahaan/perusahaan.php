@@ -89,7 +89,7 @@
                                 </div>
                                 <div class="mt-4 mb-2 d-flex justify-content-end">
                                     <button class="btn btn-md btn-warning" onclick="bukaModal('modalEditPerusahaan')">
-                                        <i class="bi bi-pencil-square me-1"></i>Ubah
+                                    </i>Ubah
                                     </button> 
                                 </div>
                             </div>
@@ -117,7 +117,7 @@
                                 
                                 <div class="d-flex justify-content-end pt-2">
                                     <button class="btn btn-sm btn-warning" onclick="bukaModal('modalEditKontak')">
-                                        <i class="bi bi-pencil-square me-1"></i> Ubah Kontak
+                                     Ubah Kontak
                                     </button>
                                 </div>
                             </div>
@@ -223,7 +223,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                     <button type="button" class="btn btn-primary" id="btnSimpanPerusahaan">
-                        <i class="bi bi-check-lg me-1"></i>Simpan
+                    Simpan
                     </button>
                 </div>
             </div>
@@ -251,7 +251,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                     <button type="button" class="btn btn-primary" id="btnSimpanKontak">
-                        <i class="bi bi-check-lg me-1"></i>Simpan
+                    Simpan
                     </button>
                 </div>
             </div>

@@ -37,9 +37,10 @@
                     </div>
                     <div class="card-body">
                         <div class="d-flex gap-2 mb-3">
-                            <button class="btn btn-sm btn-primary" onclick="bukaModalTambah()">
-                                <i class="bi bi-plus-lg me-1"></i>Tambah PIC
-                            </button>
+                            <a href="create-user.php" class="btn btn-sm btn-primary">
+                                <i class="bi bi-plus-lg me-1" aria-hidden="true"></i>
+                                Tambah Data
+                            </a>
                             <button id="export-csv" type="button" class="btn btn-sm btn-outline-secondary">
                                 <i class="bi bi-filetype-csv me-1"></i>Export CSV
                             </button>
@@ -52,10 +53,6 @@
                           <div class="col-12 col-md-3">
                             <label for="search-nama" class="form-label form-label-sm mb-1">Nama Lengkap</label>
                             <input type="text" id="search-nama" class="form-control form-control-sm" placeholder="Cari nama...">
-                          </div>
-                          <div class="col-12 col-md-4">
-                            <label for="search-departemen" class="form-label form-label-sm mb-1">Departemen</label>
-                            <input type="text" id="search-departemen" class="form-control form-control-sm" placeholder="Cari departemen...">
                           </div>
                           <div class="col-12 col-md-2">
                             <label for="search-status" class="form-label form-label-sm mb-1">Status</label>
@@ -75,110 +72,17 @@
                           </div>
                         </div>
 
-                        <div id="pic-table"></div>
+                        <div id="users-table"></div>
                     </div>
                 </div>
             </div>
         </div>
     </main>
 
-    <div class="modal fade" id="modalTambahPIC" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Tambah Data Pengguna</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Nama Lengkap</label>
-                            <input type="text" class="form-control" id="add-nama" placeholder="Masukkan nama lengkap">
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Nomor Telepon</label>
-                            <input type="text" class="form-control" id="add-telp" placeholder="Contoh: 08123456789">
-                        </div>
-                        <div class="col-md-12 mb-3">
-                            <label class="form-label">Email</label>
-                            <input type="email" class="form-control" id="add-email" placeholder="email@contoh.com">
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Jabatan</label>
-                            <input type="text" class="form-control" id="add-jabatan" placeholder="Contoh: Manager, Staff">
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Departemen</label>
-                            <input type="text" class="form-control" id="add-departemen" placeholder="Contoh: Finance, IT">
-                        </div>
-                        <div class="col-md-12 mb-0">
-                            <label class="form-label">Status</label>
-                            <select class="form-select" id="add-status">
-                                <option value="aktif">Aktif</option>
-                                <option value="nonaktif">Tidak Aktif</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="button" class="btn btn-primary" id="btnSimpanTambah">Simpan</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="modalUbahPIC" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Ubah Data PIC</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <input type="hidden" id="edit-id">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Nama Lengkap</label>
-                            <input type="text" class="form-control" id="edit-nama">
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Nomor Telepon</label>
-                            <input type="text" class="form-control" id="edit-telp">
-                        </div>
-                        <div class="col-md-12 mb-3">
-                            <label class="form-label">Email</label>
-                            <input type="email" class="form-control" id="edit-email">
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Jabatan</label>
-                            <input type="text" class="form-control" id="edit-jabatan">
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Departemen</label>
-                            <input type="text" class="form-control" id="edit-departemen">
-                        </div>
-                        <div class="col-md-12 mb-0">
-                            <label class="form-label">Status</label>
-                            <select class="form-select" id="edit-status">
-                                <option value="aktif">Aktif</option>
-                                <option value="nonaktif">Tidak Aktif</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="button" class="btn btn-warning" id="btnSimpanUbah">Simpan</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <?php include "../../layout/footer.php"; ?>
 
     <div id="custom-dropdown-pic" class="dropdown-menu shadow" style="display:none; position:fixed; z-index:9999; min-width:160px;">
-      <a class="dropdown-item" id="ddp-ubah" href="#"><i class="bi bi-pencil-square me-2"></i>Ubah</a>
+      <a class="dropdown-item" id="dd-ubah" href="#"><i class="bi bi-pencil-square me-2"></i>Ubah</a>
       <hr class="dropdown-divider">
       <a class="dropdown-item text-danger" id="ddp-hapus" href="#"><i class="bi bi-trash me-2"></i>Hapus</a>
     </div>
@@ -219,8 +123,8 @@
       const PIC_KEY = 'app_pics';
 
       const defaultPICs = [
-        { id: 1, nama: 'Budi Santoso', no_telp: '081234567890', email: 'budi@ptmaju.com', jabatan: 'Purchasing Manager', departemen: 'Finance', status: 'aktif' },
-        { id: 2, nama: 'Siti Aminah', no_telp: '081987654321', email: 'siti@vendor.co.id', jabatan: 'Sales Representative', departemen: 'Marketing', status: 'aktif' },
+        { id: 1, nama: 'Budi Santoso', no_telp: '081234567890', email: 'budi@ptmaju.com', jabatan: 'Purchasing Manager', status: 'aktif' },
+        { id: 2, nama: 'Siti Aminah', no_telp: '081987654321', email: 'siti@vendor.co.id', jabatan: 'Sales Representative', status: 'aktif' },
       ];
 
       function loadPICs() {
@@ -255,10 +159,20 @@
         e.stopPropagation();
         const dd = document.getElementById('custom-dropdown-pic');
         const rect = e.currentTarget.getBoundingClientRect();
+        
         if (activePICRowId === id && dd.style.display === 'block') {
-          dd.style.display = 'none'; activePICRowId = null; return;
+          dd.style.display = 'none'; 
+          activePICRowId = null; 
+          return;
         }
-        document.getElementById('ddp-ubah').onclick = (ev) => { ev.preventDefault(); bukaModalUbah(id); dd.style.display = 'none'; activePICRowId = null; };
+
+        // PERBAIKAN 1: Pindah halaman ke edit-user.php dan bawa parameter ID-nya
+        // Pastikan pemanggilan ID elemennya benar ('dd-ubah')
+        document.getElementById('dd-ubah').onclick = (ev) => { 
+            ev.preventDefault(); 
+            window.location.href = `edit-user.php?id=${id}`; 
+        };
+
         document.getElementById('ddp-hapus').onclick = (ev) => {
           ev.preventDefault();
           if (confirm('Hapus kontak PIC ini?')) {
@@ -266,25 +180,21 @@
             if (row) row.delete();
             dataPICs = dataPICs.filter(p => p.id !== id);
             savePICs(dataPICs);
-            dd.style.display = 'none'; activePICRowId = null;
+            dd.style.display = 'none'; 
+            activePICRowId = null;
           }
         };
+
         dd.style.display = 'block';
         dd.style.top  = (rect.bottom + window.scrollY + 2) + 'px';
         dd.style.left = (rect.left + window.scrollX - 40) + 'px';
         activePICRowId = id;
       }
 
-      document.addEventListener('click', () => {
-        const dd = document.getElementById('custom-dropdown-pic');
-        if (dd) dd.style.display = 'none';
-        activePICRowId = null;
-      });
-
-      let table;
+      // ... (kode inisialisasi tabel dibiarkan sama seperti milik Anda) ...
 
       document.addEventListener('DOMContentLoaded', () => {
-        table = new Tabulator('#pic-table', {
+        table = new Tabulator('#users-table', {
           theme: 'bootstrap5',
           data: dataPICs,
           layout: 'fitColumns',
@@ -304,110 +214,37 @@
             { title: 'No. Telepon', field: 'no_telp',   headerHozAlign: 'left',   hozAlign: 'left' },
             { title: 'Email',      field: 'email',      headerHozAlign: 'left',   hozAlign: 'left' },
             { title: 'Jabatan',    field: 'jabatan',    headerHozAlign: 'left',   hozAlign: 'left' },
-            { title: 'Departemen', field: 'departemen', headerHozAlign: 'left',   hozAlign: 'left' },
             { title: 'Status',     field: 'status',     formatter: statusBadge, headerHozAlign: 'center', hozAlign: 'center', width: 100 },
             { title: 'Aksi',       field: 'id',         formatter: btnAksi, headerSort: false, headerHozAlign: 'center', hozAlign: 'center', width: 120 },
           ],
         });
 
-        // Search Filter
+        // PERBAIKAN 2: Search Filter (Menghapus 'search-departemen' yang bikin error)
         function applySearch() {
           const nama       = document.getElementById('search-nama').value.trim();
-          const departemen = document.getElementById('search-departemen').value.trim();
           const status     = document.getElementById('search-status').value;
           const filters    = [];
-          if (nama)       filters.push({ field: 'nama',       type: 'like', value: nama });
-          if (departemen) filters.push({ field: 'departemen', type: 'like', value: departemen });
-          if (status)     filters.push({ field: 'status',     type: '=',    value: status });
+          
+          if (nama)   filters.push({ field: 'nama',   type: 'like', value: nama });
+          if (status) filters.push({ field: 'status', type: '=',    value: status });
+          
           filters.length > 0 ? table.setFilter(filters) : table.clearFilter();
         }
         
         document.getElementById('btn-search').addEventListener('click', applySearch);
         document.getElementById('search-nama').addEventListener('input', applySearch);
-        document.getElementById('search-departemen').addEventListener('input', applySearch);
         document.getElementById('search-status').addEventListener('change', applySearch);
         
         document.getElementById('btn-reset').addEventListener('click', () => {
-          document.getElementById('search-nama').value       = '';
-          document.getElementById('search-departemen').value = '';
-          document.getElementById('search-status').value     = '';
+          document.getElementById('search-nama').value   = '';
+          document.getElementById('search-status').value = '';
           table.clearFilter();
         });
 
         // Export Buttons
         document.getElementById('export-csv').addEventListener('click', () => table.download('csv', 'data_pic.csv'));
         document.getElementById('export-json').addEventListener('click', () => table.download('json', 'data_pic.json'));
-
-        // Tambah PIC
-        document.getElementById('btnSimpanTambah').addEventListener('click', () => {
-          const nama       = document.getElementById('add-nama').value.trim();
-          const no_telp    = document.getElementById('add-telp').value.trim();
-          const email      = document.getElementById('add-email').value.trim();
-          const jabatan    = document.getElementById('add-jabatan').value.trim();
-          const departemen = document.getElementById('add-departemen').value.trim();
-          const status     = document.getElementById('add-status').value;
-          
-          if (!nama || !no_telp) { alert('Nama dan No Telepon wajib diisi!'); return; }
-          
-          const newPIC = { id: nextId++, nama, no_telp, email, jabatan, departemen, status };
-          dataPICs.push(newPIC);
-          savePICs(dataPICs);
-          table.addRow(newPIC);
-          
-          // Clear inputs
-          document.getElementById('add-nama').value = '';
-          document.getElementById('add-telp').value = '';
-          document.getElementById('add-email').value = '';
-          document.getElementById('add-jabatan').value = '';
-          document.getElementById('add-departemen').value = '';
-          
-          bootstrap.Modal.getInstance(document.getElementById('modalTambahPIC')).hide();
-        });
-
-        // Ubah PIC
-        document.getElementById('btnSimpanUbah').addEventListener('click', () => {
-          const id         = parseInt(document.getElementById('edit-id').value);
-          const nama       = document.getElementById('edit-nama').value.trim();
-          const no_telp    = document.getElementById('edit-telp').value.trim();
-          const email      = document.getElementById('edit-email').value.trim();
-          const jabatan    = document.getElementById('edit-jabatan').value.trim();
-          const departemen = document.getElementById('edit-departemen').value.trim();
-          const status     = document.getElementById('edit-status').value;
-          
-          if (!nama || !no_telp) { alert('Nama dan No Telepon wajib diisi!'); return; }
-          
-          const row = table.getRow(id);
-          if (row) row.update({ nama, no_telp, email, jabatan, departemen, status });
-          
-          const pic = dataPICs.find(p => p.id === id);
-          if (pic) { 
-              pic.nama = nama; pic.no_telp = no_telp; pic.email = email; 
-              pic.jabatan = jabatan; pic.departemen = departemen; pic.status = status; 
-          }
-          savePICs(dataPICs);
-          
-          bootstrap.Modal.getInstance(document.getElementById('modalUbahPIC')).hide();
-        });
       });
-
-      function bukaModalTambah() {
-        new bootstrap.Modal(document.getElementById('modalTambahPIC')).show();
-      }
-
-      function bukaModalUbah(id) {
-        const pic = dataPICs.find(p => p.id === id);
-        if (!pic) return;
-        
-        document.getElementById('edit-id').value         = pic.id;
-        document.getElementById('edit-nama').value       = pic.nama;
-        document.getElementById('edit-telp').value       = pic.no_telp;
-        document.getElementById('edit-email').value      = pic.email;
-        document.getElementById('edit-jabatan').value    = pic.jabatan;
-        document.getElementById('edit-departemen').value = pic.departemen;
-        document.getElementById('edit-status').value     = pic.status;
-        
-        new bootstrap.Modal(document.getElementById('modalUbahPIC')).show();
-      }
     </script>
 </body>
 </html>

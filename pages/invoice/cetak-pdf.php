@@ -12,6 +12,16 @@ if (isset($_GET['inv_no'])) {
     $tanggal = "13 Juli 2026";
     $jatuh_tempo = "20 Juli 2026";
     $nama_pelanggan = "Budi Santoso";
+
+    // Pastikan path dan ekstensi file (misal .png) benar sesuai file Anda
+    $path_logo = __DIR__ . '/../../assets/logo-hitam.png'; 
+    $base64_logo = '';
+    
+    if (file_exists($path_logo)) {
+        $type_logo = pathinfo($path_logo, PATHINFO_EXTENSION);
+        $data_logo = file_get_contents($path_logo);
+        $base64_logo = 'data:image/' . $type_logo . ';base64,' . base64_encode($data_logo);
+    }
     
     // 2. Desain HTML Khusus DomPDF yang menyamai Pict 1
     $html = '
@@ -101,27 +111,28 @@ if (isset($_GET['inv_no'])) {
     </head>
     <body>
 
-        <table class="grid-table">
-            <tr>
-                <td width="50%">
-                    <h2 class="text-primary" style="margin: 0 0 8px 0; font-size: 24px;">Amura Store</h2>
-                    <p class="text-muted" style="margin: 0; line-height: 1.5;">
-                        Jl. Rungkut Madya No. 123<br>
-                        Surabaya, Jawa Timur 60293<br>
-                        Email: halo@amurastore.com<br>
-                        Telp: 0812-3456-7890
-                    </p>
-                </td>
-                <td width="50%" class="text-right">
-                    <h1 style="margin: 0 0 10px 0; color: #495057; font-size: 32px; letter-spacing: 2px;">INVOICE</h1>
-                    <p style="margin: 0; line-height: 1.6;">
-                        <strong>No. Faktur:</strong> ' . $inv_no . '<br>
-                        <strong>Tanggal:</strong> ' . $tanggal . '<br>
-                        <strong>Jatuh Tempo:</strong> ' . $jatuh_tempo . '
-                    </p>
-                </td>
-            </tr>
-        </table>
+        <table class="grid-table" style="width: 100%; border-collapse: collapse; margin-bottom: 25px;">
+    <tr>
+        <td style="width: 50%; vertical-align: middle; border: none;">
+            <img src="' . $base64_logo . '" alt="Logo Amura Store" style="max-height: 100px; width: auto; margin-left: -15px;">
+            
+            <p class="text-muted" style="margin: 0; line-height: 1.5;">
+                Jl. Rungkut Madya No. 123<br>
+                Surabaya, Jawa Timur 60293<br>
+                Email: halo@amurastore.com<br>
+                Telp: 0812-3456-7890
+            </p>
+        </td>
+        <td style="width: 50%; text-align: right; vertical-align: middle; border: none;">
+            <h1 style="margin: 0 0 10px 0; color: #495057; font-size: 32px; letter-spacing: 2px;">INVOICE</h1>
+            <p style="margin: 0; line-height: 1.6;">
+                <strong>No. Faktur:</strong> ' . $inv_no . '<br>
+                <strong>Tanggal:</strong> ' . $tanggal . '<br>
+                <strong>Jatuh Tempo:</strong> ' . $jatuh_tempo . '
+            </p>
+        </td>
+    </tr>
+</table>
 
         <hr style="border: 0; border-top: 1px solid #dee2e6; margin-bottom: 25px;">
 
@@ -143,9 +154,11 @@ if (isset($_GET['inv_no'])) {
                         <strong>Bank BCA</strong><br>
                         No. Rek: 8291-293-112<br>
                         A/N: Amura Store Official<br><br>
-                        <strong>Bank Mandiri</strong><br>
-                        No. Rek: 142-00-1928374-1<br>
-                        A/N: Amura Store Official
+                    </p>
+                    <div class="section-title">DITANGANI OLEH:</div>
+                    <p style="margin: 0; line-height: 1.5;">
+                        <strong>Zidan Rasyid Susanto</strong><br>
+                        No. Telp: 0812-3456-7890<br>
                     </p>
                 </td>
             </tr>
@@ -175,6 +188,97 @@ if (isset($_GET['inv_no'])) {
                     <td class="text-center">2</td>
                     <td class="text-right">Rp 125.000</td>
                     <td class="text-right">Rp 250.000</td>
+                </tr>
+                <tr>
+                    <td class="text-center">3</td>
+                    <td>Mr. Color Thinner 400ml</td>
+                    <td class="text-center">1</td>
+                    <td class="text-right">Rp 150.000</td>
+                    <td class="text-right">Rp 150.000</td>
+                </tr>
+                <tr>
+                    <td class="text-center">3</td>
+                    <td>Mr. Color Thinner 400ml</td>
+                    <td class="text-center">1</td>
+                    <td class="text-right">Rp 150.000</td>
+                    <td class="text-right">Rp 150.000</td>
+                </tr>
+                <tr>
+                    <td class="text-center">3</td>
+                    <td>Mr. Color Thinner 400ml</td>
+                    <td class="text-center">1</td>
+                    <td class="text-right">Rp 150.000</td>
+                    <td class="text-right">Rp 150.000</td>
+                </tr>
+                <tr>
+                    <td class="text-center">3</td>
+                    <td>Mr. Color Thinner 400ml</td>
+                    <td class="text-center">1</td>
+                    <td class="text-right">Rp 150.000</td>
+                    <td class="text-right">Rp 150.000</td>
+                </tr>
+                <tr>
+                    <td class="text-center">3</td>
+                    <td>Mr. Color Thinner 400ml</td>
+                    <td class="text-center">1</td>
+                    <td class="text-right">Rp 150.000</td>
+                    <td class="text-right">Rp 150.000</td>
+                </tr>
+                <tr>
+                    <td class="text-center">3</td>
+                    <td>Mr. Color Thinner 400ml</td>
+                    <td class="text-center">1</td>
+                    <td class="text-right">Rp 150.000</td>
+                    <td class="text-right">Rp 150.000</td>
+                </tr>
+                <tr>
+                    <td class="text-center">3</td>
+                    <td>Mr. Color Thinner 400ml</td>
+                    <td class="text-center">1</td>
+                    <td class="text-right">Rp 150.000</td>
+                    <td class="text-right">Rp 150.000</td>
+                </tr>
+                <tr>
+                    <td class="text-center">3</td>
+                    <td>Mr. Color Thinner 400ml</td>
+                    <td class="text-center">1</td>
+                    <td class="text-right">Rp 150.000</td>
+                    <td class="text-right">Rp 150.000</td>
+                </tr>
+                <tr>
+                    <td class="text-center">3</td>
+                    <td>Mr. Color Thinner 400ml</td>
+                    <td class="text-center">1</td>
+                    <td class="text-right">Rp 150.000</td>
+                    <td class="text-right">Rp 150.000</td>
+                </tr>
+                <tr>
+                    <td class="text-center">3</td>
+                    <td>Mr. Color Thinner 400ml</td>
+                    <td class="text-center">1</td>
+                    <td class="text-right">Rp 150.000</td>
+                    <td class="text-right">Rp 150.000</td>
+                </tr>
+                <tr>
+                    <td class="text-center">3</td>
+                    <td>Mr. Color Thinner 400ml</td>
+                    <td class="text-center">1</td>
+                    <td class="text-right">Rp 150.000</td>
+                    <td class="text-right">Rp 150.000</td>
+                </tr>
+                <tr>
+                    <td class="text-center">3</td>
+                    <td>Mr. Color Thinner 400ml</td>
+                    <td class="text-center">1</td>
+                    <td class="text-right">Rp 150.000</td>
+                    <td class="text-right">Rp 150.000</td>
+                </tr>
+                <tr>
+                    <td class="text-center">3</td>
+                    <td>Mr. Color Thinner 400ml</td>
+                    <td class="text-center">1</td>
+                    <td class="text-right">Rp 150.000</td>
+                    <td class="text-right">Rp 150.000</td>
                 </tr>
                 <tr>
                     <td class="text-center">3</td>

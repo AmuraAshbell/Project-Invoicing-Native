@@ -69,16 +69,16 @@
     <div class="app-content">
       <div class="container-fluid">
         <div class="d-flex justify-content-end gap-2 mb-3 d-print-none">
-          <button class="btn btn-outline-secondary" onclick="window.print()" type="button">
-            <i class="bi bi-printer me-1"></i>Cetak
-          </button>
-          <a href="#" class="btn btn-outline-secondary">
-            <i class="bi bi-download me-1"></i>PDF
+          <a id="btn-cetak-dompdf" href="#" target="_blank" class="btn btn-outline-success">
+            <i class="bi bi-printer"></i> Print
+          </a>
+          <a id="btn-download-dompdf" href="#" class="btn btn-outline-success" style="margin-right: 5px;">
+            <i class="bi bi-download"></i> Generate PDF
           </a>
           <a href="../pembayaran/cetak-kwitansi.php" class="btn btn-outline-success">
             <i class="bi bi-receipt me-1"></i> Kwitansi
           </a>
-          <a href="edit-invoice.php" class="btn btn-sm btn-warning">
+          <a href="edit-invoice.php" class="btn btn-warning">
             <i class="bi bi-pencil-square"></i> Ubah Faktur
           </a>
         </div>
@@ -86,31 +86,38 @@
         <div class="card">
           <div class="card-body p-4 p-md-5">
             <div class="row mb-4">
-              <div class="col-sm-6">
-                <h2 class="h4 mb-0 text-primary fw-semibold">Amura Store</h2>
-                <p class="text-secondary mb-0 small">
-                  Jl. Tunjungan No. 1, Surabaya<br/>
-                  Jawa Timur 60275<br/>
-                  admin@amurastore.id
-                </p>
-              </div>
-              <div class="col-sm-6 text-sm-end">
-                <h1 class="h2 mb-1">Faktur</h1>
-                <p class="text-secondary mb-0">
-                  <span class="fw-semibold">#</span><span id="inv-number">INV-2026-00428</span>
-                </p>
-                <span class="badge text-bg-warning mt-1" id="inv-status">Belum Lunas</span>
-              </div>
-            </div>
+    <div class="col-sm-6 mb-3 mb-sm-0 d-flex flex-column align-items-start">
+        
+        <img src="../../assets/logo.png" alt="Logo Amura Store" 
+             style="max-height: 100px; width: auto; margin-left: -15px;" 
+             class="mb-2">
+        
+        <p class="text-secondary mb-0 small" style="line-height: 1.5;">
+            Jl. Tunjungan No. 1, Surabaya<br/>
+            Jawa Timur 60275<br/>
+            admin@amurastore.id
+        </p>
+    </div>
+    
+    <div class="col-sm-6 text-sm-end d-flex flex-column align-items-sm-end justify-content-center">
+        <h1 class="h2 mb-1">Faktur</h1>
+        <p class="text-secondary mb-0">
+            <span class="fw-semibold">#</span><span id="inv-number">INV-2026-00428</span>
+        </p>
+        <div>
+            <span class="badge text-bg-warning mt-2" id="inv-status">Belum Lunas</span>
+        </div>
+    </div>
+</div>
 
-            <div class="row mb-4 p-3 bg-dark rounded">
+            <div class="row mb-4 p-2 bg-dark rounded">
               
-              <div class="col-sm-4">
+              <div class="col-sm-4 p-1">
                 <p class="text-secondary small mb-1">Tagihan kepada</p>
                 <p class="mb-0 fw-semibold" id="inv-customer">-</p>
               </div>
               
-              <div class="col-sm-4 offset-sm-4 text-sm-end">
+              <div class="col-sm-4 offset-sm-4 text-sm-end mb-3">
                 <p class="text-secondary small mb-1">Tanggal dibuat</p>
                 <p class="mb-2 fw-semibold" id="inv-date">-</p>
                 
@@ -238,25 +245,58 @@
       </div>
     </div>
   </div>
+  <?php include "../../layout/footer.php"; ?>
 
   <script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
   <script src="../../dist/js/adminlte.js"></script>
   
-  <script>
-    // ... [Script Theme AdminLTE bawaan disembunyikan agar kode rapi] ...
-    (() => {
-      'use strict';
-      const STORAGE_KEY = 'lte-theme';
-      const getStoredTheme = () => localStorage.getItem(STORAGE_KEY);
-      const setStoredTheme = (theme) => localStorage.setItem(STORAGE_KEY, theme);
-      const prefersDark = () => globalThis.matchMedia('(prefers-color-scheme: dark)').matches;
-      const getPreferredTheme = () => { const stored = getStoredTheme(); if (stored) return stored; return prefersDark() ? 'dark' : 'light'; };
-      const setTheme = (theme) => { const resolved = theme === 'auto' ? (prefersDark() ? 'dark' : 'light') : theme; document.documentElement.setAttribute('data-bs-theme', resolved); };
-      setTheme(getPreferredTheme());
-    })();
-  </script>
+    <script>
+      const SELECTOR_SIDEBAR_WRAPPER = '.sidebar-wrapper';
+      const Default = {
+        scrollbarTheme: 'os-theme-light',
+        scrollbarAutoHide: 'leave',
+        scrollbarClickScroll: true,
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        const sidebarWrapper = document.querySelector(SELECTOR_SIDEBAR_WRAPPER);
+        const isMobile = window.innerWidth <= 992;
+        if (sidebarWrapper && OverlayScrollbarsGlobal?.OverlayScrollbars !== undefined && !isMobile) {
+          OverlayScrollbarsGlobal.OverlayScrollbars(sidebarWrapper, {
+            scrollbars: {
+              theme: Default.scrollbarTheme,
+              autoHide: Default.scrollbarAutoHide,
+              clickScroll: Default.scrollbarClickScroll,
+            },
+          });
+        }
+      });
+    </script>
+
+    <script>
+      (() => {
+        'use strict';
+        const STORAGE_KEY = 'lte-theme';
+        const getStoredTheme = () => localStorage.getItem(STORAGE_KEY);
+        const setStoredTheme = (theme) => localStorage.setItem(STORAGE_KEY, theme);
+        const prefersDark = () => globalThis.matchMedia('(prefers-color-scheme: dark)').matches;
+        const getPreferredTheme = () => { const stored = getStoredTheme(); if (stored) return stored; return prefersDark() ? 'dark' : 'light'; };
+        const setTheme = (theme) => { const resolved = theme === 'auto' ? (prefersDark() ? 'dark' : 'light') : theme; document.documentElement.setAttribute('data-bs-theme', resolved); };
+        setTheme(getPreferredTheme());
+        const showActiveTheme = (theme) => {
+          document.querySelectorAll('[data-bs-theme-value]').forEach((el) => { el.classList.remove('active'); el.setAttribute('aria-pressed', 'false'); const check = el.querySelector('.bi-check-lg'); if (check) check.classList.add('d-none'); });
+          const active = document.querySelector(`[data-bs-theme-value="${theme}"]`);
+          if (active) { active.classList.add('active'); active.setAttribute('aria-pressed', 'true'); const check = active.querySelector('.bi-check-lg'); if (check) check.classList.remove('d-none'); }
+          document.querySelectorAll('[data-lte-theme-icon]').forEach((icon) => { icon.classList.toggle('d-none', icon.dataset.lteThemeIcon !== theme); });
+        };
+        globalThis.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { const stored = getStoredTheme(); if (!stored || stored === 'auto') setTheme(getPreferredTheme()); });
+        document.addEventListener('DOMContentLoaded', () => {
+          showActiveTheme(getPreferredTheme());
+          document.querySelectorAll('[data-bs-theme-value]').forEach((toggle) => { toggle.addEventListener('click', () => { const theme = toggle.getAttribute('data-bs-theme-value'); setStoredTheme(theme); setTheme(theme); showActiveTheme(theme); }); });
+        });
+      })();
+    </script>
 
   <script>
     const fmt = (n) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(n);
@@ -361,19 +401,6 @@
 
         bootstrap.Modal.getInstance(document.getElementById('modalUbahBarang')).hide();
       });
-      // ... (kode renderItems dan pengambilan data URL lainnya tetap ada di atasnya) ...
-
-      // =================================================================
-      // LOGIKA AUTO-PRINT DARI TABEL INVOICE
-      // Cek apakah ada perintah cetak dari URL (?cetak=1)
-      if (params.get('cetak') === '1') {
-        // Gunakan setTimeout untuk memberi jeda 0.5 detik.
-        // Ini penting agar JavaScript selesai me-render data barang (tabel) 
-        // ke layar sebelum jendela print bawaan browser terbuka.
-        setTimeout(() => {
-          window.print();
-        }, 500); 
-      }
       // =================================================================
     });
 
@@ -386,6 +413,22 @@
         const hargaOtomatis = opsiTerpilih.getAttribute('data-harga');
         inputHarga.value = hargaOtomatis;
       });
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+      // Ambil nomor invoice dari URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const invNo = urlParams.get('inv_no'); 
+      
+      if(invNo) {
+          // Isi otomatis link untuk Cetak (buka tab blank DomPDF)
+          document.getElementById('btn-cetak-dompdf').href = `cetak-pdf.php?inv_no=${encodeURIComponent(invNo)}&action=print`;
+          
+          // Isi otomatis link untuk Download (langsung unduh file DomPDF)
+          document.getElementById('btn-download-dompdf').href = `cetak-pdf.php?inv_no=${encodeURIComponent(invNo)}&action=download`;
+      }
+      
+      // ... (kode combobox barang Anda biarkan saja di sini) ...
     });
   </script>
 </body>

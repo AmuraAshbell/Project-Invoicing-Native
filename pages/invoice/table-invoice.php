@@ -117,7 +117,7 @@
       <hr class="dropdown-divider">
       <a class="dropdown-item text-danger" id="dd-hapus" href="#"><i class="bi bi-trash me-2"></i>Hapus</a>
       
-      <a class="dropdown-item" id="dd-cetak" href="#"><i class="bi bi-printer me-2"></i>Cetak</a>
+      <a class="dropdown-item" id="dd-cetak" href="#"><i class="bi bi-printer me-2" target="_blank"></i>Cetak</a>
       <a class="dropdown-item" id="dd-pdf" href="#"><i class="bi bi-file-earmark-pdf me-2"></i>Download PDF</a>
     </div>
 
@@ -226,24 +226,24 @@
           }
         };
 
-      // ── Aksi Tombol Cetak (Menggunakan DomPDF - View di Browser) ──
-        document.getElementById('dd-cetak').onclick = (ev) => {
-          ev.preventDefault();
-          // Kita kirim parameter action=print ke PHP
-          window.location.href = `cetak-pdf.php?inv_no=${encodeURIComponent(row.inv_no)}&action=print`;
-          
-          dd.style.display = 'none';
-          activeRowId = null;
+      // ── KITA BUANG SEMUA window.open DAN window.location ──
+        
+        // 1. Aksi Tombol Cetak (DomPDF)
+        const btnCetak = document.getElementById('dd-cetak');
+        btnCetak.href = `cetak-pdf.php?inv_no=${encodeURIComponent(row.inv_no)}&action=print`;
+        btnCetak.target = '_blank'; // Buka di tab baru (blank)
+        btnCetak.onclick = () => { 
+            dd.style.display = 'none'; 
+            activeRowId = null; 
         };
 
-        // ── Aksi Tombol Download PDF (Menggunakan DomPDF - Force Download) ──
-        document.getElementById('dd-pdf').onclick = (ev) => {
-          ev.preventDefault();
-          // Kita kirim parameter action=download ke PHP
-          window.location.href = `cetak-pdf.php?inv_no=${encodeURIComponent(row.inv_no)}&action=download`;
-          
-          dd.style.display = 'none';
-          activeRowId = null;
+        // 2. Aksi Tombol Download PDF (DomPDF)
+        const btnPdf = document.getElementById('dd-pdf');
+        btnPdf.href = `cetak-pdf.php?inv_no=${encodeURIComponent(row.inv_no)}&action=download`;
+        btnPdf.target = ''; // Tidak perlu tab baru, langsung download di tab saat ini
+        btnPdf.onclick = () => { 
+            dd.style.display = 'none'; 
+            activeRowId = null; 
         };
 
         // Posisi dropdown di bawah tombol
@@ -267,6 +267,21 @@
           { id:3,  inv_no:"INV-2026-003", customer:"Citra Dewi",     start_date:"2026-05-02", due_date:"2026-07-10", price:1200000, status:"paid"      },
           { id:4,  inv_no:"INV-2026-004", customer:"Daniel Wijaya",  start_date:"2026-05-02", due_date:"2026-07-12", price:620000,  status:"cancelled" },
           { id:5,  inv_no:"INV-2026-005", customer:"Eka Putri",      start_date:"2026-05-02", due_date:"2026-07-15", price:3950000, status:"paid"      },
+          { id:1,  inv_no:"INV-2026-001", customer:"Amelia Price",   start_date:"2026-05-02", due_date:"2026-07-01", price:650000,  status:"paid"      },
+          { id:2,  inv_no:"INV-2026-002", customer:"Budi Santoso",   start_date:"2026-05-02", due_date:"2026-07-05", price:1560000, status:"unpaid"    },
+          { id:3,  inv_no:"INV-2026-003", customer:"Citra Dewi",     start_date:"2026-05-02", due_date:"2026-07-10", price:1200000, status:"paid"      },
+          { id:4,  inv_no:"INV-2026-004", customer:"Daniel Wijaya",  start_date:"2026-05-02", due_date:"2026-07-12", price:620000,  status:"cancelled" },
+          { id:5,  inv_no:"INV-2026-005", customer:"Eka Putri",      start_date:"2026-05-02", due_date:"2026-07-15", price:3950000, status:"paid"      },
+          { id:1,  inv_no:"INV-2026-001", customer:"Amelia Price",   start_date:"2026-05-02", due_date:"2026-07-01", price:650000,  status:"paid"      },
+          { id:2,  inv_no:"INV-2026-002", customer:"Budi Santoso",   start_date:"2026-05-02", due_date:"2026-07-05", price:1560000, status:"unpaid"    },
+          { id:3,  inv_no:"INV-2026-003", customer:"Citra Dewi",     start_date:"2026-05-02", due_date:"2026-07-10", price:1200000, status:"paid"      },
+          { id:4,  inv_no:"INV-2026-004", customer:"Daniel Wijaya",  start_date:"2026-05-02", due_date:"2026-07-12", price:620000,  status:"cancelled" },
+          { id:5,  inv_no:"INV-2026-005", customer:"Eka Putri",      start_date:"2026-05-02", due_date:"2026-07-15", price:3950000, status:"paid"      },
+          { id:1,  inv_no:"INV-2026-001", customer:"Amelia Price",   start_date:"2026-05-02", due_date:"2026-07-01", price:650000,  status:"paid"      },
+          { id:2,  inv_no:"INV-2026-002", customer:"Budi Santoso",   start_date:"2026-05-02", due_date:"2026-07-05", price:1560000, status:"unpaid"    },
+          { id:3,  inv_no:"INV-2026-003", customer:"Citra Dewi",     start_date:"2026-05-02", due_date:"2026-07-10", price:1200000, status:"paid"      },
+          { id:4,  inv_no:"INV-2026-004", customer:"Daniel Wijaya",  start_date:"2026-05-02", due_date:"2026-07-12", price:620000,  status:"cancelled" },
+          { id:5,  inv_no:"INV-2026-005", customer:"Eka Putri",      start_date:"2026-05-02", due_date:"2026-07-15", price:3950000, status:"paid"      },
           { id:6,  inv_no:"INV-2026-006", customer:"Fahmi Malik",    start_date:"2026-05-02", due_date:"2026-07-18", price:1080000, status:"unpaid"    },
           { id:7,  inv_no:"INV-2026-007", customer:"Gita Permata",   start_date:"2026-05-02", due_date:"2026-07-20", price:1450000, status:"paid"      },
           { id:8,  inv_no:"INV-2026-008", customer:"Hendra Wijaya",  start_date:"2026-05-02", due_date:"2026-07-22", price:1160000, status:"unpaid"    },
@@ -281,7 +296,7 @@
           pagination: true,
           paginationSize: 10,
           paginationSizeSelector: [10, 25, 50, 100],
-          movableColumns: true,
+          movableColumns: false,
 
           paginationCounter: function(pageSize, currentRow, currentPage, totalRows, totalPages) {
               // Mengambil total seluruh data asli (sebelum terkena filter/pencarian)
