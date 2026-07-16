@@ -21,6 +21,11 @@ body.page-fade-out {
   position: relative;
   background-size: cover;
   background-position: center;
+}
+/* Sisi Kiri (Branding & Ilustrasi) */
+.split-left {
+  background-image: url("../assets/akatsukigundam.png");
+  background-size: cover;
   min-height: 100vh;
   padding: 3rem;
   overflow: hidden;
