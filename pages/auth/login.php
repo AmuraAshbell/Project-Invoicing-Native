@@ -75,7 +75,7 @@
                     <div class="col-8 mb-3">
                       <div class="form-check">
                         <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
-                        <label class="form-check-label" for="flexCheckDefault"> Remember Me </label>
+                        <label class="form-check-label" for="flexCheckDefault"> Ingat Saya </label>
                       </div>
                     </div>
 
@@ -84,7 +84,7 @@
                     </button>
 
                     <p class="mb-1">
-                        <a href="forget-password.php">I forgot my password</a>
+                        <a href="forget-password.php">Saya lupa password saya</a>
                     </p>
                     
                     <!-- <div class="divider small">Atau, Masuk dengan</div>
