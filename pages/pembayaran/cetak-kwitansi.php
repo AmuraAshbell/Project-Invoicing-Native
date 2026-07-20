@@ -5,6 +5,44 @@ require_once __DIR__ . '../../../vendor/autoload.php';
 use Dompdf\Dompdf;
 use Dompdf\Options;
 
+// ── Data pembayaran: diambil dari parameter GET yang dikirim otomatis
+// oleh modal "Bayar Sekarang" di invoice.php. Kalau dibuka langsung
+// tanpa parameter (mis. saat testing), pakai contoh data sebagai default. ──
+$inv_no    = $_GET['inv_no']    ?? 'INV-2026-00428';
+$customer  = $_GET['customer']  ?? 'Bapak Zidan Rasyid';
+$nominal   = isset($_GET['nominal']) ? (int) $_GET['nominal'] : 650000;
+$tanggal   = $_GET['tanggal']   ?? date('Y-m-d');
+$metode    = $_GET['metode']    ?? 'Tunai';
+$kwitansiNo = 'KWT-' . date('Y') . '-' . str_pad((string) (crc32($inv_no) % 999), 3, '0', STR_PAD_LEFT);
+
+function tanggalIndonesia($tgl) {
+    $bulan = ['01'=>'Januari','02'=>'Februari','03'=>'Maret','04'=>'April','05'=>'Mei','06'=>'Juni',
+              '07'=>'Juli','08'=>'Agustus','09'=>'September','10'=>'Oktober','11'=>'November','12'=>'Desember'];
+    $parts = explode('-', $tgl);
+    if (count($parts) !== 3) return $tgl;
+    [$y, $m, $d] = $parts;
+    return ((int) $d) . ' ' . ($bulan[$m] ?? $m) . ' ' . $y;
+}
+
+// ── Terbilang: ubah angka nominal jadi teks "Enam Ratus Lima Puluh Ribu Rupiah" ──
+function terbilang($angka) {
+    $angka = (int) abs($angka);
+    $huruf = ['', 'Satu', 'Dua', 'Tiga', 'Empat', 'Lima', 'Enam', 'Tujuh', 'Delapan', 'Sembilan', 'Sepuluh',
+              'Sebelas'];
+
+    if ($angka < 12) return $huruf[$angka];
+    if ($angka < 20) return terbilang($angka - 10) . ' Belas';
+    if ($angka < 100) return trim(terbilang((int) ($angka / 10)) . ' Puluh ' . terbilang($angka % 10));
+    if ($angka < 200) return trim('Seratus ' . terbilang($angka - 100));
+    if ($angka < 1000) return trim(terbilang((int) ($angka / 100)) . ' Ratus ' . terbilang($angka % 100));
+    if ($angka < 2000) return trim('Seribu ' . terbilang($angka - 1000));
+    if ($angka < 1000000) return trim(terbilang((int) ($angka / 1000)) . ' Ribu ' . terbilang($angka % 1000));
+    if ($angka < 1000000000) return trim(terbilang((int) ($angka / 1000000)) . ' Juta ' . terbilang($angka % 1000000));
+    return trim(terbilang((int) ($angka / 1000000000)) . ' Miliar ' . terbilang($angka % 1000000000));
+}
+
+$nominalTerbilang = trim(terbilang($nominal)) . ' Rupiah';
+
 // 2. Setup Options DOMPDF
 $options = new Options();
 $options->set('isRemoteEnabled', true);
@@ -121,7 +159,7 @@ $html = '
                 </td>
                 <td style="width: 40%;">
                     <div class="kwitansi-text">Kwitansi</div>
-                    <div class="kwitansi-no">No. KWT-2026-042</div>
+                    <div class="kwitansi-no">No. ' . htmlspecialchars($kwitansiNo) . '</div>
                 </td>
             </tr>
         </table>
@@ -132,15 +170,15 @@ $html = '
         <table>
             <tr class="row-item">
                 <td class="label">Telah terima dari</td>
-                <td class="value">Bapak Zidan Rasyid</td>
+                <td class="value">' . htmlspecialchars($customer) . '</td>
             </tr>
             <tr class="row-item">
                 <td class="label">Uang sejumlah</td>
-                <td class="value bg-light-value"># Enam Ratus Lima Puluh Ribu Rupiah #</td>
+                <td class="value bg-light-value"># ' . htmlspecialchars($nominalTerbilang) . ' #</td>
             </tr>
             <tr class="row-item">
                 <td class="label">Untuk pembayaran</td>
-                <td class="value">Pelunasan Invoice No. INV-2026-00428 (Pembelian RG 1/144 RX-93 v Gundam)</td>
+                <td class="value">Pelunasan Invoice No. ' . htmlspecialchars($inv_no) . ' (' . htmlspecialchars($metode) . ')</td>
             </tr>
         </table>
 
@@ -149,12 +187,12 @@ $html = '
             <tr>
                 <td style="width: 50%; vertical-align: bottom;">
                     <div class="box-nominal">
-                        Rp 650.000,-
+                        Rp ' . number_format($nominal, 0, ',', '.') . ',-
                     </div>
                 </td>
                 <td style="width: 50%;" class="signature-area">
-                    <div>Surabaya, 02 Juli 2026</div>
-                    <div class="signature-name">Amelia Price</div>
+                    <div>Surabaya, ' . htmlspecialchars(tanggalIndonesia($tanggal)) . '</div>
+                    <div class="signature-name">' . htmlspecialchars($customer) . '</div>
                     <div style="color: #6c757d;">Finance & Cashier</div>
                 </td>
             </tr>
@@ -177,5 +215,5 @@ $dompdf->render();
 
 // 7. Output PDF
 // Ubah "Attachment" => 1 jika ingin langsung otomatis terdownload
-$dompdf->stream("Kwitansi_INV-2026-00428.pdf", array("Attachment" => 0));
+$dompdf->stream("Kwitansi_" . $inv_no . ".pdf", array("Attachment" => 0));
 ?>

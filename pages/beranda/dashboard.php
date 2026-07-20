@@ -330,11 +330,11 @@
 
     // ── Data Dummy: Pelanggan Terbaik ──
     const pelangganTerbaik = [
-      { nama: 'PT Karya Abadi',        total: 45200000 },
-      { nama: 'Toko Andalan Jaya',     total: 38900000 },
-      { nama: 'CV Mitra Sejahtera',    total: 27650000 },
-      { nama: 'Budi Santoso',          total: 15300000 },
-      { nama: 'Toko Sumber Rezeki',    total: 12100000 },
+      { nama: 'PT Karya Abadi',        total: 45200000, kunjungan: 12 },
+      { nama: 'Toko Andalan Jaya',     total: 38900000, kunjungan: 9  },
+      { nama: 'CV Mitra Sejahtera',    total: 27650000, kunjungan: 7  },
+      { nama: 'Budi Santoso',          total: 15300000, kunjungan: 5  },
+      { nama: 'Toko Sumber Rezeki',    total: 12100000, kunjungan: 4  },
     ];
 
     // ── Data Dummy: Riwayat Transaksi ──
@@ -441,11 +441,12 @@
       pelangganTerbaik.forEach((item) => {
         ulPelanggan.innerHTML += `
           <li class="list-group-item d-flex justify-content-between align-items-center px-3 py-2">
-            <div class="d-flex align-items-center gap-2">
+            <div class="d-flex align-items-center gap-2 text-truncate">
               <i class="bi bi-person-circle text-primary"></i>
-              <span class="small">${item.nama}</span>
+              <span class="small text-truncate">${item.nama}</span>
+              <span class="badge text-bg-light text-secondary fw-normal" title="Jumlah kunjungan">${item.kunjungan}x</span>
             </div>
-            <span class="small fw-semibold">${fmtRupiah(item.total)}</span>
+            <span class="small fw-semibold flex-shrink-0 ms-2">${fmtRupiah(item.total)}</span>
           </li>`;
       });
 

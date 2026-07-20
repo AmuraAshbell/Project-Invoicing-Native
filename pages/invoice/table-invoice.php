@@ -141,6 +141,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
     <script src="../../dist/js/adminlte.js"></script>
+    <script src="../../assets/js/dummy-data.js"></script>
 
     <script>
       const SELECTOR_SIDEBAR_WRAPPER = '.sidebar-wrapper';
@@ -182,7 +183,7 @@
     <script>
       const statusBadge = (cell) => {
         const val = cell.getValue();
-        const map = { paid: ['Lunas','success'], unpaid: ['Belum Lunas','warning'], cancelled: ['Dibatalkan','secondary'] };
+        const map = { paid: ['Lunas','success'], partial: ['Sebagian','info'], unpaid: ['Belum Lunas','warning'], cancelled: ['Dibatalkan','secondary'] };
         const [label, color] = map[val] || [val, 'secondary'];
         return `<span class="badge text-bg-${color}">${label}</span>`;
       };
@@ -261,33 +262,10 @@
       });
 
       document.addEventListener('DOMContentLoaded', () => {
-        const data = [
-          { id:1,  inv_no:"INV-2026-001", customer:"Amelia Price",   start_date:"2026-05-02", due_date:"2026-07-01", price:650000,  status:"paid"      },
-          { id:2,  inv_no:"INV-2026-002", customer:"Budi Santoso",   start_date:"2026-05-02", due_date:"2026-07-05", price:1560000, status:"unpaid"    },
-          { id:3,  inv_no:"INV-2026-003", customer:"Citra Dewi",     start_date:"2026-05-02", due_date:"2026-07-10", price:1200000, status:"paid"      },
-          { id:4,  inv_no:"INV-2026-004", customer:"Daniel Wijaya",  start_date:"2026-05-02", due_date:"2026-07-12", price:620000,  status:"cancelled" },
-          { id:5,  inv_no:"INV-2026-005", customer:"Eka Putri",      start_date:"2026-05-02", due_date:"2026-07-15", price:3950000, status:"paid"      },
-          { id:1,  inv_no:"INV-2026-001", customer:"Amelia Price",   start_date:"2026-05-02", due_date:"2026-07-01", price:650000,  status:"paid"      },
-          { id:2,  inv_no:"INV-2026-002", customer:"Budi Santoso",   start_date:"2026-05-02", due_date:"2026-07-05", price:1560000, status:"unpaid"    },
-          { id:3,  inv_no:"INV-2026-003", customer:"Citra Dewi",     start_date:"2026-05-02", due_date:"2026-07-10", price:1200000, status:"paid"      },
-          { id:4,  inv_no:"INV-2026-004", customer:"Daniel Wijaya",  start_date:"2026-05-02", due_date:"2026-07-12", price:620000,  status:"cancelled" },
-          { id:5,  inv_no:"INV-2026-005", customer:"Eka Putri",      start_date:"2026-05-02", due_date:"2026-07-15", price:3950000, status:"paid"      },
-          { id:1,  inv_no:"INV-2026-001", customer:"Amelia Price",   start_date:"2026-05-02", due_date:"2026-07-01", price:650000,  status:"paid"      },
-          { id:2,  inv_no:"INV-2026-002", customer:"Budi Santoso",   start_date:"2026-05-02", due_date:"2026-07-05", price:1560000, status:"unpaid"    },
-          { id:3,  inv_no:"INV-2026-003", customer:"Citra Dewi",     start_date:"2026-05-02", due_date:"2026-07-10", price:1200000, status:"paid"      },
-          { id:4,  inv_no:"INV-2026-004", customer:"Daniel Wijaya",  start_date:"2026-05-02", due_date:"2026-07-12", price:620000,  status:"cancelled" },
-          { id:5,  inv_no:"INV-2026-005", customer:"Eka Putri",      start_date:"2026-05-02", due_date:"2026-07-15", price:3950000, status:"paid"      },
-          { id:1,  inv_no:"INV-2026-001", customer:"Amelia Price",   start_date:"2026-05-02", due_date:"2026-07-01", price:650000,  status:"paid"      },
-          { id:2,  inv_no:"INV-2026-002", customer:"Budi Santoso",   start_date:"2026-05-02", due_date:"2026-07-05", price:1560000, status:"unpaid"    },
-          { id:3,  inv_no:"INV-2026-003", customer:"Citra Dewi",     start_date:"2026-05-02", due_date:"2026-07-10", price:1200000, status:"paid"      },
-          { id:4,  inv_no:"INV-2026-004", customer:"Daniel Wijaya",  start_date:"2026-05-02", due_date:"2026-07-12", price:620000,  status:"cancelled" },
-          { id:5,  inv_no:"INV-2026-005", customer:"Eka Putri",      start_date:"2026-05-02", due_date:"2026-07-15", price:3950000, status:"paid"      },
-          { id:6,  inv_no:"INV-2026-006", customer:"Fahmi Malik",    start_date:"2026-05-02", due_date:"2026-07-18", price:1080000, status:"unpaid"    },
-          { id:7,  inv_no:"INV-2026-007", customer:"Gita Permata",   start_date:"2026-05-02", due_date:"2026-07-20", price:1450000, status:"paid"      },
-          { id:8,  inv_no:"INV-2026-008", customer:"Hendra Wijaya",  start_date:"2026-05-02", due_date:"2026-07-22", price:1160000, status:"unpaid"    },
-          { id:9,  inv_no:"INV-2026-009", customer:"Indah Lestari",  start_date:"2026-05-02", due_date:"2026-07-25", price:1100000, status:"paid"      },
-          { id:10, inv_no:"INV-2026-010", customer:"Joko Anwar",     start_date:"2026-05-02", due_date:"2026-07-28", price:680000,  status:"cancelled" },
-        ];
+        // Data faktur sekarang diambil dari DummyDB (localStorage) yang sama
+        // dipakai oleh invoice.php dan pembayaran.php — begitu ada pembayaran
+        // baru dicatat, status faktur di tabel ini otomatis ikut berubah.
+        const data = DummyDB.getInvoices();
 
         table = new Tabulator('#users-table', {
           theme: "bootstrap5",
@@ -315,6 +293,14 @@
             {
               title: 'Total Harga', field: 'price', headerSort: true, headerHozAlign: 'right', hozAlign: 'right',
               formatter: (cell) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(cell.getValue()),
+            },
+            {
+              title: 'Sisa Tagihan', field: 'sisa', headerSort: true, headerHozAlign: 'right', hozAlign: 'right',
+              formatter: (cell) => {
+                const sisa = cell.getValue() || 0;
+                const teks = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(sisa);
+                return sisa > 0 ? `<span class="fw-semibold text-danger">${teks}</span>` : `<span class="text-success">${teks}</span>`;
+              },
             },
             { title: 'Status', field: 'status', formatter: statusBadge, headerSort: false, headerHozAlign: 'center', hozAlign: 'center', width: 130 },
             { title: 'Aksi',   field: 'id',     formatter: btnAksi,     headerSort: false, headerHozAlign: 'center', hozAlign: 'center', width: 120 },
@@ -356,4 +342,4 @@
       });
     </script>
   </body>
-</html> 
+</html>

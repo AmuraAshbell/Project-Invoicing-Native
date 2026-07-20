@@ -43,6 +43,24 @@
       margin: 1cm;
     }
   }
+
+  /* Dropdown "Cetak": dikasih warna solid + kontras tinggi & z-index tegas,
+     supaya selalu jelas kelihatan saat dibuka (terlepas dari tema gelap/terang). */
+  .dropdown-cetak .dropdown-menu {
+    --bs-dropdown-bg: #1c2333;
+    --bs-dropdown-color: #e5e7eb;
+    --bs-dropdown-link-color: #e5e7eb;
+    --bs-dropdown-link-hover-bg: #198754;
+    --bs-dropdown-link-hover-color: #ffffff;
+    --bs-dropdown-link-active-bg: #198754;
+    --bs-dropdown-link-active-color: #ffffff;
+    --bs-dropdown-border-color: rgba(255, 255, 255, 0.15);
+    z-index: 1055;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  }
+  .dropdown-cetak .dropdown-item i {
+    color: inherit;
+  }
 </style>
 </head>
 <body class="app-wrapper">
@@ -69,17 +87,18 @@
     <div class="app-content">
       <div class="container-fluid">
         <div class="d-flex justify-content-end gap-2 mb-3 d-print-none">
-          <a id="btn-cetak-dompdf" href="#" target="_blank" class="btn btn-outline-success">
-            <i class="bi bi-printer"></i> Print
-          </a>
-          <a id="btn-download-dompdf" href="#" class="btn btn-outline-success" style="margin-right: 5px;">
-            <i class="bi bi-download"></i> Generate PDF
-          </a>
-          <a href="../pembayaran/cetak-kwitansi.php" class="btn btn-outline-success">
-            <i class="bi bi-receipt me-1"></i> Kwitansi
-          </a>
-          <a href="edit-invoice.php" class="btn btn-warning">
-            <i class="bi bi-pencil-square"></i> Ubah Faktur
+          <div class="dropdown dropdown-cetak">
+            <button class="btn btn-success dropdown-toggle" type="button" data-bs-toggle="dropdown">
+              <i class="bi bi-printer"></i> Cetak
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a id="btn-cetak-dompdf" class="dropdown-item" href="#" target="_blank"><i class="bi bi-printer me-2"></i>Print Faktur</a></li>
+              <li><a id="btn-download-dompdf" class="dropdown-item" href="#"><i class="bi bi-download me-2"></i>Generate PDF</a></li>
+              <li><a id="btn-cetak-kwitansi" class="dropdown-item" href="../pembayaran/cetak-kwitansi.php" target="_blank"><i class="bi bi-receipt me-2"></i>Kwitansi</a></li>
+            </ul>
+          </div>
+          <a href="edit-invoice.php" class="btn btn-outline-warning" title="Ubah Faktur">
+            <i class="bi bi-pencil-square"></i>
           </a>
         </div>
 
@@ -161,17 +180,30 @@
                   <dd class="col-5 text-end mb-2" id="total-subtotal">Rp 0</dd>
                   <dt class="col-7 fw-semibold border-top pt-2">Total</dt>
                   <dd class="col-5 text-end fw-semibold border-top pt-2 mb-0" id="total-grand">Rp 0</dd>
+                  <dt class="col-7 text-secondary fw-normal pt-2">Sudah Dibayar</dt>
+                  <dd class="col-5 text-end text-success pt-2 mb-0" id="total-terbayar">Rp 0</dd>
+                  <dt class="col-7 fw-semibold border-top pt-2">Sisa Tagihan</dt>
+                  <dd class="col-5 text-end fw-semibold border-top pt-2 mb-0 text-danger" id="total-sisa">Rp 0</dd>
                 </dl>
               </div>
             </div>
+
+            <div class="d-print-none" id="riwayat-bayar-wrapper" style="display:none;">
+              <hr>
+              <p class="small text-secondary mb-2">
+                <i class="bi bi-clock-history me-1"></i>Riwayat Pembayaran
+              </p>
+              <ul class="list-group list-group-flush mb-0" id="riwayat-bayar-list"></ul>
+            </div>
           </div>
           <div class="mx-4 mb-3 d-print-none text-end" style="padding: 1vw ">
-              <a href="../pembayaran/form-pembayaran.php" class="btn btn-lg btn-success">
+              <button type="button" class="btn btn-lg btn-success" id="btn-bayar-sekarang" data-bs-toggle="modal" data-bs-target="#modalBayar">
                 <i class="bi bi-credit-card"></i> Bayar Sekarang
-              </a>
+              </button>
             </div>
         </div>
       </div>
+
     </div>
   </main>
 
@@ -245,12 +277,84 @@
       </div>
     </div>
   </div>
+  <!-- Modal Bayar Sekarang: satu langkah, tanpa pindah halaman -->
+  <div class="modal fade" id="modalBayar" tabindex="-1" aria-labelledby="modalBayarLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalBayarLabel"><i class="bi bi-credit-card me-2"></i>Bayar Faktur</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row mb-3">
+            <div class="col-sm-4">
+              <p class="text-secondary small mb-1">No. Faktur</p>
+              <p class="fw-semibold mb-0" id="bayar-inv-no">-</p>
+            </div>
+            <div class="col-sm-4">
+              <p class="text-secondary small mb-1">Total Tagihan</p>
+              <p class="fw-semibold mb-0" id="bayar-total">Rp 0</p>
+            </div>
+            <div class="col-sm-4">
+              <p class="text-secondary small mb-1">Sisa yang harus dibayar</p>
+              <p class="fw-bold text-danger mb-0" id="bayar-sisa">Rp 0</p>
+            </div>
+          </div>
+
+          <div class="alert alert-success py-2 small d-none" id="bayar-alert-lunas">
+            <i class="bi bi-check-circle me-1"></i>Faktur ini sudah lunas.
+          </div>
+
+          <form id="form-bayar-modal">
+            <div class="row">
+              <div class="col-sm-6 mb-3">
+                <label class="form-label">Tanggal Pembayaran*</label>
+                <input type="date" class="form-control" id="bayar-tanggal" required>
+              </div>
+              <div class="col-sm-6 mb-3">
+                <label class="form-label">Nominal Dibayar*</label>
+                <input type="number" class="form-control" id="bayar-nominal" min="1" placeholder="Masukkan nominal" required>
+                <div class="form-text" id="bayar-nominal-help">Sisa tagihan akan berkurang otomatis setelah disimpan.</div>
+              </div>
+              <div class="col-sm-6 mb-3">
+                <label class="form-label">Metode Pembayaran*</label>
+                <select class="form-select" id="bayar-metode" required>
+                  <option value="" disabled selected>-- Pilih Metode --</option>
+                  <option value="Tunai">Tunai</option>
+                  <option value="Transfer Bank">Transfer Bank</option>
+                  <option value="QRIS">QRIS</option>
+                  <option value="Kartu Debit">Kartu Debit</option>
+                  <option value="Kartu Kredit">Kartu Kredit</option>
+                </select>
+              </div>
+              <div class="col-sm-6 mb-3">
+                <label class="form-label">No. Referensi / Bukti</label>
+                <input type="text" class="form-control" id="bayar-referensi" placeholder="Opsional, contoh: kode transfer">
+              </div>
+              <div class="col-12 mb-0">
+                <label class="form-label">Catatan</label>
+                <textarea class="form-control" id="bayar-catatan" rows="2" placeholder="Catatan tambahan (opsional)"></textarea>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+          <button type="button" class="btn btn-success" id="btn-simpan-bayar">
+            <i class="bi bi-check-lg me-1"></i>Simpan Pembayaran
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <?php include "../../layout/footer.php"; ?>
 
   <script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
   <script src="../../dist/js/adminlte.js"></script>
+  <script src="../../assets/js/dummy-data.js"></script>
   
     <script>
       const SELECTOR_SIDEBAR_WRAPPER = '.sidebar-wrapper';
@@ -329,6 +433,26 @@
 
       document.getElementById('total-subtotal').textContent = fmt(grand);
       document.getElementById('total-grand').textContent = fmt(grand);
+
+      // ==== Daftarkan/sinkronkan faktur ini ke DummyDB ====
+      // Ini yang tadinya bikin bug: faktur baru dari "Tambah Faktur" belum
+      // pernah tercatat di DummyDB, jadi modal "Bayar Sekarang" tidak
+      // menemukan datanya (nominal & total selalu Rp 0, tombol simpan diam).
+      // Sekarang setiap kali barang ditambah/diubah/dihapus, total faktur
+      // otomatis disinkronkan, dan ringkasan pembayaran ikut diperbarui.
+      if (window.DummyDB) {
+        const invNoAktif = document.getElementById('inv-number').textContent.trim();
+        DummyDB.saveItems(invNoAktif, items); // ← barang disimpan, tidak lagi reset tiap reload
+        DummyDB.upsertInvoice({
+          inv_no: invNoAktif,
+          customer: document.getElementById('inv-customer').textContent.trim(),
+          due_date: document.getElementById('inv-due').textContent.trim(),
+          total: grand,
+        });
+        if (typeof window.refreshInvoiceSummary === 'function') {
+          window.refreshInvoiceSummary();
+        }
+      }
     }
 
     function hapusItem(i) {
@@ -347,9 +471,27 @@
 
     document.addEventListener('DOMContentLoaded', () => {
       const params = new URLSearchParams(window.location.search);
-      
-      // Ambil data pelanggan & jatuh tempo
-      if (params.get('inv_no')) document.getElementById('inv-number').textContent = params.get('inv_no');
+      const invNo = params.get('inv_no');
+
+      // ==== Faktur tidak valid: JANGAN diam-diam pakai data faktur lain ====
+      // Sebelumnya kalau inv_no kosong/hilang dari URL, sistem fallback ke
+      // 'INV-2026-001' — artinya bisa menampilkan data pelanggan lain tanpa
+      // sepengetahuan user. Sekarang kalau nomor faktur tidak ada, halaman
+      // berhenti di sini dan kasih pesan yang jelas.
+      if (!invNo) {
+        document.querySelector('.app-content .container-fluid').innerHTML = `
+          <div class="alert alert-danger d-flex align-items-center gap-2">
+            <i class="bi bi-exclamation-triangle-fill fs-4"></i>
+            <div>
+              <strong>Nomor faktur tidak ditemukan.</strong><br>
+              Faktur ini kemungkinan rusak/tidak lengkap. Silakan kembali ke daftar faktur dan buka lagi lewat menu "Detail".
+              <br><a href="table-invoice.php" class="alert-link">&larr; Kembali ke Daftar Faktur</a>
+            </div>
+          </div>`;
+        return;
+      }
+
+      document.getElementById('inv-number').textContent = invNo;
       if (params.get('customer')) document.getElementById('inv-customer').textContent = params.get('customer');
       if (params.get('due_date')) document.getElementById('inv-due').textContent = params.get('due_date');
 
@@ -361,14 +503,153 @@
       document.getElementById('inv-pic').textContent = activePIC;
       // =======================================================
 
-      const invNo = params.get('inv_no') || 'INV-2026-001';
-      const btnBayar = document.querySelector('a[href*="form-pembayaran.php"]');
-      if (btnBayar) {
-        btnBayar.href = `../pembayaran/form-pembayaran.php?inv_no=${encodeURIComponent(invNo)}`;
+      // ==== Ambil status, total, terbayar, sisa dari DummyDB (bukan lagi statis) ====
+      const statusMap = {
+        paid:      ['Lunas', 'success'],
+        partial:   ['Sebagian', 'info'],
+        unpaid:    ['Belum Lunas', 'warning'],
+        cancelled: ['Dibatalkan', 'secondary'],
+      };
+
+      function renderStatusBadge(status) {
+        const badge = document.getElementById('inv-status');
+        const [label, color] = statusMap[status] || ['-', 'secondary'];
+        badge.className = `badge text-bg-${color} mt-2`;
+        badge.textContent = label;
       }
+
+      function renderRiwayatBayar(invNoAktif) {
+        const list = document.getElementById('riwayat-bayar-list');
+        const wrapper = document.getElementById('riwayat-bayar-wrapper');
+        const riwayat = DummyDB.getPayments(invNoAktif);
+
+        if (!riwayat.length) {
+          wrapper.style.display = 'none';
+          return;
+        }
+
+        wrapper.style.display = 'block';
+        list.innerHTML = riwayat.map((p) => `
+          <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+            <span>
+              <span class="fw-semibold">${DummyDB.fmt(p.nominal)}</span>
+              <span class="text-secondary small ms-1">${p.metode} · ${p.tanggal}</span>
+            </span>
+            ${p.referensi ? `<span class="text-secondary small">Ref: ${p.referensi}</span>` : ''}
+          </li>`).join('');
+      }
+
+      function refreshInvoiceSummary() {
+        const inv = DummyDB.getInvoiceByNo(invNo);
+        if (!inv) return;
+
+        renderStatusBadge(inv.status);
+        document.getElementById('total-terbayar').textContent = DummyDB.fmt(inv.terbayar);
+        document.getElementById('total-sisa').textContent = DummyDB.fmt(inv.sisa);
+        renderRiwayatBayar(invNo);
+
+        // Tombol "Bayar Sekarang" otomatis nonaktif kalau sudah lunas/dibatalkan
+        const btnBayar = document.getElementById('btn-bayar-sekarang');
+        const sudahSelesai = inv.status === 'paid' || inv.status === 'cancelled';
+        btnBayar.disabled = sudahSelesai;
+        btnBayar.classList.toggle('disabled', sudahSelesai);
+
+        return inv;
+      }
+
+      window.refreshInvoiceSummary = refreshInvoiceSummary;
+      refreshInvoiceSummary();
+
+      // ==== Isi modal setiap kali dibuka, supaya datanya selalu terbaru ====
+      document.getElementById('modalBayar').addEventListener('show.bs.modal', (e) => {
+        const inv = DummyDB.getInvoiceByNo(invNo);
+        if (!inv || inv.total <= 0) {
+          e.preventDefault();
+          DummyDB.showToast('Tambahkan barang terlebih dahulu sebelum melakukan pembayaran.', 'error');
+          return;
+        }
+        document.getElementById('bayar-inv-no').textContent = invNo;
+        document.getElementById('bayar-total').textContent = DummyDB.fmt(inv.total);
+        document.getElementById('bayar-sisa').textContent = DummyDB.fmt(inv.sisa);
+        document.getElementById('bayar-tanggal').value = new Date().toISOString().slice(0, 10);
+        document.getElementById('bayar-nominal').value = inv.sisa;
+        document.getElementById('bayar-nominal').max = inv.sisa;
+        document.getElementById('bayar-metode').value = '';
+        document.getElementById('bayar-referensi').value = '';
+        document.getElementById('bayar-catatan').value = '';
+        document.getElementById('bayar-alert-lunas').classList.toggle('d-none', inv.sisa > 0);
+      });
+
+      // ==== Validasi nominal real-time: cegah input melebihi sisa tagihan ====
+      document.getElementById('bayar-nominal').addEventListener('input', function () {
+        const inv = DummyDB.getInvoiceByNo(invNo);
+        if (!inv) return;
+        const help = document.getElementById('bayar-nominal-help');
+        const nilai = Number(this.value || 0);
+
+        if (nilai > inv.sisa) {
+          this.classList.add('is-invalid');
+          help.textContent = `Nominal melebihi sisa tagihan (maks. ${DummyDB.fmt(inv.sisa)}).`;
+          help.classList.add('text-danger');
+        } else {
+          this.classList.remove('is-invalid');
+          help.textContent = `Sisa setelah dibayar: ${DummyDB.fmt(Math.max(inv.sisa - nilai, 0))}`;
+          help.classList.remove('text-danger');
+        }
+      });
+
+      // ==== Simpan pembayaran → tersimpan ke DummyDB, badge & total update instan, toast, tutup modal ====
+      document.getElementById('btn-simpan-bayar').addEventListener('click', () => {
+        const form = document.getElementById('form-bayar-modal');
+        if (!form.reportValidity()) return;
+
+        const inv = DummyDB.getInvoiceByNo(invNo);
+        if (!inv) {
+          DummyDB.showToast('Faktur belum memiliki tagihan. Tambahkan barang terlebih dahulu.', 'error');
+          return;
+        }
+        const nominal = Number(document.getElementById('bayar-nominal').value || 0);
+
+        if (nominal <= 0 || nominal > inv.sisa) {
+          DummyDB.showToast('Nominal pembayaran tidak valid.', 'error');
+          return;
+        }
+
+        const payment = DummyDB.addPayment({
+          inv_no: invNo,
+          tanggal: document.getElementById('bayar-tanggal').value,
+          nominal,
+          metode: document.getElementById('bayar-metode').value,
+          referensi: document.getElementById('bayar-referensi').value.trim(),
+          catatan: document.getElementById('bayar-catatan').value.trim(),
+        });
+
+        bootstrap.Modal.getInstance(document.getElementById('modalBayar')).hide();
+
+        const updated = refreshInvoiceSummary();
+
+        DummyDB.showToast(
+          `Pembayaran ${DummyDB.fmt(nominal)} berhasil dicatat untuk ${invNo}` +
+          (updated.status === 'paid' ? ' — faktur kini Lunas.' : '.')
+        );
+
+        // Tautkan tombol Kwitansi ke data pembayaran yang baru saja disimpan
+        const linkKwitansi = document.getElementById('btn-cetak-kwitansi');
+        const qp = new URLSearchParams({
+          inv_no: invNo,
+          customer: document.getElementById('inv-customer').textContent,
+          nominal: payment.nominal,
+          tanggal: payment.tanggal,
+          metode: payment.metode,
+        });
+        linkKwitansi.href = `../pembayaran/cetak-kwitansi.php?${qp.toString()}`;
+      });
 
       document.getElementById('inv-date').textContent = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
 
+      // Muat barang yang sudah tersimpan untuk faktur ini (kalau ada),
+      // supaya total tidak ke-reset ke Rp0 setiap halaman dibuka ulang.
+      items = DummyDB.getItems(invNo);
       renderItems();
 
       document.getElementById('btnSimpanBarang').addEventListener('click', () => {
@@ -413,6 +694,13 @@
         const hargaOtomatis = opsiTerpilih.getAttribute('data-harga');
         inputHarga.value = hargaOtomatis;
       });
+
+      // Inisialisasi eksplisit dropdown "Cetak" (jaga-jaga kalau auto-init
+      // dari atribut data-bs-toggle sempat tertimpa/tidak jalan).
+      const toggleCetak = document.querySelector('.dropdown-cetak .dropdown-toggle');
+      if (toggleCetak && !bootstrap.Dropdown.getInstance(toggleCetak)) {
+        new bootstrap.Dropdown(toggleCetak);
+      }
     });
 
     document.addEventListener('DOMContentLoaded', function() {

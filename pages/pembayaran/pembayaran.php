@@ -85,6 +85,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
   <script src="../../dist/js/adminlte.js"></script>
+  <script src="../../assets/js/dummy-data.js"></script>
 
   <script>
       const SELECTOR_SIDEBAR_WRAPPER = '.sidebar-wrapper';
@@ -136,19 +137,9 @@
   <script>
     const fmt = (n) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(n);
 
-    // ── Data Dummy ──
-    const dataPembayaran = [
-      { no: 1,  tanggal: '2026-06-23', inv_no: 'INV-2026-001', nominal: 650000  },
-      { no: 2,  tanggal: '2026-06-24', inv_no: 'INV-2026-002', nominal: 1560000 },
-      { no: 3,  tanggal: '2026-06-25', inv_no: 'INV-2026-003', nominal: 1200000 },
-      { no: 4,  tanggal: '2026-06-26', inv_no: 'INV-2026-004', nominal: 620000  },
-      { no: 5,  tanggal: '2026-06-27', inv_no: 'INV-2026-005', nominal: 3950000 },
-      { no: 6,  tanggal: '2026-06-28', inv_no: 'INV-2026-006', nominal: 1080000 },
-      { no: 7,  tanggal: '2026-06-29', inv_no: 'INV-2026-007', nominal: 1450000 },
-      { no: 8,  tanggal: '2026-06-30', inv_no: 'INV-2026-008', nominal: 1160000 },
-      { no: 9,  tanggal: '2026-07-01', inv_no: 'INV-2026-009', nominal: 1100000 },
-      { no: 10, tanggal: '2026-07-02', inv_no: 'INV-2026-010', nominal: 680000  },
-    ];
+    // ── Data pembayaran sekarang diambil dari DummyDB, sinkron dengan
+    // pembayaran yang dicatat lewat modal "Bayar Sekarang" di invoice.php ──
+    const dataPembayaran = DummyDB.getPayments();
 
     const btnAksi = (cell) => {
       const no = cell.getValue();
@@ -159,20 +150,20 @@
 
     let activePayRowId = null;
 
-function toggleDropdownBayar(e, no) {
+function toggleDropdownBayar(e, id) {
       e.stopPropagation();
       const dd = document.getElementById('custom-dropdown-bayar');
       const rect = e.currentTarget.getBoundingClientRect();
 
       // Tutup jika klik tombol yang sama
-      if (activePayRowId === no && dd.style.display === 'block') {
+      if (activePayRowId === id && dd.style.display === 'block') {
         dd.style.display = 'none'; 
         activePayRowId = null; 
         return;
       }
 
       // PERBAIKAN 1: Cari baris secara spesifik menggunakan data 'no', karena tabel tidak memakai 'id'
-      const baris = tabelPembayaran.getRows().find(r => r.getData().no === no);
+      const baris = tabelPembayaran.getRows().find(r => r.getData().id === id);
       const row = baris.getData();
 
       // Update parameter link Detail
@@ -195,7 +186,7 @@ function toggleDropdownBayar(e, no) {
       // PERBAIKAN 2: Geser posisi kiri (offset) agar tidak terpotong di tepi layar
       dd.style.left = (rect.left + window.scrollX - 80) + 'px';
       
-      activePayRowId = no;
+      activePayRowId = id;
     }
     document.addEventListener('click', () => {
       const dd = document.getElementById('custom-dropdown-bayar');
@@ -245,14 +236,27 @@ function toggleDropdownBayar(e, no) {
         },
 
         columns: [
-          { title: 'No.',        field: 'no',   headerHozAlign: 'right',    hozAlign: 'center', width: 90 },
+          { title: 'No.',        field: 'id',   headerHozAlign: 'right',    hozAlign: 'center', width: 90 },
           { title: 'Tanggal',   field: 'tanggal',  headerHozAlign: 'center', hozAlign: 'center', sorter: 'date', width: 120 },
           { title: 'No. Faktur',   field: 'inv_no',  headerHozAlign: 'center',   hozAlign: 'center' },
           {
             title: 'Nominal', field: 'nominal', headerHozAlign: 'right', hozAlign: 'right',
             formatter: (cell) => fmt(cell.getValue())
           },
-          { title: 'Aksi', field: 'no', formatter: btnAksi, headerSort: false, headerHozAlign: 'center', hozAlign: 'center', width: 120 },
+          {
+            title: 'Sisa Faktur', field: 'inv_no', headerHozAlign: 'right', hozAlign: 'right',
+            headerSort: false,
+            formatter: (cell) => {
+              // Diambil langsung dari data faktur terkait (DummyDB) — selalu
+              // menampilkan sisa tagihan TERKINI, bukan sisa saat pembayaran
+              // ini dulu dibuat.
+              const inv = DummyDB.getInvoiceByNo(cell.getValue());
+              if (!inv) return '<span class="text-secondary">-</span>';
+              const teks = fmt(inv.sisa);
+              return inv.sisa > 0 ? `<span class="fw-semibold text-danger">${teks}</span>` : `<span class="text-success">${teks}</span>`;
+            },
+          },
+          { title: 'Aksi', field: 'id', formatter: btnAksi, headerSort: false, headerHozAlign: 'center', hozAlign: 'center', width: 120 },
         ],
       });
 

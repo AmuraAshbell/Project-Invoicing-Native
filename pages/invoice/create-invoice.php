@@ -43,8 +43,17 @@
           <form action="invoice.php" method="GET">
             <div class="card-body">
               <div class="mb-3">
-                <label for="exampleInputRef_No1" class="form-label">Nomor Faktur*</label>
-                <input type="text" class="form-control" id="exampleInputRef_No1" name="inv_no" placeholder="Masukkan Nomor Faktur">
+                <label class="form-label">Nomor Faktur*</label>
+                <div class="d-flex align-items-center gap-2">
+                  <div class="form-control-plaintext fs-5 fw-bold text-primary bg-body-secondary border rounded px-3 py-2 mb-0">
+                    <i class="bi bi-upc-scan me-2"></i><span id="noFakturText">Membuat nomor faktur…</span>
+                  </div>
+                  <button type="button" class="btn btn-outline-secondary" id="btnAcakNoFaktur" title="Buat nomor baru">
+                    <i class="bi bi-arrow-clockwise"></i>
+                  </button>
+                </div>
+                <input type="hidden" id="exampleInputRef_No1" name="inv_no" required>
+                <div class="form-text">Nomor faktur dibuat otomatis & dijamin unik, tidak perlu diisi manual.</div>
               </div>
               <div class="mb-3">
                 <label for="inputCustomer" class="form-label">Nama Pelanggan*</label>
@@ -86,6 +95,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
     <script src="../../dist/js/adminlte.js"></script>
+    <script src="../../assets/js/dummy-data.js"></script>
     <script>
       (() => {
         'use strict';
@@ -137,6 +147,35 @@
           });
         });
       })();
+    </script>
+
+    <script>
+      // ==== Nomor faktur otomatis (format INV-####, dijamin unik) ====
+      document.addEventListener('DOMContentLoaded', () => {
+        const inputNoFaktur = document.getElementById('exampleInputRef_No1'); // hidden, dikirim lewat form
+        const teksNoFaktur  = document.getElementById('noFakturText');        // yang ditampilkan ke user
+        const btnAcak       = document.getElementById('btnAcakNoFaktur');
+
+        function buatNomorBaru() {
+          const nomor = DummyDB.generateInvoiceNumber();
+          inputNoFaktur.value = nomor;
+          teksNoFaktur.textContent = nomor;
+        }
+
+        buatNomorBaru();
+        btnAcak.addEventListener('click', buatNomorBaru);
+
+        // Jaga-jaga: cek keunikan sekali lagi tepat sebelum form dikirim
+        // (mis. kalau di tab lain sempat ada faktur baru dibuat di rentang
+        // waktu yang sama), supaya tidak ada 2 faktur dengan nomor sama.
+        document.querySelector('form').addEventListener('submit', (e) => {
+          if (DummyDB.invoiceExists(inputNoFaktur.value)) {
+            e.preventDefault();
+            buatNomorBaru();
+            DummyDB.showToast('Nomor faktur sebelumnya sudah dipakai, sudah dibuatkan nomor baru. Silakan klik Kirim lagi.', 'error');
+          }
+        });
+      });
     </script>
 </body>
 </html>

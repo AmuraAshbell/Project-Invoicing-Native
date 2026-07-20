@@ -41,19 +41,11 @@
 
             <!-- Search -->
             <div class="row g-2 mb-3">
-              <div class="col-12 col-md-5">
+              <div class="col-12 col-md-8">
                 <label for="search-nama" class="form-label form-label-sm mb-1">Nama Pelanggan</label>
                 <input type="text" id="search-nama" class="form-control form-control-sm" placeholder="Cari nama pelanggan...">
               </div>
-              <div class="col-12 col-md-4">
-                <label for="search-sisa" class="form-label form-label-sm mb-1">Tampilkan</label>
-                <select id="search-sisa" class="form-select form-select-sm">
-                  <option value="">Semua</option>
-                  <option value="ada">Ada Tunggakan</option>
-                  <option value="lunas">Lunas</option>
-                </select>
-              </div>
-              <div class="col-12 col-md-3 d-flex align-items-end gap-1">
+              <div class="col-12 col-md-4 d-flex align-items-end gap-1">
                 <button id="btn-search" type="button" class="btn btn-sm btn-primary w-100">
                   <i class="bi bi-search me-1"></i>Cari
                 </button>
@@ -63,12 +55,19 @@
               </div>
             </div>
 
+            <p class="text-secondary small mb-2">
+              <i class="bi bi-info-circle me-1"></i>Hanya menampilkan pelanggan yang masih memiliki sisa tagihan. Pelanggan yang sudah lunas otomatis tidak tercantum di sini.
+            </p>
+
             <div id="users-table"></div>
           </div>
         </div>
       </div>
     </div>
   </main>
+
+  <!-- Dropdown custom: daftar faktur penyebab tunggakan pelanggan ini -->
+  <div id="custom-dropdown-tunggakan" class="dropdown-menu shadow" style="display:none; position:fixed; z-index:9999; min-width:260px; max-width:320px;"></div>
 
   <?php include "../../layout/footer.php"; ?>
 
@@ -77,6 +76,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
   <script src="../../dist/js/adminlte.js"></script>
+  <script src="../../assets/js/dummy-data.js"></script>
 
   <script>
     (() => {
@@ -107,19 +107,13 @@
     let tabelTunggakan;
     const fmt = (n) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(n);
 
-    // ── Data Dummy ──
-    const dataTunggakan = [
-      { nama: 'Amelia Price',    total_inv: 650000,  terbayar: 650000  },
-      { nama: 'Budi Santoso',    total_inv: 1560000, terbayar: 800000  },
-      { nama: 'Citra Dewi',      total_inv: 1200000, terbayar: 1200000 },
-      { nama: 'Daniel Wijaya',   total_inv: 620000,  terbayar: 0       },
-      { nama: 'Eka Putri',       total_inv: 3950000, terbayar: 3950000 },
-      { nama: 'Fahmi Malik',     total_inv: 1080000, terbayar: 500000  },
-      { nama: 'Gita Permata',    total_inv: 1450000, terbayar: 1450000 },
-      { nama: 'Hendra Wijaya',   total_inv: 1160000, terbayar: 300000  },
-      { nama: 'Indah Lestari',   total_inv: 1100000, terbayar: 1100000 },
-      { nama: 'Joko Anwar',      total_inv: 680000,  terbayar: 0       },
-    ];
+    // ── Data tunggakan sekarang dihitung otomatis dari invoice + pembayaran
+    // di DummyDB (bukan angka manual lagi) — begitu ada pembayaran baru,
+    // angka "Total Terbayar" & "Sisa Tagihan" di sini otomatis ikut berubah ──
+    // Halaman ini khusus menampilkan TUNGGAKAN, jadi pelanggan yang sisa
+    // tagihannya sudah 0 (lunas) otomatis disaring keluar dari daftar.
+    const dataTunggakan = DummyDB.getTunggakanPerPelanggan()
+      .filter((r) => (r.total_inv - r.terbayar) > 0);
 
     // ── Custom formatter: hitung sisa tagihan secara dinamis ──
     const sisaTagihanFormatter = (cell) => {
@@ -131,6 +125,57 @@
       }
       return `<span class="text-success">${fmt(sisa)}</span>`;
     };
+
+    // ── Tombol Aksi: buka dropdown berisi rincian faktur penyebab tunggakan ──
+    const btnAksiTunggakan = (cell) => {
+      const nama = cell.getRow().getData().nama;
+      return `<button class="btn btn-sm btn-outline-primary" onclick="toggleDropdownTunggakan(event, ${JSON.stringify(nama).replace(/"/g, '&quot;')})">
+        Lihat Faktur <i class="bi bi-chevron-down ms-1"></i>
+      </button>`;
+    };
+
+    let activeTunggakanName = null;
+
+    function toggleDropdownTunggakan(e, nama) {
+      e.stopPropagation();
+      const dd = document.getElementById('custom-dropdown-tunggakan');
+      const rect = e.currentTarget.getBoundingClientRect();
+
+      if (activeTunggakanName === nama && dd.style.display === 'block') {
+        dd.style.display = 'none';
+        activeTunggakanName = null;
+        return;
+      }
+
+      const row = dataTunggakan.find((r) => r.nama === nama);
+      const faktur = row ? row.faktur : [];
+
+      dd.innerHTML = faktur.length
+        ? faktur.map((f) => {
+            const badge = { paid: 'success', partial: 'info', unpaid: 'warning' }[f.status] || 'secondary';
+            const label = { paid: 'Lunas', partial: 'Sebagian', unpaid: 'Belum Lunas' }[f.status] || f.status;
+            return `
+              <a class="dropdown-item d-flex justify-content-between align-items-center gap-2" href="../invoice/invoice.php?inv_no=${encodeURIComponent(f.inv_no)}">
+                <span>
+                  <span class="fw-semibold">${f.inv_no}</span>
+                  <span class="badge text-bg-${badge} ms-1">${label}</span>
+                </span>
+                <span class="${f.sisa > 0 ? 'text-danger fw-semibold' : 'text-success'} small">${fmt(f.sisa)}</span>
+              </a>`;
+          }).join('<hr class="dropdown-divider my-1">')
+        : '<span class="dropdown-item-text text-secondary small">Tidak ada faktur.</span>';
+
+      dd.style.display = 'block';
+      dd.style.top  = (rect.bottom + window.scrollY + 2) + 'px';
+      dd.style.left = (rect.left + window.scrollX - 120) + 'px';
+      activeTunggakanName = nama;
+    }
+
+    document.addEventListener('click', () => {
+      const dd = document.getElementById('custom-dropdown-tunggakan');
+      if (dd) dd.style.display = 'none';
+      activeTunggakanName = null;
+    });
 
     document.addEventListener('DOMContentLoaded', () => {
       tabelTunggakan = new Tabulator('#users-table', {
@@ -159,30 +204,22 @@
             formatter: (cell) => fmt(cell.getValue()),
           },
           {
-            title: 'Sisa Tagihan', field: 'total_inv', hozAlign: 'right', headerHozAlign:'right',
+            title: 'Sisa Tagihan', field: 'sisa_tunggakan', hozAlign: 'right', headerHozAlign:'right',
             formatter: sisaTagihanFormatter,
           },
+          { title: 'Aksi', field: 'aksi_tunggakan', formatter: btnAksiTunggakan, headerSort: false, headerHozAlign: 'center', hozAlign: 'center', width: 150 },
         ],
       });
     });
 
       function applySearch() {
-        const nama = document.getElementById('search-nama').value.trim();
-        const sisa = document.getElementById('search-sisa').value;
-        tabelTunggakan.setFilter((row) => {
-          let ok = true;
-          if (nama) ok = ok && row.nama.toLowerCase().includes(nama.toLowerCase());
-          if (sisa === 'ada')   ok = ok && (row.total_inv - row.terbayar) > 0;
-          if (sisa === 'lunas') ok = ok && (row.total_inv - row.terbayar) <= 0;
-          return ok;
-        });
+        const nama = document.getElementById('search-nama').value.trim().toLowerCase();
+        tabelTunggakan.setFilter((row) => !nama || row.nama.toLowerCase().includes(nama));
       }
       document.getElementById('btn-search').addEventListener('click', applySearch);
       document.getElementById('search-nama').addEventListener('input', applySearch);
-      document.getElementById('search-sisa').addEventListener('change', applySearch);
       document.getElementById('btn-reset').addEventListener('click', () => {
         document.getElementById('search-nama').value = '';
-        document.getElementById('search-sisa').value = '';
         tabelTunggakan.clearFilter();
       });
   </script>
