@@ -56,7 +56,7 @@
             </div>
 
             <p class="text-secondary small mb-2">
-              <i class="bi bi-info-circle me-1"></i>Hanya menampilkan pelanggan yang masih memiliki sisa tagihan. Pelanggan yang sudah lunas otomatis tidak tercantum di sini.
+              <i class="bi bi-info-circle me-1"></i>Hanya menampilkan faktur yang masih memiliki sisa tagihan. Faktur yang sudah lunas atau dibatalkan otomatis tidak tercantum di sini.
             </p>
 
             <div id="users-table"></div>
@@ -65,9 +65,6 @@
       </div>
     </div>
   </main>
-
-  <!-- Dropdown custom: daftar faktur penyebab tunggakan pelanggan ini -->
-  <div id="custom-dropdown-tunggakan" class="dropdown-menu shadow" style="display:none; position:fixed; z-index:9999; min-width:260px; max-width:320px;"></div>
 
   <?php include "../../layout/footer.php"; ?>
 
@@ -107,75 +104,12 @@
     let tabelTunggakan;
     const fmt = (n) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(n);
 
-    // ── Data tunggakan sekarang dihitung otomatis dari invoice + pembayaran
-    // di DummyDB (bukan angka manual lagi) — begitu ada pembayaran baru,
-    // angka "Total Terbayar" & "Sisa Tagihan" di sini otomatis ikut berubah ──
-    // Halaman ini khusus menampilkan TUNGGAKAN, jadi pelanggan yang sisa
-    // tagihannya sudah 0 (lunas) otomatis disaring keluar dari daftar.
-    const dataTunggakan = DummyDB.getTunggakanPerPelanggan()
-      .filter((r) => (r.total_inv - r.terbayar) > 0);
-
-    // ── Custom formatter: hitung sisa tagihan secara dinamis ──
-    const sisaTagihanFormatter = (cell) => {
-      const data = cell.getRow().getData();
-      const sisa = data.total_inv - data.terbayar;
-
-      if (sisa > 0) {
-        return `<span class="fw-bold text-danger">${fmt(sisa)}</span>`;
-      }
-      return `<span class="text-success">${fmt(sisa)}</span>`;
-    };
-
-    // ── Tombol Aksi: buka dropdown berisi rincian faktur penyebab tunggakan ──
-    const btnAksiTunggakan = (cell) => {
-      const nama = cell.getRow().getData().nama;
-      return `<button class="btn btn-sm btn-outline-primary" onclick="toggleDropdownTunggakan(event, ${JSON.stringify(nama).replace(/"/g, '&quot;')})">
-        Lihat Faktur <i class="bi bi-chevron-down ms-1"></i>
-      </button>`;
-    };
-
-    let activeTunggakanName = null;
-
-    function toggleDropdownTunggakan(e, nama) {
-      e.stopPropagation();
-      const dd = document.getElementById('custom-dropdown-tunggakan');
-      const rect = e.currentTarget.getBoundingClientRect();
-
-      if (activeTunggakanName === nama && dd.style.display === 'block') {
-        dd.style.display = 'none';
-        activeTunggakanName = null;
-        return;
-      }
-
-      const row = dataTunggakan.find((r) => r.nama === nama);
-      const faktur = row ? row.faktur : [];
-
-      dd.innerHTML = faktur.length
-        ? faktur.map((f) => {
-            const badge = { paid: 'success', partial: 'info', unpaid: 'warning' }[f.status] || 'secondary';
-            const label = { paid: 'Lunas', partial: 'Sebagian', unpaid: 'Belum Lunas' }[f.status] || f.status;
-            return `
-              <a class="dropdown-item d-flex justify-content-between align-items-center gap-2" href="../invoice/invoice.php?inv_no=${encodeURIComponent(f.inv_no)}">
-                <span>
-                  <span class="fw-semibold">${f.inv_no}</span>
-                  <span class="badge text-bg-${badge} ms-1">${label}</span>
-                </span>
-                <span class="${f.sisa > 0 ? 'text-danger fw-semibold' : 'text-success'} small">${fmt(f.sisa)}</span>
-              </a>`;
-          }).join('<hr class="dropdown-divider my-1">')
-        : '<span class="dropdown-item-text text-secondary small">Tidak ada faktur.</span>';
-
-      dd.style.display = 'block';
-      dd.style.top  = (rect.bottom + window.scrollY + 2) + 'px';
-      dd.style.left = (rect.left + window.scrollX - 120) + 'px';
-      activeTunggakanName = nama;
-    }
-
-    document.addEventListener('click', () => {
-      const dd = document.getElementById('custom-dropdown-tunggakan');
-      if (dd) dd.style.display = 'none';
-      activeTunggakanName = null;
-    });
+    // ── Satu baris = satu faktur (bukan agregat per pelanggan lagi) ──
+    // Supaya "No. Faktur" bisa ditampilkan langsung dan jelas faktur mana
+    // yang jadi sumber tunggakannya. Faktur yang batal atau sudah lunas
+    // (sisa Rp0) otomatis tidak ikut tampil di sini.
+    const dataTunggakan = DummyDB.getInvoices()
+      .filter((inv) => inv.status !== 'cancelled' && inv.sisa > 0);
 
     document.addEventListener('DOMContentLoaded', () => {
       tabelTunggakan = new Tabulator('#users-table', {
@@ -194,9 +128,11 @@
         },
 
         columns: [
-          { title: 'Nama Pelanggan',   field: 'nama' },
+          { title: 'No', formatter: 'rownum', hozAlign: 'center', headerHozAlign: 'center', headerSort: false, width: 60 },
+          { title: 'No. Faktur', field: 'inv_no', headerHozAlign: 'center', hozAlign: 'center' },
+          { title: 'Nama Pelanggan', field: 'customer' },
           {
-            title: 'Total Tagihan', field: 'total_inv', hozAlign: 'right', headerHozAlign:'right', 
+            title: 'Total Tagihan', field: 'total', hozAlign: 'right', headerHozAlign:'right',
             formatter: (cell) => fmt(cell.getValue()),
           },
           {
@@ -204,17 +140,28 @@
             formatter: (cell) => fmt(cell.getValue()),
           },
           {
-            title: 'Sisa Tagihan', field: 'sisa_tunggakan', hozAlign: 'right', headerHozAlign:'right',
-            formatter: sisaTagihanFormatter,
+            title: 'Sisa Tagihan', field: 'sisa', hozAlign: 'right', headerHozAlign:'right',
+            formatter: (cell) => `<span class="fw-bold text-danger">${fmt(cell.getValue())}</span>`,
           },
-          { title: 'Aksi', field: 'aksi_tunggakan', formatter: btnAksiTunggakan, headerSort: false, headerHozAlign: 'center', hozAlign: 'center', width: 150 },
+          {
+            title: 'Aksi', hozAlign: 'center', headerHozAlign: 'center', headerSort: false, width: 130,
+            formatter: () => `<button class="btn btn-sm btn-outline-primary"><i class="bi bi-eye me-1"></i>Detail</button>`,
+            cellClick: (e, cell) => {
+              const invNo = cell.getRow().getData().inv_no;
+              window.location.href = `../invoice/invoice.php?inv_no=${encodeURIComponent(invNo)}`;
+            },
+          },
         ],
       });
     });
 
       function applySearch() {
-        const nama = document.getElementById('search-nama').value.trim().toLowerCase();
-        tabelTunggakan.setFilter((row) => !nama || row.nama.toLowerCase().includes(nama));
+        const kata = document.getElementById('search-nama').value.trim().toLowerCase();
+        tabelTunggakan.setFilter((row) =>
+          !kata ||
+          row.customer.toLowerCase().includes(kata) ||
+          row.inv_no.toLowerCase().includes(kata)
+        );
       }
       document.getElementById('btn-search').addEventListener('click', applySearch);
       document.getElementById('search-nama').addEventListener('input', applySearch);

@@ -305,6 +305,7 @@
         Object.assign(
           {
             id: nextId,
+            customer: "Pelanggan Belum Diisi",
             start_date: new Date().toISOString().slice(0, 10),
             status_override: null,
             editable_total: true,

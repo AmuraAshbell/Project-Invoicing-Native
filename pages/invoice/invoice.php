@@ -88,7 +88,7 @@
       <div class="container-fluid">
         <div class="d-flex justify-content-end gap-2 mb-3 d-print-none">
           <div class="dropdown dropdown-cetak">
-            <button class="btn btn-success dropdown-toggle" type="button" data-bs-toggle="dropdown">
+            <button class="btn btn-outline-success dropdown-toggle" type="button" data-bs-toggle="dropdown">
               <i class="bi bi-printer"></i> Cetak
             </button>
             <ul class="dropdown-menu dropdown-menu-end">
@@ -442,13 +442,20 @@
       // otomatis disinkronkan, dan ringkasan pembayaran ikut diperbarui.
       if (window.DummyDB) {
         const invNoAktif = document.getElementById('inv-number').textContent.trim();
+        const customerAktif = document.getElementById('inv-customer').textContent.trim();
         DummyDB.saveItems(invNoAktif, items); // ← barang disimpan, tidak lagi reset tiap reload
-        DummyDB.upsertInvoice({
+
+        // "-" adalah placeholder default sebelum data pelanggan termuat —
+        // jangan sampai ini ikut tersimpan sebagai nama pelanggan asli
+        // (bikin baris "hantu" tanpa nama di halaman Tunggakan/Pembayaran).
+        const payload = {
           inv_no: invNoAktif,
-          customer: document.getElementById('inv-customer').textContent.trim(),
           due_date: document.getElementById('inv-due').textContent.trim(),
           total: grand,
-        });
+        };
+        if (customerAktif && customerAktif !== '-') payload.customer = customerAktif;
+        DummyDB.upsertInvoice(payload);
+
         if (typeof window.refreshInvoiceSummary === 'function') {
           window.refreshInvoiceSummary();
         }
